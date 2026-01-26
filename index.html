@@ -2512,7 +2512,7 @@
 
   <!-- TABS with Drag & Drop -->
   <div class="tabs-container">
-    <div class="tabs-wrapper" id="tabsWrapper"><button class="tab-btn active" data-tab="richard" data-index="0" draggable="true">
+    <div class="tabs-wrapper" id="tabsWrapper"><button class="tab-btn active" data-tab="richad" data-index="0" draggable="true">
           <span class="drag-handle">⋮⋮</span>
           <span class="tab-dot" style="background:#3b82f6"></span>
           <span class="tab-name">Richad</span>
@@ -4545,10 +4545,10 @@
     /* State */
     const MASTER_CODE = 'Villepinte'; // Code maître pour protéger/supprimer des onglets
     let tabs = [
-      { id: 'richard', name: 'Richard', color: '#3b82f6' }
+      { id: 'richad', name: 'Richad', color: '#3b82f6' }
     ];
     let dataByTab = {};
-    let currentTab = 'richard';
+    let currentTab = 'richad';
     let currentList = [];
     let currentFilter = 'Tous';
     let currentSort = 'name';
@@ -6554,7 +6554,7 @@
       const cloudTabs = await loadTabsConfig();
       if (cloudTabs && Array.isArray(cloudTabs) && cloudTabs.length > 0) {
         tabs = cloudTabs;
-        currentTab = tabs[0]?.id || 'richard';
+        currentTab = tabs[0]?.id || 'richad';
       }
 
       // Load data for each tab
