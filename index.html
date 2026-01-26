@@ -3213,6 +3213,14 @@
           <small style="color:var(--gray-500)">Ex: 216000000 pour 216M€</small>
         </div>
       </div>
+      
+<!-- Taux prévisionnel (%)  ⬅️ NEW -->
+  <div class="form-group" style="margin-top:12px;">
+    <label class="form-label">Taux Prévisionnel (%)</label>
+    <input type="number" class="form-input" id="configTauxPrev" placeholder="50" min="0" max="100">
+    <small style="color:var(--gray-500)">Ex: 50 = 50% appliqué au total “En cours”</small>
+  </div>
+
       <div class="modal-footer">
         <button class="btn btn-secondary" onclick="closeObjectivesConfig()">Annuler</button>
         <button class="btn btn-primary" onclick="saveObjectivesConfig()">Enregistrer</button>
@@ -3716,12 +3724,26 @@
     const getObjectifAnnuel = () => objectifsConfig.annuel || 216000000;
     const getObjectifChiffreur = () => objectifsConfig.chiffreur || 4500000;
     const getObjectifMetreur = () => objectifsConfig.metreur || 4500000;
+    const getTauxPrevisionnel = () => {
+      return (typeof objectifsConfig?.taux_previsionnel === 'number')
+        ? objectifsConfig.taux_previsionnel
+    
+
+  
+    ? objectifsConfig.taux_previsionnel
+    : 0.5;
+};
+
 
     function openObjectivesConfig() {
       document.getElementById('configObjMensuel').value = getObjectifMensuel();
       document.getElementById('configObjAnnuel').value = getObjectifAnnuel();
       document.getElementById('objectivesConfigModal').classList.add('open');
-    }
+      const tauxPrevPourcent = Math.round(getTauxPrevisionnel() * 100);
+      const inputTaux = document.getElementById('configTauxPrev');
+      if (inputTaux) inputTaux.value = tauxPrevPourcent;
+      document.getElementById('objectivesConfigModal').classList.add('open');
+}
 
     function closeObjectivesConfig() {
       document.getElementById('objectivesConfigModal').classList.remove('open');
@@ -3733,6 +3755,29 @@
       
       if (Number.isFinite(mensuel) && mensuel > 0) objectifsConfig.mensuel = mensuel;
       if (Number.isFinite(annuel) && annuel > 0) objectifsConfig.annuel = annuel;
+      const raw = document.getElementById('configTauxPrev')?.value;
+      const asNumber = raw === '' ? NaN : Number(raw);
+      if (!Number.isNaN(asNumber) && asNumber >= 0 && asNumber <= 100) {
+        objectifsConfig.taux_previsionnel = asNumber / 100; // stocké en 0..1
+      }
+      localStorage.setItem('smac_objectifs_config', JSON.stringify(objectifsConfig));
+      closeObjectivesConfig();
+      updateObjectives();
+       // Recalcule la prévision immédiatement (au cas où le panneau stats est ouvert)
+      try { updateAdvancedStats?.(); } catch(e) {}
+      showToast('Objectifs CA mis à jour !', 'success');
+      
+    }
+
+      
+
+
+
+
+
+
+
+
       
       localStorage.setItem('smac_objectifs_config', JSON.stringify(objectifsConfig));
       closeObjectivesConfig();
@@ -4669,6 +4714,11 @@
       const OBJECTIF_ANNUEL = getObjectifAnnuel();
       const OBJECTIF_CHIFFREUR = getObjectifChiffreur();
       const OBJECTIF_METREUR = getObjectifMetreur();
+      const taux = getTauxPrevisionnel(); // 0..1
+      const potentiel = montantEnCours * taux;
+      document.getElementById('forecastPotential').textContent = nfEUR.format(potentiel);
+
+
       
       // Update labels
       document.getElementById('objMonthTargetLabel').textContent = formatMontantShort(OBJECTIF_MENSUEL);
@@ -6429,3 +6479,4 @@
   </script>
 </body>
 </html>
+
