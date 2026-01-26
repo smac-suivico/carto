@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <!-- saved from url=(0039)https://pn2beprix.github.io/smac-carto/ -->
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -2513,25 +2512,14 @@
 
   <!-- TABS with Drag & Drop -->
   <div class="tabs-container">
-    <div class="tabs-wrapper" id="tabsWrapper"><button class="tab-btn active  " data-tab="datacenter" data-index="0" draggable="true">
+    <div class="tabs-wrapper" id="tabsWrapper"><button class="tab-btn active" data-tab="richard" data-index="0" draggable="true">
           <span class="drag-handle">⋮⋮</span>
           <span class="tab-dot" style="background:#3b82f6"></span>
-          <span class="tab-name">Data-Centers</span>
+          <span class="tab-name">Richad</span>
           
-          <span class="tab-count">19</span>
+          <span class="tab-count">0</span>
           <span class="tab-actions">
             <button class="tab-action-btn lock " title="Protéger">🔒</button>
-            <button class="tab-action-btn rename" title="Renommer">✏️</button>
-            <button class="tab-action-btn delete" title="Supprimer">✕</button>
-          </span>
-        </button><button class="tab-btn  locked protected" data-tab="projets" data-index="1" draggable="true">
-          <span class="drag-handle">⋮⋮</span>
-          <span class="tab-dot" style="background:#8b5cf6"></span>
-          <span class="tab-name">Projets Chiffrés 2026</span>
-          <span class="lock-icon">🔒</span>
-          <span class="tab-count">1</span>
-          <span class="tab-actions">
-            <button class="tab-action-btn lock has-password" title="Retirer la protection">🔓</button>
             <button class="tab-action-btn rename" title="Renommer">✏️</button>
             <button class="tab-action-btn delete" title="Supprimer">✕</button>
           </span>
@@ -2722,9 +2710,36 @@
       <div class="stats-section" id="comparisonSection">
         <div class="stats-section-title">📊 Comparaison périodes</div>
         <div class="stats-chart-container">
+          <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+            <select id="compPeriod1" class="form-select" style="flex:1;min-width:100px;font-size:11px;">
+              <option value="thisMonth">Ce mois</option>
+              <option value="lastMonth">Mois dernier</option>
+              <option value="thisQuarter">Ce trimestre</option>
+              <option value="lastQuarter">Trimestre dernier</option>
+              <option value="thisYear">Cette année</option>
+              <option value="lastYear">Année dernière</option>
+            </select>
+            <span style="align-self:center;color:var(--gray-500);">vs</span>
+            <select id="compPeriod2" class="form-select" style="flex:1;min-width:100px;font-size:11px;">
+              <option value="lastMonth" selected>Mois dernier</option>
+              <option value="thisMonth">Ce mois</option>
+              <option value="thisQuarter">Ce trimestre</option>
+              <option value="lastQuarter">Trimestre dernier</option>
+              <option value="thisYear">Cette année</option>
+              <option value="lastYear">Année dernière</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:12px;">
+            <select id="compStatutFilter" class="form-select" style="flex:1;font-size:11px;">
+              <option value="all">Tous les statuts</option>
+              <option value="Gagné">Gagné seulement</option>
+              <option value="En cours">En cours seulement</option>
+              <option value="Perdu">Perdu seulement</option>
+            </select>
+          </div>
           <div class="comparison-container">
             <div class="comparison-period">
-              <div class="comparison-period-label">Ce mois</div>
+              <div class="comparison-period-label" id="compLabel1">Ce mois</div>
               <div class="comparison-period-value" id="compCurrentMonth">0 €</div>
               <div class="comparison-period-count" id="compCurrentCount">0 affaires</div>
             </div>
@@ -2733,7 +2748,7 @@
               <div class="comparison-percent" id="compPercent">0%</div>
             </div>
             <div class="comparison-period">
-              <div class="comparison-period-label">Mois dernier</div>
+              <div class="comparison-period-label" id="compLabel2">Mois dernier</div>
               <div class="comparison-period-value" id="compLastMonth">0 €</div>
               <div class="comparison-period-count" id="compLastCount">0 affaires</div>
             </div>
@@ -4524,39 +4539,16 @@
       return !!tab?.passwordHash;
     }
 
-    /* Default Data */
-    const defaultDataDC = [
-      {affaires:"1&2 - PAR2", client:"COLT", eg:"BY", architect:"RBA", adresse:"Villebon-sur-Yvette", smac:"", datePrevisionnelle:"", statut:"Gagné", montant:"5 000 000 €", coords:[48.69185845097801, 2.219128539789481]},
-      {affaires:"PAR03", client:"MICROSOFT", eg:"BY", architect:"RBA", adresse:"Vélizy-Villacoublay", smac:"", datePrevisionnelle:"", statut:"Gagné", montant:"913 057 €", coords:[48.784326576119696, 2.2091410968477154]},
-      {affaires:"Global Switch - Est", client:"GLOBAL SWITCH", eg:"BY", architect:"APL", adresse:"Clichy", smac:"", datePrevisionnelle:"", statut:"Gagné", montant:"410 000 €", coords:[48.89962692207227, 2.2960704688876863]},
-      {affaires:"PA10", client:"EQUINIX", eg:"BY", architect:"RBA", adresse:"Saint-Denis", smac:"", datePrevisionnelle:"", statut:"Gagné", montant:"14 541 €", coords:[48.927313927005734, 2.350674512495238]},
-      {affaires:"Telehouse", client:"TELEHOUSE", eg:"VINCI", architect:"AAMH ASSOCIES", adresse:"Paris 13e", smac:"", datePrevisionnelle:"", statut:"Gagné", montant:"495 000 €", coords:[48.8564370470459, 2.38353062630346]},
-      {affaires:"Interxion PAR7", client:"INTERXION", eg:"BY", architect:"DK ARCHITECTES", adresse:"La Courneuve", smac:"", datePrevisionnelle:"", statut:"Gagné", montant:"1 500 000 €", coords:[48.92530651461756, 2.401494431606759]},
-      {affaires:"PA14", client:"EQUINIX", eg:"BY", architect:"RBA", adresse:"Aubervilliers", smac:"", datePrevisionnelle:"", statut:"Perdu", montant:"2 945 000 €", coords:[48.908908655451164, 2.3728223956227543]},
-      {affaires:"Interxion PAR 10 & 11", client:"INTERXION", eg:"BY", architect:"DK ARCHITECTES", adresse:"La Courneuve", smac:"", datePrevisionnelle:"", statut:"Perdu", montant:"-", coords:[48.92776437259542, 2.397265110647607]},
-      {affaires:"SEGRO BONNEUIL", client:"SEGRO", eg:"VINCI", architect:"RBA", adresse:"Bonneuil-sur-Marne", smac:"", datePrevisionnelle:"", statut:"En cours", montant:"2 000 000 €", coords:[48.76931916868814, 2.4948702109577447]},
-      {affaires:"PASS2", client:"EQUINIX", eg:"VINCI", architect:"RBA", adresse:"Meudon", smac:"", datePrevisionnelle:"", statut:"En cours", montant:"570 213 €", coords:[48.78869514855185, 2.2154677416418247]},
-      {affaires:"DATA VILLENEUVE", client:"GOODMAN", eg:"BY-EIFFAGE", architect:"RBA", adresse:"Villeneuve-Saint-Georges", smac:"", datePrevisionnelle:"", statut:"En cours", montant:"-", coords:[48.76129354753436, 2.4491614262989443]},
-      {affaires:"PAR1", client:"NTT DATA", eg:"VINCI", architect:"HYPHEN", adresse:"Le Coudray-Montceaux", smac:"", datePrevisionnelle:"", statut:"Faste", montant:"11 500 000 €", coords:[48.57108084757299, 2.4643250379359993]},
-      {affaires:"DATA HILLS 3", client:"HILLS", eg:"VINCI", architect:"RBA", adresse:"Aulnay-sous-Bois", smac:"", datePrevisionnelle:"", statut:"En cours", montant:"-", coords:[48.970329166784175, 2.498289028922746]},
-      {affaires:"PA15", client:"EQUINIX", eg:"BY", architect:"RBA", adresse:"Meudon", smac:"", datePrevisionnelle:"", statut:"En cours", montant:"7 079 169 €", coords:[48.78864189170742, 2.212410539794085]},
-      {affaires:"PAR3", client:"DATA4", eg:"BY", architect:"IF ARCHITECTES", adresse:"Nozay", smac:"", datePrevisionnelle:"", statut:"En cours", montant:"2 630 346 €", coords:[48.66884520433203, 2.2376156970706473]},
-      {affaires:"PAR01", client:"GOODMAN", eg:"BY", architect:"A26 BLM", adresse:"Tremblay-en-France", smac:"", datePrevisionnelle:"", statut:"En cours", montant:"2 511 133 €", coords:[48.968398055972706, 2.5689678923018984]},
-      {affaires:"DATA VELIZY", client:"Nation Data Center", eg:"BY", architect:"Silvio d'Ascia Architecture", adresse:"Vélizy-Villacoublay", smac:"", datePrevisionnelle:"", statut:"En cours", montant:"2 275 398 €", coords:[48.78344102692218, 2.213381055135426]}
-    ];
-
-    const defaultDataProj = [
-      {affaires:"Projet Alpha 2026", client:"CLIENT A", eg:"BY", architect:"Architecte X", adresse:"Paris 15e", smac:"PARIS", datePrevisionnelle:"2026-03-15", statut:"En cours", montant:"3 500 000 €", coords:[48.8400, 2.2900]}
-    ];
+    /* Default Data - Vide */
+    const defaultDataDC = [];
 
     /* State */
     const MASTER_CODE = 'Villepinte'; // Code maître pour protéger/supprimer des onglets
     let tabs = [
-      { id: 'datacenter', name: 'Data-Centers', color: '#3b82f6' },
-      { id: 'projets', name: 'Projets Chiffrés 2026', color: '#8b5cf6' }
+      { id: 'richard', name: 'Richard', color: '#3b82f6' }
     ];
     let dataByTab = {};
-    let currentTab = 'datacenter';
+    let currentTab = 'richard';
     let currentList = [];
     let currentFilter = 'Tous';
     let currentSort = 'name';
@@ -5299,7 +5291,7 @@
       
       // Calculate conversion rate for potential forecast
       const decided = gagne + perdu;
-      const conversionRate = decided > 0 ? gagne / decided : 0.16; // Default to 16% if no data
+      const conversionRate = decided > 0 ? gagne / decided : 0.5; // Default to 50% if no data
       const potentialCA = encoursTotal * conversionRate;
       
       // Update UI
@@ -5315,28 +5307,85 @@
       const currentMonth = now.getMonth();
       const currentYear = now.getFullYear();
       
-      // Filter items by month based on datePrevisionnelle
-      const currentMonthItems = currentList.filter(item => {
-        if (!item.datePrevisionnelle) return false;
-        const d = new Date(item.datePrevisionnelle);
-        return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
-      });
+      // Get selected periods and filter
+      const period1 = document.getElementById('compPeriod1')?.value || 'thisMonth';
+      const period2 = document.getElementById('compPeriod2')?.value || 'lastMonth';
+      const statutFilter = document.getElementById('compStatutFilter')?.value || 'all';
       
-      const lastMonthItems = currentList.filter(item => {
-        if (!item.datePrevisionnelle) return false;
-        const d = new Date(item.datePrevisionnelle);
-        const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
-        const lastYear = currentMonth === 0 ? currentYear - 1 : currentYear;
-        return d.getMonth() === lastMonth && d.getFullYear() === lastYear;
-      });
+      // Get all data (not filtered)
+      const allData = dataByTab[currentTab] || [];
+      
+      // Period labels
+      const periodLabels = {
+        thisMonth: 'Ce mois',
+        lastMonth: 'Mois dernier',
+        thisQuarter: 'Ce trimestre',
+        lastQuarter: 'Trim. dernier',
+        thisYear: 'Cette année',
+        lastYear: 'Année dernière'
+      };
+      
+      // Update labels
+      document.getElementById('compLabel1').textContent = periodLabels[period1];
+      document.getElementById('compLabel2').textContent = periodLabels[period2];
+      
+      // Filter items by period
+      function isInPeriod(item, period) {
+        let itemDate = null;
+        if (item.moisRemis) {
+          const [y, m] = item.moisRemis.split('-');
+          itemDate = new Date(parseInt(y), parseInt(m) - 1, 1);
+        } else if (item.dateDevis) {
+          itemDate = new Date(item.dateDevis);
+        } else if (item.datePrevisionnelle) {
+          itemDate = new Date(item.datePrevisionnelle);
+        }
+        
+        if (!itemDate || isNaN(itemDate.getTime())) return false;
+        
+        const itemMonth = itemDate.getMonth();
+        const itemYear = itemDate.getFullYear();
+        const itemQuarter = Math.floor(itemMonth / 3);
+        const currentQuarter = Math.floor(currentMonth / 3);
+        
+        switch(period) {
+          case 'thisMonth':
+            return itemMonth === currentMonth && itemYear === currentYear;
+          case 'lastMonth':
+            const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+            const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+            return itemMonth === lastMonth && itemYear === lastMonthYear;
+          case 'thisQuarter':
+            return itemQuarter === currentQuarter && itemYear === currentYear;
+          case 'lastQuarter':
+            const lastQuarter = currentQuarter === 0 ? 3 : currentQuarter - 1;
+            const lastQuarterYear = currentQuarter === 0 ? currentYear - 1 : currentYear;
+            return itemQuarter === lastQuarter && itemYear === lastQuarterYear;
+          case 'thisYear':
+            return itemYear === currentYear;
+          case 'lastYear':
+            return itemYear === currentYear - 1;
+          default:
+            return false;
+        }
+      }
+      
+      // Filter by statut if not "all"
+      function matchesStatut(item) {
+        if (statutFilter === 'all') return true;
+        return item.statut === statutFilter;
+      }
+      
+      const period1Items = allData.filter(item => isInPeriod(item, period1) && matchesStatut(item));
+      const period2Items = allData.filter(item => isInPeriod(item, period2) && matchesStatut(item));
       
       // Calculate totals
-      const currentTotal = currentMonthItems.reduce((sum, item) => {
+      const total1 = period1Items.reduce((sum, item) => {
         const val = parseMontant(item.montant);
         return Number.isFinite(val) ? sum + val : sum;
       }, 0);
       
-      const lastTotal = lastMonthItems.reduce((sum, item) => {
+      const total2 = period2Items.reduce((sum, item) => {
         const val = parseMontant(item.montant);
         return Number.isFinite(val) ? sum + val : sum;
       }, 0);
@@ -5344,19 +5393,19 @@
       // Calculate percentage change
       let percentChange = 0;
       let isUp = true;
-      if (lastTotal > 0) {
-        percentChange = ((currentTotal - lastTotal) / lastTotal) * 100;
+      if (total2 > 0) {
+        percentChange = ((total1 - total2) / total2) * 100;
         isUp = percentChange >= 0;
-      } else if (currentTotal > 0) {
+      } else if (total1 > 0) {
         percentChange = 100;
         isUp = true;
       }
       
       // Update UI
-      document.getElementById('compCurrentMonth').textContent = formatMontantShort(currentTotal);
-      document.getElementById('compCurrentCount').textContent = `${currentMonthItems.length} affaire${currentMonthItems.length > 1 ? 's' : ''}`;
-      document.getElementById('compLastMonth').textContent = formatMontantShort(lastTotal);
-      document.getElementById('compLastCount').textContent = `${lastMonthItems.length} affaire${lastMonthItems.length > 1 ? 's' : ''}`;
+      document.getElementById('compCurrentMonth').textContent = formatMontantShort(total1);
+      document.getElementById('compCurrentCount').textContent = `${period1Items.length} affaire${period1Items.length > 1 ? 's' : ''}`;
+      document.getElementById('compLastMonth').textContent = formatMontantShort(total2);
+      document.getElementById('compLastCount').textContent = `${period2Items.length} affaire${period2Items.length > 1 ? 's' : ''}`;
       
       const arrow = document.getElementById('compArrow');
       const percent = document.getElementById('compPercent');
@@ -6505,7 +6554,7 @@
       const cloudTabs = await loadTabsConfig();
       if (cloudTabs && Array.isArray(cloudTabs) && cloudTabs.length > 0) {
         tabs = cloudTabs;
-        currentTab = tabs[0]?.id || 'datacenter';
+        currentTab = tabs[0]?.id || 'richard';
       }
 
       // Load data for each tab
@@ -6514,7 +6563,7 @@
         if (cloudData && Array.isArray(cloudData)) {
           dataByTab[tab.id] = migrateData(cloudData);
         } else {
-          dataByTab[tab.id] = migrateData(tab.id === 'datacenter' ? defaultDataDC : defaultDataProj);
+          dataByTab[tab.id] = migrateData(defaultDataDC);
         }
       }
 
@@ -6862,7 +6911,7 @@
       });
       document.getElementById('resetData')?.addEventListener('click', async () => {
         if (confirm('Réinitialiser les données de cet onglet ? Cela affectera tous les utilisateurs.')) {
-          const defaults = currentTab === 'datacenter' ? defaultDataDC : defaultDataProj;
+          const defaults = defaultDataDC;
           dataByTab[currentTab] = migrateData(JSON.parse(JSON.stringify(defaults)));
           await saveToCloud(currentTab);
           updateTabCounts();
@@ -7077,6 +7126,11 @@
         document.getElementById('statsPanel').classList.remove('open');
       });
 
+      // Comparison period selectors
+      document.getElementById('compPeriod1')?.addEventListener('change', updateComparison);
+      document.getElementById('compPeriod2')?.addEventListener('change', updateComparison);
+      document.getElementById('compStatutFilter')?.addEventListener('change', updateComparison);
+
       // Stats configuration
       document.getElementById('statsConfigBtn')?.addEventListener('click', () => {
         document.getElementById('statsConfigPanel').classList.toggle('open');
@@ -7183,6 +7237,5 @@
       injectJS(CDN.jsPDF).then(() => injectJS(CDN.autoTable));
     });
   </script>
-
-
-<script src="./Cartographie SMAC mdp_files/leaflet.js.téléchargement" async=""></script><script src="./Cartographie SMAC mdp_files/leaflet.markercluster.js.téléchargement" async=""></script><script src="./Cartographie SMAC mdp_files/xlsx.full.min.js.téléchargement" async=""></script><script src="./Cartographie SMAC mdp_files/jspdf.umd.min.js.téléchargement" async=""></script><script src="./Cartographie SMAC mdp_files/jspdf.plugin.autotable.min.js.téléchargement" async=""></script></body></html>
+</body>
+</html>
