@@ -1689,6 +1689,41 @@
       color: var(--dark);
     }
 
+    /* Forecast Rate Slider */
+    .forecast-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--gray-200);
+      outline: none;
+      cursor: pointer;
+    }
+    .forecast-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .forecast-slider::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--primary);
+      cursor: pointer;
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .forecast-slider:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
     /* Comparison (Comparaison) */
     .comparison-container {
       display: flex;
@@ -2701,32 +2736,23 @@
                 <span class="forecast-detail-value" id="forecastPotential">0 €</span>
               </div>
             </div>
-            <div class="forecast-rate-setting">
-              <label class="forecast-rate-label">
-                <span>⚙️ Taux de conversion</span>
-                <span class="forecast-rate-value" id="forecastRateValue">50%</span>
+            <!-- Taux de conversion configurable -->
+            <div class="forecast-rate-config" style="margin-top:16px;padding-top:12px;border-top:1px solid var(--gray-200);">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                <span style="font-size:12px;font-weight:600;color:var(--gray-700);">Taux de conversion</span>
+                <span id="forecastRateValue" style="font-size:14px;font-weight:700;color:var(--primary);">50%</span>
+              </div>
+              <input type="range" id="forecastRateSlider" min="0" max="100" value="50" class="forecast-slider" style="width:100%;margin-bottom:8px;">
+              <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gray-600);cursor:pointer;">
+                <input type="checkbox" id="forecastAutoRate" style="cursor:pointer;">
+                <span>Calcul auto basé sur l'historique</span>
+                <span id="forecastAutoValue" style="color:var(--gray-400);"></span>
               </label>
-              <div class="forecast-rate-slider-container">
-                <input type="range" id="forecastRateSlider" class="forecast-rate-slider" min="0" max="100" value="50">
-                <div class="forecast-rate-marks">
-                  <span>0%</span>
-                  <span>25%</span>
-                  <span>50%</span>
-                  <span>75%</span>
-                  <span>100%</span>
-                </div>
-              </div>
-              <div class="forecast-rate-mode">
-                <label class="forecast-rate-checkbox">
-                  <input type="checkbox" id="forecastAutoRate">
-                  <span>Auto (basé sur historique)</span>
-                </label>
-              </div>
             </div>
           </div>
         </div>
       </div>
-
+      
       <div class="stats-section" id="comparisonSection">
         <div class="stats-section-title">📊 Comparaison périodes</div>
         <div class="stats-chart-container">
@@ -4463,9 +4489,34 @@
       // Calculate average
       const encoursAvg = encours > 0 ? encoursTotal / encours : 0;
       
-      // Calculate conversion rate for potential forecast
+      // Calculate historical conversion rate
       const decided = gagne + perdu;
-      const conversionRate = decided > 0 ? gagne / decided : 0.5; // Default to 50% if no data
+      const historicalRate = decided > 0 ? gagne / decided : 0.5;
+      
+      // Get slider and checkbox
+      const slider = document.getElementById('forecastRateSlider');
+      const autoCheckbox = document.getElementById('forecastAutoRate');
+      const autoValueSpan = document.getElementById('forecastAutoValue');
+      
+      // Show historical rate
+      if (autoValueSpan) {
+        autoValueSpan.textContent = `(historique: ${Math.round(historicalRate * 100)}%)`;
+      }
+      
+      // Determine which rate to use
+      let conversionRate;
+      if (autoCheckbox && autoCheckbox.checked) {
+        conversionRate = historicalRate;
+        if (slider) {
+          slider.value = Math.round(historicalRate * 100);
+          slider.disabled = true;
+        }
+        document.getElementById('forecastRateValue').textContent = Math.round(historicalRate * 100) + '%';
+      } else {
+        conversionRate = slider ? parseInt(slider.value) / 100 : 0.5;
+        if (slider) slider.disabled = false;
+      }
+      
       const potentialCA = encoursTotal * conversionRate;
       
       // Update UI
@@ -6352,6 +6403,34 @@
       document.getElementById('compPeriod2')?.addEventListener('change', updateComparison);
       document.getElementById('compStatutFilter')?.addEventListener('change', updateComparison);
 
+      // Forecast rate slider and checkbox
+      const forecastRateSlider = document.getElementById('forecastRateSlider');
+      const forecastAutoRate = document.getElementById('forecastAutoRate');
+      
+      // Load saved forecast rate settings
+      const savedForecastRate = localStorage.getItem('smac_forecast_rate');
+      const savedAutoRate = localStorage.getItem('smac_forecast_auto_rate');
+      
+      if (savedForecastRate && forecastRateSlider) {
+        forecastRateSlider.value = savedForecastRate;
+        document.getElementById('forecastRateValue').textContent = savedForecastRate + '%';
+      }
+      if (savedAutoRate === 'true' && forecastAutoRate) {
+        forecastAutoRate.checked = true;
+      }
+      
+      forecastRateSlider?.addEventListener('input', () => {
+        const value = forecastRateSlider.value;
+        document.getElementById('forecastRateValue').textContent = value + '%';
+        localStorage.setItem('smac_forecast_rate', value);
+        updateAdvancedStats();
+      });
+      
+      forecastAutoRate?.addEventListener('change', () => {
+        localStorage.setItem('smac_forecast_auto_rate', forecastAutoRate.checked);
+        updateAdvancedStats();
+      });
+
       // Stats configuration
       document.getElementById('statsConfigBtn')?.addEventListener('click', () => {
         document.getElementById('statsConfigPanel').classList.toggle('open');
@@ -6460,4 +6539,3 @@
   </script>
 </body>
 </html>
-
