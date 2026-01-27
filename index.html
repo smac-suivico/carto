@@ -1318,7 +1318,7 @@
       position: fixed;
       top: 124px;
       right: 430px;
-      z-index: 1000;
+      z-index: 1001;
       background: white;
       border-radius: 12px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.15);
@@ -1332,7 +1332,6 @@
 
     .stats-panel.open {
       display: block;
-      animation: slideIn 0.2s ease;
     }
 
     @media (max-width: 1200px) {
@@ -4397,7 +4396,6 @@
             <div style="font-size:16px;font-weight:600;color:var(--gray-600);margin-bottom:8px">Statistiques verrouillées</div>
             <div style="font-size:13px;color:var(--gray-500)">Déverrouillez l'onglet pour voir les statistiques</div>
           `;
-          statsPanel.style.position = 'relative';
           statsPanel.appendChild(lockedOverlay);
         }
         lockedOverlay.style.display = 'flex';
