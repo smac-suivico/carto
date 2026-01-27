@@ -1088,6 +1088,12 @@
       background: var(--red-dark);
     }
 
+    /* Map cluster toggle */
+    .map-control-btn.cluster-toggle.active {
+      background: var(--cyan);
+      color: white;
+    }
+
     /* Itinerary Panel */
     .itinerary-panel {
       position: absolute;
@@ -2513,6 +2519,9 @@
       </button>
       <button class="map-control-btn" id="toggleItineraryBtn" title="Calculer un itinéraire">
         🚗
+      </button>
+      <button class="map-control-btn cluster-toggle active" id="toggleClusterBtn" title="Activer/Désactiver le regroupement">
+        🔘
       </button>
     </div>
     
@@ -4334,6 +4343,20 @@
       return !!tab?.passwordHash;
     }
 
+    function showLockedMessage() {
+      const container = document.getElementById('listContainer');
+      const mobileContainer = document.getElementById('mobileListContainer');
+      const lockedHTML = `
+        <div style="padding:60px 20px;text-align:center;color:var(--gray-500);">
+          <div style="font-size:48px;margin-bottom:16px;">🔒</div>
+          <div style="font-size:16px;font-weight:600;margin-bottom:8px;">Onglet verrouillé</div>
+          <div style="font-size:13px;">Cliquez sur l'onglet pour entrer le mot de passe</div>
+        </div>
+      `;
+      if (container) container.innerHTML = lockedHTML;
+      if (mobileContainer) mobileContainer.innerHTML = lockedHTML;
+    }
+
     /* Default Data - Vide */
     const defaultDataDC = [];
 
@@ -4349,6 +4372,8 @@
     let currentSort = 'name';
     let currentQuery = '';
     let map, markerCluster;
+    let clusterEnabled = true;
+    let directMarkersLayer = null;
     const markerByIndex = new Map();
     let editingId = null;
     let deletingIdx = null;
@@ -4674,6 +4699,13 @@
 
     /* Advanced Statistics Functions */
     function updateAdvancedStats() {
+      // SECURITY: Si l'onglet est verrouillé, ne pas afficher les stats
+      if (isTabLocked(currentTab)) {
+        document.getElementById('statsTotalAffaires').textContent = '🔒';
+        document.getElementById('statsTotalMontant').textContent = '🔒';
+        return;
+      }
+      
       const total = currentList.length;
       const gagne = currentList.filter(i => i.statut === 'Gagné').length;
       const perdu = currentList.filter(i => i.statut === 'Perdu').length;
@@ -5222,6 +5254,16 @@
 
     /* Filter & Sort */
     function applyFilters() {
+      // SECURITY: Si l'onglet est verrouillé, masquer les données
+      if (isTabLocked(currentTab)) {
+        currentList = [];
+        renderList([]);
+        renderMap([]);
+        updateStats([], []);
+        showLockedMessage();
+        return;
+      }
+      
       const data = dataByTab[currentTab] || [];
       const fClient = (document.getElementById('fClient')?.value || '').toLowerCase();
       const fEG = (document.getElementById('fEG')?.value || '').toLowerCase();
@@ -5377,8 +5419,13 @@
     function renderMap(items) {
       if (!map || !markerCluster) return;
       markerCluster.clearLayers();
+      if (directMarkersLayer) {
+        map.removeLayer(directMarkersLayer);
+        directMarkersLayer = null;
+      }
       markerByIndex.clear();
 
+      const markers = [];
       items.forEach(item => {
         const lat = parseCoord(item.coords?.[0]);
         const lng = parseCoord(item.coords?.[1]);
@@ -5408,9 +5455,32 @@
           </div>
         `);
         
-        markerCluster.addLayer(marker);
+        markers.push(marker);
         markerByIndex.set(item.id, marker);
       });
+
+      // Add markers based on cluster mode
+      if (clusterEnabled && markerCluster) {
+        markers.forEach(m => markerCluster.addLayer(m));
+      } else {
+        directMarkersLayer = L.layerGroup(markers);
+        directMarkersLayer.addTo(map);
+      }
+    }
+
+    function toggleCluster() {
+      clusterEnabled = !clusterEnabled;
+      const btn = document.getElementById('toggleClusterBtn');
+      if (clusterEnabled) {
+        btn.classList.add('active');
+        btn.title = 'Désactiver le regroupement';
+        showToast('Regroupement activé', 'info');
+      } else {
+        btn.classList.remove('active');
+        btn.title = 'Activer le regroupement';
+        showToast('Regroupement désactivé - Tous les marqueurs visibles', 'success');
+      }
+      renderMap(currentList);
     }
 
     /* CRUD Operations */
@@ -5659,6 +5729,12 @@
 
     /* Export Functions */
     function exportExcel() {
+      // SECURITY: Check if tab is locked
+      if (isTabLocked(currentTab)) {
+        showToast('🔒 Onglet verrouillé - Export impossible', 'error');
+        return;
+      }
+      
       if (typeof XLSX === 'undefined') {
         showToast('Chargement en cours...', 'error');
         return;
@@ -5690,6 +5766,12 @@
     }
 
     function exportPDF() {
+      // SECURITY: Check if tab is locked
+      if (isTabLocked(currentTab)) {
+        showToast('🔒 Onglet verrouillé - Export impossible', 'error');
+        return;
+      }
+      
       if (typeof jspdf === 'undefined' || typeof jspdf.jsPDF === 'undefined') {
         showToast('Chargement en cours...', 'error');
         return;
@@ -6007,6 +6089,9 @@
           showToast('Mode itinéraire activé - Cliquez sur les marqueurs', 'info');
         }
       });
+
+      // Toggle cluster mode
+      document.getElementById('toggleClusterBtn')?.addEventListener('click', toggleCluster);
 
       itineraryClose.addEventListener('click', () => {
         itineraryMode = false;
