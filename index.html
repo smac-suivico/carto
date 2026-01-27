@@ -430,14 +430,6 @@
       grid-column: 2;
       grid-row: 1;
     }
-    
-    /* Force absolute positioned elements to overlap with map cell */
-    .map-controls,
-    .itinerary-panel,
-    .stats-panel {
-      grid-column: 1;
-      grid-row: 1;
-    }
 
     @media (max-width: 1024px) {
       main { 
@@ -1099,7 +1091,7 @@
 
     /* Map Controls Custom */
     .map-controls {
-      position: absolute;
+      position: fixed;
       top: 124px;
       left: 10px;
       z-index: 1000;
@@ -1139,7 +1131,7 @@
 
     /* Itinerary Panel */
     .itinerary-panel {
-      position: absolute;
+      position: fixed;
       top: 124px;
       left: 60px;
       z-index: 1000;
@@ -1323,7 +1315,7 @@
 
     /* Statistics Panel */
     .stats-panel {
-      position: absolute;
+      position: fixed;
       top: 124px;
       right: 430px;
       z-index: 1000;
