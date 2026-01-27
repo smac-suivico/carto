@@ -2720,7 +2720,7 @@
           <div class="forecast-container">
             <div class="forecast-main">
               <div class="forecast-value" id="forecastValue">0 €</div>
-              <div class="forecast-label">CA prévisionnel (En cours)</div>
+              <div class="forecast-label">CA potentiel (avec taux)</div>
             </div>
             <div class="forecast-details">
               <div class="forecast-detail">
@@ -2732,7 +2732,7 @@
                 <span class="forecast-detail-value" id="forecastAvg">0 €</span>
               </div>
               <div class="forecast-detail">
-                <span class="forecast-detail-label">CA potentiel (avec taux)</span>
+                <span class="forecast-detail-label">Montant brut (En cours)</span>
                 <span class="forecast-detail-value" id="forecastPotential">0 €</span>
               </div>
             </div>
@@ -4519,11 +4519,11 @@
       
       const potentialCA = encoursTotal * conversionRate;
       
-      // Update UI
-      document.getElementById('forecastValue').textContent = formatMontantShort(encoursTotal);
+      // Update UI - La valeur principale est maintenant le CA potentiel avec taux
+      document.getElementById('forecastValue').textContent = formatMontantShort(potentialCA);
       document.getElementById('forecastCount').textContent = encours;
       document.getElementById('forecastAvg').textContent = formatMontantShort(encoursAvg);
-      document.getElementById('forecastPotential').textContent = formatMontantShort(potentialCA) + ` (${Math.round(conversionRate * 100)}%)`;
+      document.getElementById('forecastPotential').textContent = formatMontantShort(encoursTotal);
     }
 
     /* Comparison (Comparaison périodes) */
