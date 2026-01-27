@@ -407,6 +407,7 @@
     main {
       display: grid;
       grid-template-columns: 1fr 420px;
+      grid-template-rows: 1fr;
       height: 100vh;
       height: 100dvh;
       position: fixed;
@@ -415,6 +416,27 @@
       right: 0;
       bottom: 0;
       overflow: hidden;
+    }
+
+    /* Map takes first column */
+    #map {
+      grid-column: 1;
+      grid-row: 1;
+      position: relative;
+    }
+    
+    /* Sidebar takes second column */
+    .sidebar {
+      grid-column: 2;
+      grid-row: 1;
+    }
+    
+    /* Force absolute positioned elements to overlap with map cell */
+    .map-controls,
+    .itinerary-panel,
+    .stats-panel {
+      grid-column: 1;
+      grid-row: 1;
     }
 
     @media (max-width: 1024px) {
@@ -1313,11 +1335,19 @@
       max-height: calc(100vh - 150px);
       overflow-y: auto;
       display: none;
+      pointer-events: auto;
     }
 
     .stats-panel.open {
       display: block;
       animation: slideIn 0.2s ease;
+    }
+
+    @media (max-width: 1200px) {
+      .stats-panel {
+        right: 440px;
+        width: 340px;
+      }
     }
 
     @media (max-width: 1024px) {
