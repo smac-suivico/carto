@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0039)https://pn2beprix.github.io/smac-carto/ -->
 <html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   <title>Cartographie SMAC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link href="./Cartographie SMAC mdp_files/css2" rel="stylesheet">
   <style>
     :root {
       --red: #e10600;
@@ -798,6 +796,35 @@
     .status.perdu { background: var(--rose-light); color: #9f1239; }
     .status.encours { background: var(--orange-light); color: #92400e; }
     .status.faste { background: var(--blue-light); color: #1d4ed8; }
+    .status.nonvalorise { background: var(--gray-200); color: #525252; }
+
+    .pill.nonvalorise { background: var(--gray-200); color: #525252; border-color: #a3a3a3; }
+    .pill.nonvalorise.active { background: var(--gray-500); color: white; }
+
+    /* Mois remis badge */
+    .list-item-mois-remis {
+      font-size: 10px;
+      color: var(--purple);
+      background: var(--purple-light);
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-left: 8px;
+    }
+
+    /* Chiffreur badge */
+    .chiffreur-badge {
+      font-size: 10px;
+      color: var(--cyan);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    /* Map cluster toggle */
+    .map-control-btn.cluster-toggle.active {
+      background: var(--cyan);
+      color: white;
+    }
 
     /* Total Bar */
     .total-bar {
@@ -2063,104 +2090,6 @@
       cursor: pointer;
     }
 
-    /* Person Stats (Chiffreur/Métreur) */
-    .person-filter-tabs {
-      display: flex;
-      gap: 4px;
-      margin-bottom: 12px;
-      padding: 4px;
-      background: var(--gray-100);
-      border-radius: 8px;
-    }
-
-    .person-filter-btn {
-      flex: 1;
-      padding: 6px 8px;
-      border: none;
-      background: transparent;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--gray-500);
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .person-filter-btn:hover {
-      color: var(--gray-700);
-      background: var(--gray-200);
-    }
-
-    .person-filter-btn.active {
-      background: white;
-      color: var(--theme-color);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-
-    .person-stats-list {
-      max-height: 250px;
-      overflow-y: auto;
-    }
-
-    .person-stat-item {
-      padding: 10px 0;
-      border-bottom: 1px solid var(--gray-100);
-    }
-
-    .person-stat-item:last-child {
-      border-bottom: none;
-    }
-
-    .person-stat-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 6px;
-    }
-
-    .person-stat-name {
-      font-weight: 600;
-      font-size: 13px;
-      color: var(--dark);
-    }
-
-    .person-stat-values {
-      font-size: 11px;
-      color: var(--gray-500);
-    }
-
-    .person-stat-bar {
-      height: 8px;
-      background: var(--gray-200);
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .person-stat-fill {
-      height: 100%;
-      border-radius: 4px;
-      transition: width 0.5s ease;
-      background: linear-gradient(90deg, var(--theme-color), var(--theme-color-dark));
-    }
-
-    .person-stat-fill.success {
-      background: linear-gradient(90deg, var(--green), #16a34a);
-    }
-
-    .person-stat-details {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 4px;
-      font-size: 10px;
-      color: var(--gray-500);
-    }
-
-    .person-stat-count {
-      font-size: 11px;
-      color: var(--gray-400);
-      margin-left: 8px;
-    }
-
     /* Map Popup */
     .leaflet-popup-content-wrapper {
       border-radius: var(--radius);
@@ -2704,8 +2633,8 @@
       <button class="map-control-btn" id="toggleItineraryBtn" title="Calculer un itinéraire">
         🚗
       </button>
-      <button class="map-control-btn active" id="clusterToggleBtn" title="Activer/Désactiver le regroupement">
-        🔵
+      <button class="map-control-btn cluster-toggle active" id="toggleClusterBtn" title="Activer/Désactiver le regroupement">
+        🔘
       </button>
     </div>
     
@@ -2778,11 +2707,11 @@
         </div>
         <div class="stats-config-item">
           <span class="stats-config-label">🧮 Chiffreurs</span>
-          <div class="stats-toggle active" data-section="chiffreurSection"></div>
+          <div class="stats-toggle active" data-section="chiffreurObjectivesSection"></div>
         </div>
         <div class="stats-config-item">
           <span class="stats-config-label">📐 Métreurs</span>
-          <div class="stats-toggle active" data-section="metreurSection"></div>
+          <div class="stats-toggle active" data-section="metreurObjectivesSection"></div>
         </div>
       </div>
       
@@ -2893,9 +2822,36 @@
       <div class="stats-section" id="comparisonSection">
         <div class="stats-section-title">📊 Comparaison périodes</div>
         <div class="stats-chart-container">
+          <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+            <select id="compPeriod1" class="form-select" style="flex:1;min-width:100px;font-size:11px;">
+              <option value="thisMonth">Ce mois</option>
+              <option value="lastMonth">Mois dernier</option>
+              <option value="thisQuarter">Ce trimestre</option>
+              <option value="lastQuarter">Trimestre dernier</option>
+              <option value="thisYear">Cette année</option>
+              <option value="lastYear">Année dernière</option>
+            </select>
+            <span style="align-self:center;color:var(--gray-500);">vs</span>
+            <select id="compPeriod2" class="form-select" style="flex:1;min-width:100px;font-size:11px;">
+              <option value="lastMonth" selected>Mois dernier</option>
+              <option value="thisMonth">Ce mois</option>
+              <option value="thisQuarter">Ce trimestre</option>
+              <option value="lastQuarter">Trimestre dernier</option>
+              <option value="thisYear">Cette année</option>
+              <option value="lastYear">Année dernière</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:12px;">
+            <select id="compStatutFilter" class="form-select" style="flex:1;font-size:11px;">
+              <option value="all">Tous les statuts</option>
+              <option value="Gagné">Gagné seulement</option>
+              <option value="En cours">En cours seulement</option>
+              <option value="Perdu">Perdu seulement</option>
+            </select>
+          </div>
           <div class="comparison-container">
             <div class="comparison-period">
-              <div class="comparison-period-label">Ce mois</div>
+              <div class="comparison-period-label" id="compLabel1">Ce mois</div>
               <div class="comparison-period-value" id="compCurrentMonth">0 €</div>
               <div class="comparison-period-count" id="compCurrentCount">0 affaires</div>
             </div>
@@ -2904,7 +2860,7 @@
               <div class="comparison-percent" id="compPercent">0%</div>
             </div>
             <div class="comparison-period">
-              <div class="comparison-period-label">Mois dernier</div>
+              <div class="comparison-period-label" id="compLabel2">Mois dernier</div>
               <div class="comparison-period-value" id="compLastMonth">0 €</div>
               <div class="comparison-period-count" id="compLastCount">0 affaires</div>
             </div>
@@ -2951,101 +2907,88 @@
       </div>
       
       <div class="stats-section" id="objectivesSection">
-        <div class="stats-section-title">🎯 Objectifs CA</div>
+        <div class="stats-section-title">
+          🎯 Objectifs CA
+          <button class="objective-config-btn" onclick="openObjectivesConfig()" title="Configurer les objectifs" style="margin-left:8px;background:none;border:none;cursor:pointer;font-size:14px;">⚙️</button>
+        </div>
         <div class="stats-chart-container">
           <div class="objectives-container">
-            <div class="objective-item">
+            <!-- Objectif Mensuel Global -->
+            <div class="objective-item" style="background: linear-gradient(135deg, var(--red-light), white);">
               <div class="objective-header">
-                <span class="objective-label">📅 Ce mois</span>
+                <span class="objective-label">📅 Ce mois (Obj: <span id="objMonthTargetLabel">18M€</span>)</span>
                 <div>
-                  <span class="objective-values"><span id="objMonthCurrent">0 €</span> / <span id="objMonthTarget">0 €</span></span>
-                  <button class="objective-edit-btn" data-target="month">✏️</button>
+                  <span class="objective-values"><span id="objMonthCurrent">0 €</span> / <span id="objMonthTarget">18 000 000 €</span></span>
                 </div>
               </div>
               <div class="objective-bar">
                 <div class="objective-fill" id="objMonthFill" style="width: 0%"></div>
               </div>
               <div class="objective-percent" id="objMonthPercent">0%</div>
-              <div class="objective-input-group" id="objMonthInput">
-                <input type="text" class="objective-input" id="objMonthValue" placeholder="Ex: 500000">
-                <button class="objective-save-btn" data-period="month">OK</button>
-              </div>
             </div>
             
+            <!-- Objectif Annuel -->
             <div class="objective-item">
               <div class="objective-header">
-                <span class="objective-label">📊 Ce trimestre</span>
+                <span class="objective-label">📆 Cette année (Obj: <span id="objYearTargetLabel">216M€</span>)</span>
                 <div>
-                  <span class="objective-values"><span id="objQuarterCurrent">0 €</span> / <span id="objQuarterTarget">0 €</span></span>
-                  <button class="objective-edit-btn" data-target="quarter">✏️</button>
-                </div>
-              </div>
-              <div class="objective-bar">
-                <div class="objective-fill" id="objQuarterFill" style="width: 0%"></div>
-              </div>
-              <div class="objective-percent" id="objQuarterPercent">0%</div>
-              <div class="objective-input-group" id="objQuarterInput">
-                <input type="text" class="objective-input" id="objQuarterValue" placeholder="Ex: 1500000">
-                <button class="objective-save-btn" data-period="quarter">OK</button>
-              </div>
-            </div>
-            
-            <div class="objective-item">
-              <div class="objective-header">
-                <span class="objective-label">📆 Cette année</span>
-                <div>
-                  <span class="objective-values"><span id="objYearCurrent">0 €</span> / <span id="objYearTarget">0 €</span></span>
-                  <button class="objective-edit-btn" data-target="year">✏️</button>
+                  <span class="objective-values"><span id="objYearCurrent">0 €</span> / <span id="objYearTarget">216 000 000 €</span></span>
                 </div>
               </div>
               <div class="objective-bar">
                 <div class="objective-fill" id="objYearFill" style="width: 0%"></div>
               </div>
               <div class="objective-percent" id="objYearPercent">0%</div>
-              <div class="objective-input-group" id="objYearInput">
-                <input type="text" class="objective-input" id="objYearValue" placeholder="Ex: 6000000">
-                <button class="objective-save-btn" data-period="year">OK</button>
+            </div>
+
+            <!-- Objectif Prise d'Affaire (Gagné) -->
+            <div class="objective-item" style="background: var(--green-light);">
+              <div class="objective-header">
+                <span class="objective-label">🏆 Prise d'affaire ce mois</span>
+                <div>
+                  <span class="objective-values"><span id="objPriseAffaire">0 €</span></span>
+                </div>
               </div>
+              <div id="priseAffaireCount" style="font-size: 11px; color: var(--green); margin-top: 4px;">0 affaires gagnées</div>
+            </div>
+
+            <!-- Historique 3 derniers mois (tout chiffré) -->
+            <div class="objective-item" style="background: var(--cyan-light);">
+              <div class="objective-header">
+                <span class="objective-label">📊 Historique 3 derniers mois (chiffré)</span>
+                <div>
+                  <span class="objective-values"><span id="objHistorique3M">0 €</span></span>
+                </div>
+              </div>
+              <div id="historique3MDetails" style="font-size: 11px; color: var(--cyan); margin-top: 4px;">Tous statuts confondus</div>
             </div>
           </div>
         </div>
       </div>
-      
+
       <!-- Objectifs par Chiffreur -->
-      <div class="stats-section" id="chiffreurSection">
+      <div class="stats-section" id="chiffreurObjectivesSection">
         <div class="stats-section-title">
           🧮 Chiffreurs
-          <button class="objective-config-btn" id="chiffreurConfigBtn" title="Configurer l'objectif" style="margin-left:8px;background:none;border:none;cursor:pointer;font-size:14px;">⚙️</button>
-          <span style="font-size:11px;color:var(--gray-500);margin-left:8px;">Obj: <span id="chiffreurObjLabel">Non défini</span></span>
+          <button class="objective-config-btn" onclick="openChiffreurConfig()" title="Configurer l'objectif chiffreurs" style="margin-left:8px;background:none;border:none;cursor:pointer;font-size:14px;">⚙️</button>
+          <span style="font-size:11px;color:var(--gray-500);margin-left:8px;">Obj: <span id="chiffreurObjLabel">4.5M€</span></span>
         </div>
         <div class="stats-chart-container">
-          <div class="person-filter-tabs">
-            <button class="person-filter-btn active" data-filter="tous" data-target="chiffreur">Tous</button>
-            <button class="person-filter-btn" data-filter="gagne" data-target="chiffreur">Gagnés</button>
-            <button class="person-filter-btn" data-filter="encours" data-target="chiffreur">En cours</button>
-            <button class="person-filter-btn" data-filter="perdu" data-target="chiffreur">Perdus</button>
-          </div>
-          <div id="chiffreurObjectivesList" class="objectives-container person-stats-list">
+          <div id="chiffreurObjectivesList" class="objectives-container">
             <!-- Generated by JS -->
           </div>
         </div>
       </div>
-      
+
       <!-- Objectifs par Métreur -->
-      <div class="stats-section" id="metreurSection">
+      <div class="stats-section" id="metreurObjectivesSection">
         <div class="stats-section-title">
           📐 Métreurs
-          <button class="objective-config-btn" id="metreurConfigBtn" title="Configurer l'objectif" style="margin-left:8px;background:none;border:none;cursor:pointer;font-size:14px;">⚙️</button>
-          <span style="font-size:11px;color:var(--gray-500);margin-left:8px;">Obj: <span id="metreurObjLabel">Non défini</span></span>
+          <button class="objective-config-btn" onclick="openMetreurConfig()" title="Configurer l'objectif métreurs" style="margin-left:8px;background:none;border:none;cursor:pointer;font-size:14px;">⚙️</button>
+          <span style="font-size:11px;color:var(--gray-500);margin-left:8px;">Obj: <span id="metreurObjLabel">4.5M€</span></span>
         </div>
         <div class="stats-chart-container">
-          <div class="person-filter-tabs">
-            <button class="person-filter-btn active" data-filter="tous" data-target="metreur">Tous</button>
-            <button class="person-filter-btn" data-filter="gagne" data-target="metreur">Gagnés</button>
-            <button class="person-filter-btn" data-filter="encours" data-target="metreur">En cours</button>
-            <button class="person-filter-btn" data-filter="perdu" data-target="metreur">Perdus</button>
-          </div>
-          <div id="metreurObjectivesList" class="objectives-container person-stats-list">
+          <div id="metreurObjectivesList" class="objectives-container">
             <!-- Generated by JS -->
           </div>
         </div>
@@ -3062,6 +3005,8 @@
             <option value="amount-desc">Tri: Montant ↓</option>
             <option value="amount-asc">Tri: Montant ↑</option>
             <option value="date">Tri: Date</option>
+            <option value="chiffreur">Tri: Chiffreur A-Z</option>
+            <option value="mois-remis">Tri: Mois remis</option>
           </select>
         </div>
         <div class="filter-pills">
@@ -3070,6 +3015,7 @@
           <span class="pill perdu" data-filter="Perdu">✕ Perdu</span>
           <span class="pill encours" data-filter="En cours">◷ En cours</span>
           <span class="pill faste" data-filter="Faste">⚡ Faste</span>
+          <span class="pill nonvalorise" data-filter="Non valorisé">⏸ Non val.</span>
         </div>
         <button class="advanced-toggle" id="advancedToggle">
           <span class="arrow">▼</span> Filtres avancés
@@ -3083,6 +3029,10 @@
             <div class="filter-group">
               <label>EG</label>
               <input type="text" id="fEG" placeholder="Ex: BY">
+            </div>
+            <div class="filter-group">
+              <label>Chiffreur</label>
+              <input type="text" id="fChiffreur" placeholder="Ex: Pierre">
             </div>
             <div class="filter-group">
               <label>MOE</label>
@@ -3115,444 +3065,7 @@
         </span>
         <span id="statsBarProtected" style="display:none;color:var(--gray-500);">🔒 Données masquées (onglet protégé)</span>
       </div>
-      <div class="list-container" id="listContainer">
-          <div class="list-item" data-id="dc_1767782424344_b4dmpu" data-idx="0">
-            <div class="list-item-header">
-              <span class="list-item-title">1&amp;2 - PAR2</span>
-              <span class="status gagne">✓ Gagné</span>
-            </div>
-            <div class="list-item-meta">
-              <span>COLT · BY</span>
-              <span>Villebon-sur-Yvette</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">5 000 000&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767783496738_gxdjiy" data-idx="1">
-            <div class="list-item-header">
-              <span class="list-item-title">Data center PAR 15 Dugny</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>Digital · BY</span>
-              <span>1 Avenue du 2ème DB</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">1 762 000&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767783665882_h3x2aj" data-idx="2">
-            <div class="list-item-header">
-              <span class="list-item-title">DATA CENTER VSG Bardage</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>GOODMAN · Mercury</span>
-              <span>34 Rue Louis Armand, Villeneuve-Saint-Georges, 94190, France</span>
-              <span class="responsable-badge">👤 Maxime</span>
-            </div>
-            <div class="list-item-description">Bardage</div>
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">11 685 363&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767783749178_075yoa" data-idx="3">
-            <div class="list-item-header">
-              <span class="list-item-title">DATA CENTER VSG Etancheité</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>GOODMAN · Mercury</span>
-              <span>34 Rue Louis Armand, Villeneuve-Saint-Georges, 94190, France</span>
-              <span class="responsable-badge">👤 Maxime</span>
-            </div>
-            <div class="list-item-description">Etanchéité</div>
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">7 573 840&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767969607910_t33kfl" data-idx="4">
-            <div class="list-item-header">
-              <span class="list-item-title">DATA HILLS 3</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>HILLS · Vinci</span>
-              <span>Aulnay-sous-Bois</span>
-              <span class="responsable-badge">👤 Richad</span>
-            </div>
-            <div class="list-item-description">Façade/Couverture</div>
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">2 250 786&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_2vsynb" data-idx="5">
-            <div class="list-item-header">
-              <span class="list-item-title">DATA VELIZY</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>Nation Data Center · BY</span>
-              <span>Vélizy-Villacoublay</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">2 275 398&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_1ddfqs" data-idx="6">
-            <div class="list-item-header">
-              <span class="list-item-title">Global Switch - Est</span>
-              <span class="status gagne">✓ Gagné</span>
-            </div>
-            <div class="list-item-meta">
-              <span>GLOBAL SWITCH · BY</span>
-              <span>Clichy</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">410 000&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_lmizhn" data-idx="7">
-            <div class="list-item-header">
-              <span class="list-item-title">Interxion PAR 10 &amp; 11</span>
-              <span class="status perdu">✕ Perdu</span>
-            </div>
-            <div class="list-item-meta">
-              <span>INTERXION · BY</span>
-              <span>La Courneuve</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">-</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_p25gp8" data-idx="8">
-            <div class="list-item-header">
-              <span class="list-item-title">Interxion PAR7</span>
-              <span class="status gagne">✓ Gagné</span>
-            </div>
-            <div class="list-item-meta">
-              <span>INTERXION · BY</span>
-              <span>La Courneuve</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">1 500 000&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_zuksre" data-idx="9">
-            <div class="list-item-header">
-              <span class="list-item-title">PA10</span>
-              <span class="status gagne">✓ Gagné</span>
-            </div>
-            <div class="list-item-meta">
-              <span>EQUINIX · BY</span>
-              <span>Saint-Denis</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">14 541&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_bluynv" data-idx="10">
-            <div class="list-item-header">
-              <span class="list-item-title">PA14</span>
-              <span class="status perdu">✕ Perdu</span>
-            </div>
-            <div class="list-item-meta">
-              <span>EQUINIX · BY</span>
-              <span>Aubervilliers</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">2 945 000&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_9glssy" data-idx="11">
-            <div class="list-item-header">
-              <span class="list-item-title">PA15</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>EQUINIX · BY</span>
-              <span>Meudon</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">7 079 169&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_km8rig" data-idx="12">
-            <div class="list-item-header">
-              <span class="list-item-title">PAR01</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>GOODMAN · BY</span>
-              <span>Tremblay-en-France</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">2 511 133&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_lg29xn" data-idx="13">
-            <div class="list-item-header">
-              <span class="list-item-title">PAR03</span>
-              <span class="status gagne">✓ Gagné</span>
-            </div>
-            <div class="list-item-meta">
-              <span>MICROSOFT · BY</span>
-              <span>Vélizy-Villacoublay</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">913 057&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_ob8dto" data-idx="14">
-            <div class="list-item-header">
-              <span class="list-item-title">PAR1</span>
-              <span class="status faste">⚡ Faste</span>
-            </div>
-            <div class="list-item-meta">
-              <span>NTT DATA · BY-VINCI</span>
-              <span>Le Coudray-Montceaux</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">11 500 000&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_3chsce" data-idx="15">
-            <div class="list-item-header">
-              <span class="list-item-title">PAR3</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>DATA4 · BY</span>
-              <span>Nozay</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">2 630 346&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_115ak0" data-idx="16">
-            <div class="list-item-header">
-              <span class="list-item-title">PASS2</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>EQUINIX · VINCI</span>
-              <span>Meudon</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">570 213&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_uckr9t" data-idx="17">
-            <div class="list-item-header">
-              <span class="list-item-title">SEGRO BONNEUIL</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>SEGRO · BY-VINCI</span>
-              <span>Bonneuil-sur-Marne</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">2 000 000&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_p6qzoa" data-idx="18">
-            <div class="list-item-header">
-              <span class="list-item-title">Telehouse</span>
-              <span class="status gagne">✓ Gagné</span>
-            </div>
-            <div class="list-item-meta">
-              <span>TELEHOUSE · VINCI</span>
-              <span>Paris 13e</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">495 000&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="list-container" id="listContainer"></div>
       <div class="total-bar">
         <span>Total</span>
         <strong id="totalAmount">63 115 846&nbsp;€</strong>
@@ -3578,446 +3091,10 @@
           <span class="pill perdu" data-filter="Perdu">✕ Perdu</span>
           <span class="pill encours" data-filter="En cours">◷ En cours</span>
           <span class="pill faste" data-filter="Faste">⚡ Faste</span>
+          <span class="pill nonvalorise" data-filter="Non valorisé">⏸ Non val.</span>
         </div>
       </div>
-      <div class="list-container" id="mobileListContainer">
-          <div class="list-item" data-id="dc_1767782424344_b4dmpu" data-idx="0">
-            <div class="list-item-header">
-              <span class="list-item-title">1&amp;2 - PAR2</span>
-              <span class="status gagne">✓ Gagné</span>
-            </div>
-            <div class="list-item-meta">
-              <span>COLT · BY</span>
-              <span>Villebon-sur-Yvette</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">5 000 000&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767783496738_gxdjiy" data-idx="1">
-            <div class="list-item-header">
-              <span class="list-item-title">Data center PAR 15 Dugny</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>Digital · BY</span>
-              <span>1 Avenue du 2ème DB</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">1 762 000&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767783665882_h3x2aj" data-idx="2">
-            <div class="list-item-header">
-              <span class="list-item-title">DATA CENTER VSG Bardage</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>GOODMAN · Mercury</span>
-              <span>34 Rue Louis Armand, Villeneuve-Saint-Georges, 94190, France</span>
-              <span class="responsable-badge">👤 Maxime</span>
-            </div>
-            <div class="list-item-description">Bardage</div>
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">11 685 363&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767783749178_075yoa" data-idx="3">
-            <div class="list-item-header">
-              <span class="list-item-title">DATA CENTER VSG Etancheité</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>GOODMAN · Mercury</span>
-              <span>34 Rue Louis Armand, Villeneuve-Saint-Georges, 94190, France</span>
-              <span class="responsable-badge">👤 Maxime</span>
-            </div>
-            <div class="list-item-description">Etanchéité</div>
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">7 573 840&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767969607910_t33kfl" data-idx="4">
-            <div class="list-item-header">
-              <span class="list-item-title">DATA HILLS 3</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>HILLS · Vinci</span>
-              <span>Aulnay-sous-Bois</span>
-              <span class="responsable-badge">👤 Richad</span>
-            </div>
-            <div class="list-item-description">Façade/Couverture</div>
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">2 250 786&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_2vsynb" data-idx="5">
-            <div class="list-item-header">
-              <span class="list-item-title">DATA VELIZY</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>Nation Data Center · BY</span>
-              <span>Vélizy-Villacoublay</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">2 275 398&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_1ddfqs" data-idx="6">
-            <div class="list-item-header">
-              <span class="list-item-title">Global Switch - Est</span>
-              <span class="status gagne">✓ Gagné</span>
-            </div>
-            <div class="list-item-meta">
-              <span>GLOBAL SWITCH · BY</span>
-              <span>Clichy</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">410 000&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_lmizhn" data-idx="7">
-            <div class="list-item-header">
-              <span class="list-item-title">Interxion PAR 10 &amp; 11</span>
-              <span class="status perdu">✕ Perdu</span>
-            </div>
-            <div class="list-item-meta">
-              <span>INTERXION · BY</span>
-              <span>La Courneuve</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">-</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_p25gp8" data-idx="8">
-            <div class="list-item-header">
-              <span class="list-item-title">Interxion PAR7</span>
-              <span class="status gagne">✓ Gagné</span>
-            </div>
-            <div class="list-item-meta">
-              <span>INTERXION · BY</span>
-              <span>La Courneuve</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">1 500 000&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_zuksre" data-idx="9">
-            <div class="list-item-header">
-              <span class="list-item-title">PA10</span>
-              <span class="status gagne">✓ Gagné</span>
-            </div>
-            <div class="list-item-meta">
-              <span>EQUINIX · BY</span>
-              <span>Saint-Denis</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">14 541&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_bluynv" data-idx="10">
-            <div class="list-item-header">
-              <span class="list-item-title">PA14</span>
-              <span class="status perdu">✕ Perdu</span>
-            </div>
-            <div class="list-item-meta">
-              <span>EQUINIX · BY</span>
-              <span>Aubervilliers</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">2 945 000&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_9glssy" data-idx="11">
-            <div class="list-item-header">
-              <span class="list-item-title">PA15</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>EQUINIX · BY</span>
-              <span>Meudon</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">7 079 169&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_km8rig" data-idx="12">
-            <div class="list-item-header">
-              <span class="list-item-title">PAR01</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>GOODMAN · BY</span>
-              <span>Tremblay-en-France</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">2 511 133&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_lg29xn" data-idx="13">
-            <div class="list-item-header">
-              <span class="list-item-title">PAR03</span>
-              <span class="status gagne">✓ Gagné</span>
-            </div>
-            <div class="list-item-meta">
-              <span>MICROSOFT · BY</span>
-              <span>Vélizy-Villacoublay</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">913 057&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_ob8dto" data-idx="14">
-            <div class="list-item-header">
-              <span class="list-item-title">PAR1</span>
-              <span class="status faste">⚡ Faste</span>
-            </div>
-            <div class="list-item-meta">
-              <span>NTT DATA · BY-VINCI</span>
-              <span>Le Coudray-Montceaux</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">11 500 000&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_3chsce" data-idx="15">
-            <div class="list-item-header">
-              <span class="list-item-title">PAR3</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>DATA4 · BY</span>
-              <span>Nozay</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">2 630 346&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_115ak0" data-idx="16">
-            <div class="list-item-header">
-              <span class="list-item-title">PASS2</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>EQUINIX · VINCI</span>
-              <span>Meudon</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">570 213&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_uckr9t" data-idx="17">
-            <div class="list-item-header">
-              <span class="list-item-title">SEGRO BONNEUIL</span>
-              <span class="status encours">◷ En cours</span>
-            </div>
-            <div class="list-item-meta">
-              <span>SEGRO · BY-VINCI</span>
-              <span>Bonneuil-sur-Marne</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">2 000 000&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        
-          <div class="list-item" data-id="dc_1767782424344_p6qzoa" data-idx="18">
-            <div class="list-item-header">
-              <span class="list-item-title">Telehouse</span>
-              <span class="status gagne">✓ Gagné</span>
-            </div>
-            <div class="list-item-meta">
-              <span>TELEHOUSE · VINCI</span>
-              <span>Paris 13e</span>
-              
-            </div>
-            
-            
-            <div class="list-item-footer">
-              <span class="list-item-amount">495 000&nbsp;€</span>
-              <div class="list-item-actions">
-                
-                <button class="btn-icon duplicate" title="Dupliquer">📋</button>
-                <button class="btn-icon edit" title="Modifier">✏️</button>
-                <button class="btn-icon delete" title="Supprimer">🗑️</button>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="list-container" id="mobileListContainer"></div>
       <div class="total-bar">
         <span>Total</span>
         <strong id="mobileTotalAmount">63 115 846&nbsp;€</strong>
@@ -4047,18 +3124,35 @@
             <input type="text" class="form-input" id="mDescription" placeholder="Ex: Lot CVC, Lot Plomberie, Étanchéité...">
           </div>
           <div class="form-group">
-            <label class="form-label">EG</label>
+            <label class="form-label">EG (Client SMAC)</label>
             <select class="form-select" id="mEG">
               <option value="">-- Sélectionner --</option>
+              <option value="BY">BY</option>
+              <option value="VINCI">VINCI</option>
+              <option value="EIFFAGE">EIFFAGE</option>
+              <option value="COLAS">COLAS</option>
+              <option value="DEMATHIEU&BARD">DEMATHIEU&BARD</option>
+              <option value="FAYAT">FAYAT</option>
+              <option value="GCC">GCC</option>
+              <option value="FAYOLLES">FAYOLLES</option>
+              <option value="SPIE BATIGNOLLES">SPIE BATIGNOLLES</option>
+              <option value="LEON GROSSE">LEON GROSSE</option>
             </select>
-            <input type="text" class="form-input" id="mEGNew" placeholder="Ou saisir nouveau..." style="margin-top:4px;font-size:12px;">
+            <input type="text" class="form-input" id="mEGCustom" placeholder="Ou saisir un nouveau..." style="margin-top:4px;font-size:12px;">
           </div>
           <div class="form-group">
-            <label class="form-label">MOE</label>
+            <label class="form-label">MOE (Architecte)</label>
             <select class="form-select" id="mArchitect">
               <option value="">-- Sélectionner --</option>
             </select>
-            <input type="text" class="form-input" id="mMOENew" placeholder="Ou saisir nouveau..." style="margin-top:4px;font-size:12px;">
+            <input type="text" class="form-input" id="mArchitectCustom" placeholder="Ou saisir un nouveau..." style="margin-top:4px;font-size:12px;">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Chiffreur</label>
+            <select class="form-select" id="mChiffreur">
+              <option value="">-- Sélectionner --</option>
+            </select>
+            <input type="text" class="form-input" id="mChiffreurCustom" placeholder="Ou saisir un nouveau..." style="margin-top:4px;font-size:12px;">
           </div>
           <div class="form-group full">
             <label class="form-label">Adresse</label>
@@ -4081,12 +3175,21 @@
             <input type="date" class="form-input" id="mDate">
           </div>
           <div class="form-group">
+            <label class="form-label">Date envoi devis</label>
+            <input type="date" class="form-input" id="mDateDevis">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mois remis client</label>
+            <input type="month" class="form-input" id="mMoisRemis" placeholder="2026-01">
+          </div>
+          <div class="form-group">
             <label class="form-label">Statut</label>
             <select class="form-select" id="mStatut">
               <option>Gagné</option>
               <option>Perdu</option>
               <option selected="">En cours</option>
               <option>Faste</option>
+              <option>Non valorisé</option>
             </select>
           </div>
           <div class="form-group">
@@ -4098,18 +3201,11 @@
             <input type="text" class="form-input" id="mResponsable" placeholder="Jean Dupont">
           </div>
           <div class="form-group">
-            <label class="form-label">Chiffreur</label>
-            <select class="form-select" id="mChiffreur">
-              <option value="">-- Sélectionner --</option>
-            </select>
-            <input type="text" class="form-input" id="mChiffreurNew" placeholder="Ou saisir nouveau..." style="margin-top:4px;font-size:12px;">
-          </div>
-          <div class="form-group">
             <label class="form-label">Métreur</label>
             <select class="form-select" id="mMetreur">
               <option value="">-- Sélectionner --</option>
             </select>
-            <input type="text" class="form-input" id="mMetreurNew" placeholder="Ou saisir nouveau..." style="margin-top:4px;font-size:12px;">
+            <input type="text" class="form-input" id="mMetreurCustom" placeholder="Ou saisir un nouveau..." style="margin-top:4px;font-size:12px;">
           </div>
           <div class="form-group">
             <label class="form-label">Latitude *</label>
@@ -4205,6 +3301,74 @@
       </div>
       <div class="modal-footer">
         <button class="btn btn-secondary" id="duplicateModalCancel">Annuler</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Objectives Config Modal -->
+  <div class="modal-overlay" id="objectivesConfigModal">
+    <div class="modal" style="max-width:450px">
+      <div class="modal-header">
+        <span class="modal-title">⚙️ Configuration des Objectifs CA</span>
+        <button class="btn-icon" onclick="closeObjectivesConfig()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Objectif Mensuel (€)</label>
+          <input type="text" class="form-input" id="configObjMensuel" placeholder="18000000">
+          <small style="color:var(--gray-500)">Ex: 18000000 pour 18M€</small>
+        </div>
+        <div class="form-group" style="margin-top:12px;">
+          <label class="form-label">Objectif Annuel (€)</label>
+          <input type="text" class="form-input" id="configObjAnnuel" placeholder="216000000">
+          <small style="color:var(--gray-500)">Ex: 216000000 pour 216M€</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeObjectivesConfig()">Annuler</button>
+        <button class="btn btn-primary" onclick="saveObjectivesConfig()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chiffreur Config Modal -->
+  <div class="modal-overlay" id="chiffreurConfigModal">
+    <div class="modal" style="max-width:400px">
+      <div class="modal-header">
+        <span class="modal-title">🧮 Objectif par Chiffreur</span>
+        <button class="btn-icon" onclick="closeChiffreurConfig()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Objectif mensuel par chiffreur (€)</label>
+          <input type="text" class="form-input" id="configObjChiffreur" placeholder="4500000">
+          <small style="color:var(--gray-500)">La jauge indiquera le % d'atteinte de cet objectif</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeChiffreurConfig()">Annuler</button>
+        <button class="btn btn-primary" onclick="saveChiffreurConfig()">Enregistrer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Metreur Config Modal -->
+  <div class="modal-overlay" id="metreurConfigModal">
+    <div class="modal" style="max-width:400px">
+      <div class="modal-header">
+        <span class="modal-title">📐 Objectif par Métreur</span>
+        <button class="btn-icon" onclick="closeMetreurConfig()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Objectif mensuel par métreur (€)</label>
+          <input type="text" class="form-input" id="configObjMetreur" placeholder="4500000">
+          <small style="color:var(--gray-500)">La jauge indiquera le % d'atteinte de cet objectif</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeMetreurConfig()">Annuler</button>
+        <button class="btn btn-primary" onclick="saveMetreurConfig()">Enregistrer</button>
       </div>
     </div>
   </div>
@@ -4452,263 +3616,6 @@
       applyFilters();
     }
 
-    function toggleCluster() {
-      clusterEnabled = !clusterEnabled;
-      
-      const btn = document.getElementById('clusterToggleBtn');
-      
-      if (clusterEnabled) {
-        btn.innerHTML = '🔵';
-        btn.classList.add('active');
-        btn.title = 'Désactiver le regroupement';
-        showToast('Regroupement activé', 'success');
-      } else {
-        btn.innerHTML = '📍';
-        btn.classList.remove('active');
-        btn.title = 'Activer le regroupement';
-        showToast('Regroupement désactivé - Points individuels', 'info');
-      }
-      
-      // Clear all markers and re-render
-      if (map && markerCluster) {
-        markerCluster.clearLayers();
-        // Remove individual markers from map
-        markerByIndex.forEach(marker => {
-          if (map.hasLayer(marker)) {
-            map.removeLayer(marker);
-          }
-        });
-        markerByIndex.clear();
-      }
-      
-      // Re-render map
-      renderMap(currentList);
-    }
-
-    /* Dynamic Lists Functions */
-    function getAllEG() {
-      return [...new Set([...defaultEGList, ...customEGList])].sort();
-    }
-
-    function getAllMOE() {
-      const fromData = [];
-      Object.values(dataByTab).forEach(data => {
-        data.forEach(item => { if (item.architect) fromData.push(item.architect); });
-      });
-      return [...new Set([...fromData, ...customMOEList])].filter(Boolean).sort();
-    }
-
-    function getAllChiffreurs() {
-      const fromData = [];
-      Object.values(dataByTab).forEach(data => {
-        data.forEach(item => { if (item.chiffreur) fromData.push(item.chiffreur); });
-      });
-      return [...new Set([...fromData, ...customChiffreurList])].filter(Boolean).sort();
-    }
-
-    function getAllMetreurs() {
-      const fromData = [];
-      Object.values(dataByTab).forEach(data => {
-        data.forEach(item => { if (item.metreur) fromData.push(item.metreur); });
-      });
-      return [...new Set([...fromData, ...customMetreurList])].filter(Boolean).sort();
-    }
-
-    function addToEGList(eg) {
-      if (eg && !defaultEGList.includes(eg) && !customEGList.includes(eg)) {
-        customEGList.push(eg);
-        localStorage.setItem(STORAGE_PREFIX + 'eg_list', JSON.stringify(customEGList));
-        updateEGDropdown();
-      }
-    }
-
-    function addToMOEList(moe) {
-      if (moe && !customMOEList.includes(moe)) {
-        customMOEList.push(moe);
-        localStorage.setItem(STORAGE_PREFIX + 'moe_list', JSON.stringify(customMOEList));
-        updateMOEDropdown();
-      }
-    }
-
-    function addToChiffreurList(chiffreur) {
-      if (chiffreur && !customChiffreurList.includes(chiffreur)) {
-        customChiffreurList.push(chiffreur);
-        localStorage.setItem(STORAGE_PREFIX + 'chiffreur_list', JSON.stringify(customChiffreurList));
-        updateChiffreurDropdown();
-      }
-    }
-
-    function addToMetreurList(metreur) {
-      if (metreur && !customMetreurList.includes(metreur)) {
-        customMetreurList.push(metreur);
-        localStorage.setItem(STORAGE_PREFIX + 'metreur_list', JSON.stringify(customMetreurList));
-        updateMetreurDropdown();
-      }
-    }
-
-    function updateEGDropdown() {
-      const select = document.getElementById('mEG');
-      if (!select) return;
-      const currentVal = select.value;
-      select.innerHTML = '<option value="">-- Sélectionner --</option>';
-      getAllEG().forEach(eg => {
-        const opt = document.createElement('option');
-        opt.value = eg;
-        opt.textContent = eg;
-        select.appendChild(opt);
-      });
-      select.value = currentVal;
-    }
-
-    function updateMOEDropdown() {
-      const select = document.getElementById('mArchitect');
-      if (!select) return;
-      const currentVal = select.value;
-      select.innerHTML = '<option value="">-- Sélectionner --</option>';
-      getAllMOE().forEach(moe => {
-        const opt = document.createElement('option');
-        opt.value = moe;
-        opt.textContent = moe;
-        select.appendChild(opt);
-      });
-      select.value = currentVal;
-    }
-
-    function updateChiffreurDropdown() {
-      const select = document.getElementById('mChiffreur');
-      if (!select) return;
-      const currentVal = select.value;
-      select.innerHTML = '<option value="">-- Sélectionner --</option>';
-      getAllChiffreurs().forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c;
-        opt.textContent = c;
-        select.appendChild(opt);
-      });
-      select.value = currentVal;
-    }
-
-    function updateMetreurDropdown() {
-      const select = document.getElementById('mMetreur');
-      if (!select) return;
-      const currentVal = select.value;
-      select.innerHTML = '<option value="">-- Sélectionner --</option>';
-      getAllMetreurs().forEach(m => {
-        const opt = document.createElement('option');
-        opt.value = m;
-        opt.textContent = m;
-        select.appendChild(opt);
-      });
-      select.value = currentVal;
-    }
-
-    function updateAllDropdowns() {
-      updateEGDropdown();
-      updateMOEDropdown();
-      updateChiffreurDropdown();
-      updateMetreurDropdown();
-    }
-
-    /* Chiffreur/Métreur Stats */
-    function updatePersonStats() {
-      const allData = Object.values(dataByTab).flat();
-      
-      // Calculate stats by chiffreur
-      const chiffreurStats = {};
-      const metreurStats = {};
-      
-      allData.forEach(item => {
-        const amount = parseMontant(item.montant);
-        if (!Number.isFinite(amount)) return;
-        
-        if (item.chiffreur) {
-          if (!chiffreurStats[item.chiffreur]) {
-            chiffreurStats[item.chiffreur] = { total: 0, count: 0, gagne: 0, encours: 0, perdu: 0, gagneCount: 0, encoursCount: 0, perduCount: 0 };
-          }
-          chiffreurStats[item.chiffreur].total += amount;
-          chiffreurStats[item.chiffreur].count++;
-          if (item.statut === 'Gagné') { chiffreurStats[item.chiffreur].gagne += amount; chiffreurStats[item.chiffreur].gagneCount++; }
-          else if (item.statut === 'En cours') { chiffreurStats[item.chiffreur].encours += amount; chiffreurStats[item.chiffreur].encoursCount++; }
-          else if (item.statut === 'Perdu') { chiffreurStats[item.chiffreur].perdu += amount; chiffreurStats[item.chiffreur].perduCount++; }
-        }
-        
-        if (item.metreur) {
-          if (!metreurStats[item.metreur]) {
-            metreurStats[item.metreur] = { total: 0, count: 0, gagne: 0, encours: 0, perdu: 0, gagneCount: 0, encoursCount: 0, perduCount: 0 };
-          }
-          metreurStats[item.metreur].total += amount;
-          metreurStats[item.metreur].count++;
-          if (item.statut === 'Gagné') { metreurStats[item.metreur].gagne += amount; metreurStats[item.metreur].gagneCount++; }
-          else if (item.statut === 'En cours') { metreurStats[item.metreur].encours += amount; metreurStats[item.metreur].encoursCount++; }
-          else if (item.statut === 'Perdu') { metreurStats[item.metreur].perdu += amount; metreurStats[item.metreur].perduCount++; }
-        }
-      });
-      
-      // Update objective labels
-      document.getElementById('chiffreurObjLabel').textContent = chiffreurObjectif > 0 ? formatMontantShort(chiffreurObjectif) : 'Non défini';
-      document.getElementById('metreurObjLabel').textContent = metreurObjectif > 0 ? formatMontantShort(metreurObjectif) : 'Non défini';
-      
-      // Render chiffreur list
-      renderPersonStatsList('chiffreurObjectivesList', chiffreurStats, chiffreurObjectif, chiffreurFilter);
-      renderPersonStatsList('metreurObjectivesList', metreurStats, metreurObjectif, metreurFilter);
-    }
-
-    function renderPersonStatsList(containerId, stats, objectif, filter) {
-      const container = document.getElementById(containerId);
-      if (!container) return;
-      
-      const entries = Object.entries(stats).sort((a, b) => b[1].total - a[1].total);
-      
-      if (entries.length === 0) {
-        container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--gray-500);font-size:12px;">Aucune donnée</div>';
-        return;
-      }
-      
-      container.innerHTML = entries.map(([name, data]) => {
-        let amount, count;
-        if (filter === 'gagne') { amount = data.gagne; count = data.gagneCount; }
-        else if (filter === 'encours') { amount = data.encours; count = data.encoursCount; }
-        else if (filter === 'perdu') { amount = data.perdu; count = data.perduCount; }
-        else { amount = data.total; count = data.count; }
-        
-        const percent = objectif > 0 ? Math.min((amount / objectif) * 100, 100) : 0;
-        const isSuccess = percent >= 100;
-        
-        return `
-          <div class="person-stat-item">
-            <div class="person-stat-header">
-              <span class="person-stat-name">${escapeHTML(name)} <span class="person-stat-count">(${count})</span></span>
-              <span class="person-stat-values">${formatMontantShort(amount)}${objectif > 0 ? ' / ' + formatMontantShort(objectif) : ''}</span>
-            </div>
-            <div class="person-stat-bar">
-              <div class="person-stat-fill ${isSuccess ? 'success' : ''}" style="width: ${percent}%"></div>
-            </div>
-            ${objectif > 0 ? `<div class="person-stat-details"><span>${Math.round(percent)}%</span></div>` : ''}
-          </div>
-        `;
-      }).join('');
-    }
-
-    function openChiffreurConfig() {
-      const val = prompt('Objectif par chiffreur (en €):', chiffreurObjectif || '');
-      if (val !== null) {
-        chiffreurObjectif = parseMontant(val) || 0;
-        localStorage.setItem(STORAGE_PREFIX + 'chiffreur_obj', chiffreurObjectif);
-        updatePersonStats();
-        showToast('Objectif chiffreur mis à jour !', 'success');
-      }
-    }
-
-    function openMetreurConfig() {
-      const val = prompt('Objectif par métreur (en €):', metreurObjectif || '');
-      if (val !== null) {
-        metreurObjectif = parseMontant(val) || 0;
-        localStorage.setItem(STORAGE_PREFIX + 'metreur_obj', metreurObjectif);
-        updatePersonStats();
-        showToast('Objectif métreur mis à jour !', 'success');
-      }
-    }
-
     /* Password Hashing (Simple hash that works everywhere) */
     function hashPassword(password) {
       // Simple but effective hash function (works on file://, http://, https://)
@@ -4876,10 +3783,22 @@
       return !!tab?.passwordHash;
     }
 
-    /* Default Data */
-    const defaultDataDC = [];
+    function showLockedMessage() {
+      const container = document.getElementById('listContainer');
+      const mobileContainer = document.getElementById('mobileListContainer');
+      const lockedHTML = `
+        <div style="padding:60px 20px;text-align:center;color:var(--gray-500);">
+          <div style="font-size:48px;margin-bottom:16px;">🔒</div>
+          <div style="font-size:16px;font-weight:600;margin-bottom:8px;">Onglet verrouillé</div>
+          <div style="font-size:13px;">Cliquez sur l'onglet pour entrer le mot de passe</div>
+        </div>
+      `;
+      if (container) container.innerHTML = lockedHTML;
+      if (mobileContainer) mobileContainer.innerHTML = lockedHTML;
+    }
 
-    const defaultDataProj = [];
+    /* Default Data - Vide pour Richad */
+    const defaultDataDC = [];
 
     /* State */
     const MASTER_CODE = 'Villepinte'; // Code maître pour protéger/supprimer des onglets
@@ -4908,18 +3827,223 @@
     const unlockedTabs = new Set(); // Onglets déverrouillés pendant cette session
     let clusterEnabled = true; // Toggle cluster on/off
 
-    /* Dynamic Lists for EG, MOE, Chiffreur, Métreur */
-    const defaultEGList = ['BY', 'VINCI', 'EIFFAGE', 'COLAS', 'DEMATHIEU&BARD', 'FAYAT', 'GCC', 'FAYOLLES', 'SPIE BATIGNOLLES', 'LEON GROSSE', 'BOUYGUES', 'GA SMART BUILDING'];
-    let customEGList = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'eg_list') || '[]');
-    let customMOEList = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'moe_list') || '[]');
-    let customChiffreurList = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'chiffreur_list') || '[]');
-    let customMetreurList = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'metreur_list') || '[]');
-    
-    // Objectifs par chiffreur/métreur
-    let chiffreurObjectif = parseInt(localStorage.getItem(STORAGE_PREFIX + 'chiffreur_obj') || '0');
-    let metreurObjectif = parseInt(localStorage.getItem(STORAGE_PREFIX + 'metreur_obj') || '0');
-    let chiffreurFilter = 'tous';
-    let metreurFilter = 'tous';
+    /* Objectifs configurables */
+    let objectifsConfig = JSON.parse(localStorage.getItem('smac_objectifs_config') || '{}');
+    const getObjectifMensuel = () => objectifsConfig.mensuel || 18000000;
+    const getObjectifAnnuel = () => objectifsConfig.annuel || 216000000;
+    const getObjectifChiffreur = () => objectifsConfig.chiffreur || 4500000;
+    const getObjectifMetreur = () => objectifsConfig.metreur || 4500000;
+
+    function openObjectivesConfig() {
+      document.getElementById('configObjMensuel').value = getObjectifMensuel();
+      document.getElementById('configObjAnnuel').value = getObjectifAnnuel();
+      document.getElementById('objectivesConfigModal').classList.add('open');
+    }
+
+    function closeObjectivesConfig() {
+      document.getElementById('objectivesConfigModal').classList.remove('open');
+    }
+
+    function saveObjectivesConfig() {
+      const mensuel = parseMontant(document.getElementById('configObjMensuel').value);
+      const annuel = parseMontant(document.getElementById('configObjAnnuel').value);
+      
+      if (Number.isFinite(mensuel) && mensuel > 0) objectifsConfig.mensuel = mensuel;
+      if (Number.isFinite(annuel) && annuel > 0) objectifsConfig.annuel = annuel;
+      
+      localStorage.setItem('smac_objectifs_config', JSON.stringify(objectifsConfig));
+      closeObjectivesConfig();
+      updateObjectives();
+      showToast('Objectifs CA mis à jour !', 'success');
+    }
+
+    function openChiffreurConfig() {
+      document.getElementById('configObjChiffreur').value = getObjectifChiffreur();
+      document.getElementById('chiffreurConfigModal').classList.add('open');
+    }
+
+    function closeChiffreurConfig() {
+      document.getElementById('chiffreurConfigModal').classList.remove('open');
+    }
+
+    function saveChiffreurConfig() {
+      const obj = parseMontant(document.getElementById('configObjChiffreur').value);
+      
+      if (Number.isFinite(obj) && obj > 0) {
+        objectifsConfig.chiffreur = obj;
+        localStorage.setItem('smac_objectifs_config', JSON.stringify(objectifsConfig));
+        closeChiffreurConfig();
+        updateObjectives();
+        showToast('Objectif chiffreurs mis à jour !', 'success');
+      } else {
+        showToast('Montant invalide', 'error');
+      }
+    }
+
+    function openMetreurConfig() {
+      document.getElementById('configObjMetreur').value = getObjectifMetreur();
+      document.getElementById('metreurConfigModal').classList.add('open');
+    }
+
+    function closeMetreurConfig() {
+      document.getElementById('metreurConfigModal').classList.remove('open');
+    }
+
+    function saveMetreurConfig() {
+      const obj = parseMontant(document.getElementById('configObjMetreur').value);
+      
+      if (Number.isFinite(obj) && obj > 0) {
+        objectifsConfig.metreur = obj;
+        localStorage.setItem('smac_objectifs_config', JSON.stringify(objectifsConfig));
+        closeMetreurConfig();
+        updateObjectives();
+        showToast('Objectif métreurs mis à jour !', 'success');
+      } else {
+        showToast('Montant invalide', 'error');
+      }
+    }
+
+    /* Auto-alimentées databases - Clients EG, MOE, Chiffreurs, Métreurs */
+    const defaultEGList = ['BY', 'VINCI', 'EIFFAGE', 'COLAS', 'DEMATHIEU&BARD', 'FAYAT', 'GCC', 'FAYOLLES', 'SPIE BATIGNOLLES', 'LEON GROSSE'];
+    let customEGList = JSON.parse(localStorage.getItem('smac_eg_list') || '[]');
+    let customMOEList = JSON.parse(localStorage.getItem('smac_moe_list') || '[]');
+    let customChiffreurList = JSON.parse(localStorage.getItem('smac_chiffreur_list') || '[]');
+    let customMetreurList = JSON.parse(localStorage.getItem('smac_metreur_list') || '[]');
+
+    // Normaliser EG (regrouper les variantes de VINCI)
+    function normalizeEG(eg) {
+      if (!eg) return eg;
+      const upper = eg.toUpperCase().trim();
+      // Regrouper toutes les variantes de VINCI
+      if (upper.includes('VINCI')) return 'VINCI';
+      return eg;
+    }
+
+    function getAllEG() {
+      return [...new Set([...defaultEGList, ...customEGList])].sort();
+    }
+
+    function getAllMOE() {
+      // Extract from existing data + custom list
+      const fromData = [];
+      Object.values(dataByTab).forEach(data => {
+        data.forEach(item => { if (item.architect) fromData.push(item.architect); });
+      });
+      return [...new Set([...fromData, ...customMOEList])].filter(Boolean).sort();
+    }
+
+    function getAllChiffreurs() {
+      // Extract from existing data + custom list
+      const fromData = [];
+      Object.values(dataByTab).forEach(data => {
+        data.forEach(item => { if (item.chiffreur) fromData.push(item.chiffreur); });
+      });
+      return [...new Set([...fromData, ...customChiffreurList])].filter(Boolean).sort();
+    }
+
+    function getAllMetreurs() {
+      // Extract from existing data + custom list
+      const fromData = [];
+      Object.values(dataByTab).forEach(data => {
+        data.forEach(item => { if (item.metreur) fromData.push(item.metreur); });
+      });
+      return [...new Set([...fromData, ...customMetreurList])].filter(Boolean).sort();
+    }
+
+    function addToEGList(eg) {
+      if (eg && !defaultEGList.includes(eg) && !customEGList.includes(eg)) {
+        customEGList.push(eg);
+        localStorage.setItem('smac_eg_list', JSON.stringify(customEGList));
+        updateEGDropdown();
+      }
+    }
+
+    function addToMOEList(moe) {
+      if (moe && !customMOEList.includes(moe)) {
+        customMOEList.push(moe);
+        localStorage.setItem('smac_moe_list', JSON.stringify(customMOEList));
+        updateMOEDropdown();
+      }
+    }
+
+    function addToChiffreurList(chiffreur) {
+      if (chiffreur && !customChiffreurList.includes(chiffreur)) {
+        customChiffreurList.push(chiffreur);
+        localStorage.setItem('smac_chiffreur_list', JSON.stringify(customChiffreurList));
+        updateChiffreurDropdown();
+      }
+    }
+
+    function addToMetreurList(metreur) {
+      if (metreur && !customMetreurList.includes(metreur)) {
+        customMetreurList.push(metreur);
+        localStorage.setItem('smac_metreur_list', JSON.stringify(customMetreurList));
+        updateMetreurDropdown();
+      }
+    }
+
+    function updateEGDropdown() {
+      const select = document.getElementById('mEG');
+      if (!select) return;
+      const currentVal = select.value;
+      select.innerHTML = '<option value="">-- Sélectionner --</option>';
+      getAllEG().forEach(eg => {
+        const opt = document.createElement('option');
+        opt.value = eg;
+        opt.textContent = eg;
+        select.appendChild(opt);
+      });
+      select.value = currentVal;
+    }
+
+    function updateMOEDropdown() {
+      const select = document.getElementById('mArchitect');
+      if (!select) return;
+      const currentVal = select.value;
+      select.innerHTML = '<option value="">-- Sélectionner --</option>';
+      getAllMOE().forEach(moe => {
+        const opt = document.createElement('option');
+        opt.value = moe;
+        opt.textContent = moe;
+        select.appendChild(opt);
+      });
+      select.value = currentVal;
+    }
+
+    function updateChiffreurDropdown() {
+      const select = document.getElementById('mChiffreur');
+      if (!select) return;
+      const currentVal = select.value;
+      select.innerHTML = '<option value="">-- Sélectionner --</option>';
+      getAllChiffreurs().forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = c;
+        select.appendChild(opt);
+      });
+      select.value = currentVal;
+    }
+
+    function updateMetreurDropdown() {
+      const select = document.getElementById('mMetreur');
+      if (!select) return;
+      const currentVal = select.value;
+      select.innerHTML = '<option value="">-- Sélectionner --</option>';
+      getAllMetreurs().forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m;
+        opt.textContent = m;
+        select.appendChild(opt);
+      });
+      select.value = currentVal;
+    }
+
+    function updateAllDropdowns() {
+      updateEGDropdown();
+      updateMOEDropdown();
+      updateChiffreurDropdown();
+      updateMetreurDropdown();
+    }
 
     /* Drag & Drop State */
     let draggedTab = null;
@@ -5259,6 +4383,8 @@
         // Hide real data in summary cards
         document.getElementById('statsTotalAffaires').textContent = '***';
         document.getElementById('statsTotalMontant').textContent = '***';
+        document.getElementById('chiffreurObjectivesList').innerHTML = '<div style="text-align:center;padding:20px;color:var(--gray-500);">🔒 Verrouillé</div>';
+        document.getElementById('metreurObjectivesList').innerHTML = '<div style="text-align:center;padding:20px;color:var(--gray-500);">🔒 Verrouillé</div>';
         return;
       } else {
         // Hide locked overlay if exists
@@ -5306,9 +4432,6 @@
       
       // Update objectives
       updateObjectives();
-      
-      // Update person stats (chiffreur/métreur)
-      updatePersonStats();
     }
 
     function formatMontantShort(value) {
@@ -5397,6 +4520,16 @@
       const container = document.getElementById('timelineChart');
       const labelsContainer = document.getElementById('timelineLabels');
       
+      // SECURITY: Si l'onglet est verrouillé, afficher message
+      if (isTabLocked(currentTab)) {
+        if (container) container.innerHTML = '<div style="text-align:center;padding:20px;">🔒</div>';
+        if (labelsContainer) labelsContainer.innerHTML = '';
+        return;
+      }
+      
+      // Get all data from current tab (not just filtered)
+      const allData = dataByTab[currentTab] || [];
+      
       // Group by month
       const monthlyData = {};
       const now = new Date();
@@ -5408,33 +4541,42 @@
         monthlyData[key] = { montant: 0, count: 0, label: d.toLocaleDateString('fr-FR', { month: 'short' }) };
       }
       
-      // Fill with data based on datePrevisionnelle
-      currentList.forEach(item => {
-        if (item.datePrevisionnelle) {
-          const d = new Date(item.datePrevisionnelle);
-          const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+      // Fill with ALL data (tous statuts) based on moisRemis or dateDevis or datePrevisionnelle
+      allData.forEach(item => {
+        let itemDate = null;
+        if (item.moisRemis) {
+          const [y, m] = item.moisRemis.split('-');
+          itemDate = new Date(parseInt(y), parseInt(m) - 1, 1);
+        } else if (item.dateDevis) {
+          itemDate = new Date(item.dateDevis);
+        } else if (item.datePrevisionnelle) {
+          itemDate = new Date(item.datePrevisionnelle);
+        }
+        
+        if (itemDate && !isNaN(itemDate.getTime())) {
+          const key = `${itemDate.getFullYear()}-${String(itemDate.getMonth() + 1).padStart(2, '0')}`;
           if (monthlyData[key]) {
             const val = parseMontant(item.montant);
             if (Number.isFinite(val)) {
               monthlyData[key].montant += val;
-              monthlyData[key].count++;
             }
+            monthlyData[key].count++; // Compte TOUTES les affaires
           }
         }
       });
       
-      // Find max for scaling
+      // Find max count for scaling (basé sur le nombre d'affaires)
       const values = Object.values(monthlyData);
-      const maxMontant = Math.max(...values.map(v => v.montant), 1);
+      const maxCount = Math.max(...values.map(v => v.count), 1);
       
-      // Generate bars
+      // Generate bars (hauteur basée sur le NOMBRE d'affaires)
       container.innerHTML = values.map((v, i) => {
-        const height = (v.montant / maxMontant) * 100;
-        return `<div class="timeline-bar" style="height: ${Math.max(height, 4)}%;" data-tooltip="${v.label}: ${formatMontantShort(v.montant)} (${v.count})"></div>`;
+        const height = (v.count / maxCount) * 100;
+        return `<div class="timeline-bar" style="height: ${Math.max(height, 4)}%;" data-tooltip="${v.label}: ${v.count} affaires (${formatMontantShort(v.montant)})"></div>`;
       }).join('');
       
-      // Generate labels
-      labelsContainer.innerHTML = values.map(v => `<span class="timeline-label">${v.label}</span>`).join('');
+      // Generate labels with count
+      labelsContainer.innerHTML = values.map(v => `<span class="timeline-label">${v.label}<br><small style="font-size:9px;color:var(--theme-color);">${v.count}</small></span>`).join('');
     }
 
     /* Forecast (Prévisions CA) */
@@ -5484,32 +4626,98 @@
 
     /* Comparison (Comparaison périodes) */
     function updateComparison() {
+      // SECURITY: Si l'onglet est verrouillé, ne pas afficher les données
+      if (isTabLocked(currentTab)) {
+        document.getElementById('compCurrentMonth').textContent = '🔒';
+        document.getElementById('compLastMonth').textContent = '🔒';
+        document.getElementById('compCurrentCount').textContent = 'Verrouillé';
+        document.getElementById('compLastCount').textContent = 'Verrouillé';
+        return;
+      }
+      
       const now = new Date();
       const currentMonth = now.getMonth();
       const currentYear = now.getFullYear();
       
-      // Filter items by month based on datePrevisionnelle
-      const currentMonthItems = currentList.filter(item => {
-        if (!item.datePrevisionnelle) return false;
-        const d = new Date(item.datePrevisionnelle);
-        return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
-      });
+      // Get selected periods and filter
+      const period1 = document.getElementById('compPeriod1')?.value || 'thisMonth';
+      const period2 = document.getElementById('compPeriod2')?.value || 'lastMonth';
+      const statutFilter = document.getElementById('compStatutFilter')?.value || 'all';
       
-      const lastMonthItems = currentList.filter(item => {
-        if (!item.datePrevisionnelle) return false;
-        const d = new Date(item.datePrevisionnelle);
-        const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
-        const lastYear = currentMonth === 0 ? currentYear - 1 : currentYear;
-        return d.getMonth() === lastMonth && d.getFullYear() === lastYear;
-      });
+      // Get all data (not filtered)
+      const allData = dataByTab[currentTab] || [];
+      
+      // Period labels
+      const periodLabels = {
+        thisMonth: 'Ce mois',
+        lastMonth: 'Mois dernier',
+        thisQuarter: 'Ce trimestre',
+        lastQuarter: 'Trim. dernier',
+        thisYear: 'Cette année',
+        lastYear: 'Année dernière'
+      };
+      
+      // Update labels
+      document.getElementById('compLabel1').textContent = periodLabels[period1];
+      document.getElementById('compLabel2').textContent = periodLabels[period2];
+      
+      // Filter items by period
+      function isInPeriod(item, period) {
+        let itemDate = null;
+        if (item.moisRemis) {
+          const [y, m] = item.moisRemis.split('-');
+          itemDate = new Date(parseInt(y), parseInt(m) - 1, 1);
+        } else if (item.dateDevis) {
+          itemDate = new Date(item.dateDevis);
+        } else if (item.datePrevisionnelle) {
+          itemDate = new Date(item.datePrevisionnelle);
+        }
+        
+        if (!itemDate || isNaN(itemDate.getTime())) return false;
+        
+        const itemMonth = itemDate.getMonth();
+        const itemYear = itemDate.getFullYear();
+        const itemQuarter = Math.floor(itemMonth / 3);
+        const currentQuarter = Math.floor(currentMonth / 3);
+        
+        switch(period) {
+          case 'thisMonth':
+            return itemMonth === currentMonth && itemYear === currentYear;
+          case 'lastMonth':
+            const lastMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+            const lastMonthYear = currentMonth === 0 ? currentYear - 1 : currentYear;
+            return itemMonth === lastMonth && itemYear === lastMonthYear;
+          case 'thisQuarter':
+            return itemQuarter === currentQuarter && itemYear === currentYear;
+          case 'lastQuarter':
+            const lastQuarter = currentQuarter === 0 ? 3 : currentQuarter - 1;
+            const lastQuarterYear = currentQuarter === 0 ? currentYear - 1 : currentYear;
+            return itemQuarter === lastQuarter && itemYear === lastQuarterYear;
+          case 'thisYear':
+            return itemYear === currentYear;
+          case 'lastYear':
+            return itemYear === currentYear - 1;
+          default:
+            return false;
+        }
+      }
+      
+      // Filter by statut if not "all"
+      function matchesStatut(item) {
+        if (statutFilter === 'all') return true;
+        return item.statut === statutFilter;
+      }
+      
+      const period1Items = allData.filter(item => isInPeriod(item, period1) && matchesStatut(item));
+      const period2Items = allData.filter(item => isInPeriod(item, period2) && matchesStatut(item));
       
       // Calculate totals
-      const currentTotal = currentMonthItems.reduce((sum, item) => {
+      const total1 = period1Items.reduce((sum, item) => {
         const val = parseMontant(item.montant);
         return Number.isFinite(val) ? sum + val : sum;
       }, 0);
       
-      const lastTotal = lastMonthItems.reduce((sum, item) => {
+      const total2 = period2Items.reduce((sum, item) => {
         const val = parseMontant(item.montant);
         return Number.isFinite(val) ? sum + val : sum;
       }, 0);
@@ -5517,19 +4725,19 @@
       // Calculate percentage change
       let percentChange = 0;
       let isUp = true;
-      if (lastTotal > 0) {
-        percentChange = ((currentTotal - lastTotal) / lastTotal) * 100;
+      if (total2 > 0) {
+        percentChange = ((total1 - total2) / total2) * 100;
         isUp = percentChange >= 0;
-      } else if (currentTotal > 0) {
+      } else if (total1 > 0) {
         percentChange = 100;
         isUp = true;
       }
       
       // Update UI
-      document.getElementById('compCurrentMonth').textContent = formatMontantShort(currentTotal);
-      document.getElementById('compCurrentCount').textContent = `${currentMonthItems.length} affaire${currentMonthItems.length > 1 ? 's' : ''}`;
-      document.getElementById('compLastMonth').textContent = formatMontantShort(lastTotal);
-      document.getElementById('compLastCount').textContent = `${lastMonthItems.length} affaire${lastMonthItems.length > 1 ? 's' : ''}`;
+      document.getElementById('compCurrentMonth').textContent = formatMontantShort(total1);
+      document.getElementById('compCurrentCount').textContent = `${period1Items.length} affaire${period1Items.length > 1 ? 's' : ''}`;
+      document.getElementById('compLastMonth').textContent = formatMontantShort(total2);
+      document.getElementById('compLastCount').textContent = `${period2Items.length} affaire${period2Items.length > 1 ? 's' : ''}`;
       
       const arrow = document.getElementById('compArrow');
       const percent = document.getElementById('compPercent');
@@ -5609,84 +4817,235 @@
 
     /* Objectives (Objectifs CA) */
     function updateObjectives() {
+      // SECURITY: Si l'onglet est verrouillé, ne pas afficher les objectifs
+      if (isTabLocked(currentTab)) {
+        document.getElementById('objMonthCurrent').textContent = '🔒';
+        document.getElementById('objYearCurrent').textContent = '🔒';
+        document.getElementById('objPriseAffaire').textContent = '🔒';
+        document.getElementById('objHistorique3M').textContent = '🔒';
+        document.getElementById('chiffreurObjectivesList').innerHTML = '<div style="text-align:center;padding:20px;color:var(--gray-500);">🔒 Verrouillé</div>';
+        document.getElementById('metreurObjectivesList').innerHTML = '<div style="text-align:center;padding:20px;color:var(--gray-500);">🔒 Verrouillé</div>';
+        return;
+      }
+      
       const now = new Date();
       const currentMonth = now.getMonth();
       const currentYear = now.getFullYear();
       
-      // Calculate current quarter (0-3)
-      const currentQuarter = Math.floor(currentMonth / 3);
+      // Objectifs configurables
+      const OBJECTIF_MENSUEL = getObjectifMensuel();
+      const OBJECTIF_ANNUEL = getObjectifAnnuel();
+      const OBJECTIF_CHIFFREUR = getObjectifChiffreur();
+      const OBJECTIF_METREUR = getObjectifMetreur();
       
-      // Get saved objectives
-      const savedObjectives = JSON.parse(localStorage.getItem(STORAGE_PREFIX + 'objectives') || '{}');
+      // Update labels
+      document.getElementById('objMonthTargetLabel').textContent = formatMontantShort(OBJECTIF_MENSUEL);
+      document.getElementById('objYearTargetLabel').textContent = formatMontantShort(OBJECTIF_ANNUEL);
+      document.getElementById('chiffreurObjLabel').textContent = formatMontantShort(OBJECTIF_CHIFFREUR);
+      document.getElementById('metreurObjLabel').textContent = formatMontantShort(OBJECTIF_METREUR);
       
-      // Calculate amounts for each period (based on "Gagné" deals)
+      // Get all data from current tab (not just filtered)
+      const allData = dataByTab[currentTab] || [];
+      
+      // Calculate amounts for each period
       let monthTotal = 0;
-      let quarterTotal = 0;
       let yearTotal = 0;
+      let priseAffaireMonth = 0;
+      let priseAffaireCount = 0;
+      let historique3M = 0;
+      let historique3MCount = 0;
+      const chiffreurStats = {};
+      const metreurStats = {};
       
-      currentList.forEach(item => {
-        if (item.statut !== 'Gagné') return;
-        if (!item.datePrevisionnelle) return;
-        
-        const d = new Date(item.datePrevisionnelle);
+      // Calculate date range for last 3 months
+      const threeMonthsAgo = new Date(currentYear, currentMonth - 2, 1);
+      
+      allData.forEach(item => {
         const amount = parseMontant(item.montant);
         if (!Number.isFinite(amount)) return;
         
+        // Get item date (moisRemis preferred, then datePrevisionnelle, then dateDevis)
+        let itemDate = null;
+        if (item.moisRemis) {
+          const [y, m] = item.moisRemis.split('-');
+          itemDate = new Date(parseInt(y), parseInt(m) - 1, 1);
+        } else if (item.dateDevis) {
+          itemDate = new Date(item.dateDevis);
+        } else if (item.datePrevisionnelle) {
+          itemDate = new Date(item.datePrevisionnelle);
+        }
+        
+        // Track CHIFFREUR stats (ALL statuses - montant total chiffré)
+        if (item.chiffreur) {
+          if (!chiffreurStats[item.chiffreur]) {
+            chiffreurStats[item.chiffreur] = { total: 0, count: 0, gagne: 0, encours: 0, perdu: 0 };
+          }
+          chiffreurStats[item.chiffreur].total += amount;
+          chiffreurStats[item.chiffreur].count++;
+          if (item.statut === 'Gagné') chiffreurStats[item.chiffreur].gagne += amount;
+          else if (item.statut === 'En cours') chiffreurStats[item.chiffreur].encours += amount;
+          else if (item.statut === 'Perdu') chiffreurStats[item.chiffreur].perdu += amount;
+        }
+        
+        // Track METREUR stats (ALL statuses - montant total chiffré)
+        if (item.metreur) {
+          if (!metreurStats[item.metreur]) {
+            metreurStats[item.metreur] = { total: 0, count: 0, gagne: 0, encours: 0, perdu: 0 };
+          }
+          metreurStats[item.metreur].total += amount;
+          metreurStats[item.metreur].count++;
+          if (item.statut === 'Gagné') metreurStats[item.metreur].gagne += amount;
+          else if (item.statut === 'En cours') metreurStats[item.metreur].encours += amount;
+          else if (item.statut === 'Perdu') metreurStats[item.metreur].perdu += amount;
+        }
+        
+        // Historique 3 derniers mois (TOUS les statuts - tout ce qui est chiffré)
+        if (itemDate && !isNaN(itemDate.getTime())) {
+          if (itemDate >= threeMonthsAgo && itemDate <= now) {
+            historique3M += amount;
+            historique3MCount++;
+          }
+        }
+        
+        // Skip non-Gagné for monthly/yearly totals (objectifs CA)
+        if (item.statut !== 'Gagné') return;
+        
+        if (!itemDate || isNaN(itemDate.getTime())) return;
+        
         // Same year
-        if (d.getFullYear() === currentYear) {
+        if (itemDate.getFullYear() === currentYear) {
           yearTotal += amount;
           
-          // Same quarter
-          const itemQuarter = Math.floor(d.getMonth() / 3);
-          if (itemQuarter === currentQuarter) {
-            quarterTotal += amount;
-          }
-          
-          // Same month
-          if (d.getMonth() === currentMonth) {
+          // Same month - Prise d'affaire
+          if (itemDate.getMonth() === currentMonth) {
             monthTotal += amount;
+            priseAffaireMonth += amount;
+            priseAffaireCount++;
           }
         }
       });
       
       // Update month objective
-      updateObjectiveUI('Month', monthTotal, savedObjectives.month || 0);
-      
-      // Update quarter objective
-      updateObjectiveUI('Quarter', quarterTotal, savedObjectives.quarter || 0);
+      document.getElementById('objMonthCurrent').textContent = formatMontantShort(monthTotal);
+      document.getElementById('objMonthTarget').textContent = formatMontantShort(OBJECTIF_MENSUEL);
+      const monthPercent = OBJECTIF_MENSUEL > 0 ? Math.min((monthTotal / OBJECTIF_MENSUEL) * 100, 150) : 0;
+      document.getElementById('objMonthFill').style.width = Math.min(monthPercent, 100) + '%';
+      document.getElementById('objMonthPercent').textContent = Math.round(monthPercent) + '%';
+      updateFillColor('objMonthFill', monthPercent, OBJECTIF_MENSUEL > 0);
       
       // Update year objective
-      updateObjectiveUI('Year', yearTotal, savedObjectives.year || 0);
+      document.getElementById('objYearCurrent').textContent = formatMontantShort(yearTotal);
+      document.getElementById('objYearTarget').textContent = formatMontantShort(OBJECTIF_ANNUEL);
+      const yearPercent = OBJECTIF_ANNUEL > 0 ? Math.min((yearTotal / OBJECTIF_ANNUEL) * 100, 150) : 0;
+      document.getElementById('objYearFill').style.width = Math.min(yearPercent, 100) + '%';
+      document.getElementById('objYearPercent').textContent = Math.round(yearPercent) + '%';
+      updateFillColor('objYearFill', yearPercent, OBJECTIF_ANNUEL > 0);
+      
+      // Update prise d'affaire
+      document.getElementById('objPriseAffaire').textContent = formatMontantShort(priseAffaireMonth);
+      document.getElementById('priseAffaireCount').textContent = `${priseAffaireCount} affaire(s) gagnée(s) ce mois`;
+      
+      // Update historique 3 mois (tous statuts confondus)
+      const moisNames = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+      const m1 = moisNames[(currentMonth - 2 + 12) % 12];
+      const m2 = moisNames[(currentMonth - 1 + 12) % 12];
+      const m3 = moisNames[currentMonth];
+      document.getElementById('objHistorique3M').textContent = formatMontantShort(historique3M);
+      document.getElementById('historique3MDetails').textContent = `${historique3MCount} affaires (${m1}-${m2}-${m3}) · Tous statuts`;
+      
+      // Update chiffreur stats avec jauge vs objectif
+      updatePersonStatsWithObjective('chiffreurObjectivesList', chiffreurStats, '🧮', 'Chiffreur', OBJECTIF_CHIFFREUR);
+      
+      // Update metreur stats avec jauge vs objectif
+      updatePersonStatsWithObjective('metreurObjectivesList', metreurStats, '📐', 'Métreur', OBJECTIF_METREUR);
+    }
+
+    function updatePersonStatsWithObjective(containerId, stats, icon, type, objectif) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      
+      const persons = Object.keys(stats).sort((a, b) => stats[b].total - stats[a].total); // Tri par montant décroissant
+      
+      if (persons.length === 0) {
+        container.innerHTML = `<div style="color:var(--gray-500);text-align:center;padding:20px;font-size:12px;">Aucun ${type.toLowerCase()} assigné</div>`;
+        return;
+      }
+      
+      container.innerHTML = persons.map(person => {
+        const s = stats[person];
+        // Calcul du pourcentage vs objectif
+        const percent = objectif > 0 ? (s.total / objectif) * 100 : 0;
+        const percentDisplay = Math.round(percent);
+        const fillWidth = Math.min(percent, 100);
+        
+        // Couleur selon pourcentage
+        let fillColor = 'var(--rose)'; // < 50%
+        if (percent >= 100) fillColor = 'var(--green)';
+        else if (percent >= 75) fillColor = 'var(--cyan)';
+        else if (percent >= 50) fillColor = 'var(--orange)';
+        
+        return `
+          <div class="objective-item" style="padding:10px;margin-bottom:8px;">
+            <div class="objective-header" style="margin-bottom:6px;">
+              <span class="objective-label" style="font-size:12px;font-weight:600;">${icon} ${escapeHTML(person)}</span>
+              <span style="font-size:13px;font-weight:700;color:${fillColor};">
+                ${percentDisplay}%
+              </span>
+            </div>
+            <div class="objective-bar" style="height:12px;background:var(--gray-200);border-radius:6px;">
+              <div style="width:${fillWidth}%;height:100%;background:${fillColor};border-radius:6px;transition:width 0.3s;"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;">
+              <span style="font-weight:600;color:var(--theme-color);">${formatMontantShort(s.total)}</span>
+              <span style="color:var(--gray-500);">${s.count} affaire(s)</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:9px;flex-wrap:wrap;gap:4px;">
+              <span style="color:var(--green);">✓ ${formatMontantShort(s.gagne)}</span>
+              <span style="color:var(--orange);">◷ ${formatMontantShort(s.encours)}</span>
+              <span style="color:var(--rose);">✕ ${formatMontantShort(s.perdu)}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updatePersonStats(containerId, stats, icon, type) {
+      // Kept for compatibility
+      updatePersonStatsWithObjective(containerId, stats, icon, type, 4500000);
+    }
+
+    function calculateConversionRate() {
+      const allData = dataByTab[currentTab] || [];
+      let gagne = 0, perdu = 0;
+      allData.forEach(item => {
+        if (item.statut === 'Gagné') gagne++;
+        else if (item.statut === 'Perdu') perdu++;
+      });
+      const total = gagne + perdu;
+      return total > 0 ? (gagne / total) * 100 : 16; // Default 16% if no data
+    }
+
+    function updateChiffreurObjectives(stats, objectif) {
+      // Kept for compatibility but now using updatePersonStats
+    }
+
+    function updateFillColor(id, percent, hasTarget) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.remove('success', 'warning', 'danger');
+      if (percent >= 100) {
+        el.classList.add('success');
+      } else if (percent >= 70) {
+        // Default
+      } else if (percent >= 40) {
+        el.classList.add('warning');
+      } else if (hasTarget) {
+        el.classList.add('danger');
+      }
     }
 
     function updateObjectiveUI(period, current, target) {
-      const currentEl = document.getElementById(`obj${period}Current`);
-      const targetEl = document.getElementById(`obj${period}Target`);
-      const fillEl = document.getElementById(`obj${period}Fill`);
-      const percentEl = document.getElementById(`obj${period}Percent`);
-      
-      currentEl.textContent = formatMontantShort(current);
-      targetEl.textContent = target > 0 ? formatMontantShort(target) : 'Non défini';
-      
-      let percent = 0;
-      if (target > 0) {
-        percent = Math.min((current / target) * 100, 150); // Cap at 150%
-      }
-      
-      fillEl.style.width = Math.min(percent, 100) + '%';
-      percentEl.textContent = Math.round(percent) + '%';
-      
-      // Color based on progress
-      fillEl.classList.remove('success', 'warning', 'danger');
-      if (percent >= 100) {
-        fillEl.classList.add('success');
-      } else if (percent >= 70) {
-        // Default gradient color
-      } else if (percent >= 40) {
-        fillEl.classList.add('warning');
-      } else if (target > 0) {
-        fillEl.classList.add('danger');
-      }
+      // Kept for compatibility but not used with new 18M system
     }
 
     /* Tab Modal */
@@ -5818,14 +5177,18 @@
         affaires: item.affaires || '',
         client: item.client || '',
         description: item.description || '',
-        eg: item.eg || '',
+        eg: normalizeEG(item.eg || ''), // Normaliser EG
         architect: item.architect || '',
         adresse: item.adresse || '',
         smac: item.smac || '',
         datePrevisionnelle: item.datePrevisionnelle || '',
+        dateDevis: item.dateDevis || '',
+        moisRemis: item.moisRemis || '',
         statut: item.statut || 'En cours',
         montant: item.montant || '-',
         responsable: item.responsable || '',
+        chiffreur: item.chiffreur || '',
+        metreur: item.metreur || '',
         coords: item.coords || [48.8566, 2.3522],
         tags: item.tags || [],
         link: item.link || '',
@@ -5839,9 +5202,20 @@
 
     /* Filter & Sort */
     function applyFilters() {
+      // SECURITY: Si l'onglet est verrouillé, ne pas afficher les données
+      if (isTabLocked(currentTab)) {
+        currentList = [];
+        renderList([]);
+        renderMap([]);
+        updateStats([], []);
+        showLockedMessage();
+        return;
+      }
+      
       const data = dataByTab[currentTab] || [];
       const fClient = (document.getElementById('fClient')?.value || '').toLowerCase();
       const fEG = (document.getElementById('fEG')?.value || '').toLowerCase();
+      const fChiffreur = (document.getElementById('fChiffreur')?.value || '').toLowerCase();
       const fArchitect = (document.getElementById('fArchitect')?.value || '').toLowerCase();
       const fAdresse = (document.getElementById('fAdresse')?.value || '').toLowerCase();
       const minM = parseMontant(document.getElementById('minMontant')?.value);
@@ -5851,11 +5225,12 @@
         if (currentFilter !== 'Tous' && item.statut !== currentFilter) return false;
         if (currentQuery) {
           const q = normalize(currentQuery);
-          const searchable = normalize(`${item.affaires} ${item.client} ${item.eg} ${item.architect} ${item.adresse} ${item.responsable} ${(item.tags||[]).join(' ')}`);
+          const searchable = normalize(`${item.affaires} ${item.client} ${item.eg} ${item.architect} ${item.adresse} ${item.responsable} ${item.metreur} ${(item.tags||[]).join(' ')}`);
           if (!searchable.includes(q)) return false;
         }
         if (fClient && !normalize(item.client).includes(fClient)) return false;
         if (fEG && !normalize(item.eg).includes(fEG)) return false;
+        if (fChiffreur && !normalize(item.metreur).includes(fChiffreur)) return false;
         if (fArchitect && !normalize(item.architect).includes(fArchitect)) return false;
         if (fAdresse && !normalize(item.adresse).includes(fAdresse)) return false;
         const m = parseMontant(item.montant);
@@ -5872,6 +5247,8 @@
           case 'amount-desc': return (parseMontant(b.montant) || 0) - (parseMontant(a.montant) || 0);
           case 'amount-asc': return (parseMontant(a.montant) || 0) - (parseMontant(b.montant) || 0);
           case 'date': return (parseDateISO(b.datePrevisionnelle) || 0) - (parseDateISO(a.datePrevisionnelle) || 0);
+          case 'chiffreur': return (a.metreur || '').localeCompare(b.metreur || '');
+          case 'mois-remis': return (b.moisRemis || '').localeCompare(a.moisRemis || '');
           default: return 0;
         }
       });
@@ -5890,10 +5267,15 @@
       // Show/hide stats based on protection
       const statsContent = document.getElementById('statsBarContent');
       const statsProtected = document.getElementById('statsBarProtected');
+      const totalBar = document.querySelector('.total-bar');
+      const mobileTotalBar = document.querySelector('.mobile-sidebar .total-bar');
       
       if (isProtected) {
         if (statsContent) statsContent.style.display = 'none';
         if (statsProtected) statsProtected.style.display = 'inline';
+        // Masquer les montants totaux
+        document.getElementById('totalAmount').textContent = '🔒';
+        document.getElementById('mobileTotalAmount').textContent = '🔒';
       } else {
         if (statsContent) statsContent.style.display = 'inline';
         if (statsProtected) statsProtected.style.display = 'none';
@@ -5908,13 +5290,14 @@
         document.getElementById('mobileTotalAmount').textContent = nfEUR.format(total);
 
         // Status stats
-        const stats = { 'Gagné': 0, 'Perdu': 0, 'En cours': 0, 'Faste': 0 };
+        const stats = { 'Gagné': 0, 'Perdu': 0, 'En cours': 0, 'Faste': 0, 'Non valorisé': 0 };
         all.forEach(item => { if (stats[item.statut] !== undefined) stats[item.statut]++; });
         document.getElementById('statusStats').innerHTML = `
           <span style="color:#22c55e">✓${stats['Gagné']}</span>
           <span style="color:#f43f5e;margin-left:6px">✕${stats['Perdu']}</span>
           <span style="color:#f59e0b;margin-left:6px">◷${stats['En cours']}</span>
           <span style="color:#3b82f6;margin-left:6px">⚡${stats['Faste']}</span>
+          <span style="color:#737373;margin-left:6px">⏸${stats['Non valorisé']}</span>
         `;
       }
       
@@ -5951,8 +5334,16 @@
       }
 
       const html = items.map((item, idx) => {
-        const statusClass = item.statut === 'Gagné' ? 'gagne' : item.statut === 'Perdu' ? 'perdu' : item.statut === 'Faste' ? 'faste' : 'encours';
-        const statusIcon = item.statut === 'Gagné' ? '✓' : item.statut === 'Perdu' ? '✕' : item.statut === 'Faste' ? '⚡' : '◷';
+        const statusClass = item.statut === 'Gagné' ? 'gagne' : item.statut === 'Perdu' ? 'perdu' : item.statut === 'Faste' ? 'faste' : item.statut === 'Non valorisé' ? 'nonvalorise' : 'encours';
+        const statusIcon = item.statut === 'Gagné' ? '✓' : item.statut === 'Perdu' ? '✕' : item.statut === 'Faste' ? '⚡' : item.statut === 'Non valorisé' ? '⏸' : '◷';
+        
+        // Format mois remis (2026-01 -> Jan 2026)
+        const formatMoisRemis = (m) => {
+          if (!m) return '';
+          const [y, mo] = m.split('-');
+          const mois = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
+          return mois[parseInt(mo)-1] + ' ' + y;
+        };
         
         return `
           <div class="list-item" data-id="${item.id}" data-idx="${idx}">
@@ -5962,8 +5353,10 @@
             </div>
             <div class="list-item-meta">
               <span>${escapeHTML(item.client)} · ${escapeHTML(item.eg)}</span>
-              <span>${escapeHTML(item.adresse)}</span>
+              <span>${escapeHTML(item.adresse)}${item.moisRemis ? `<span class="list-item-mois-remis">📅 ${formatMoisRemis(item.moisRemis)}</span>` : ''}</span>
               ${item.responsable ? `<span class="responsable-badge">👤 ${escapeHTML(item.responsable)}</span>` : ''}
+              ${item.chiffreur ? `<span class="chiffreur-badge">🧮 ${escapeHTML(item.chiffreur)}</span>` : ''}
+              ${item.metreur ? `<span class="chiffreur-badge" style="color:var(--purple);">📐 ${escapeHTML(item.metreur)}</span>` : ''}
             </div>
             ${item.description ? `<div class="list-item-description">${escapeHTML(item.description)}</div>` : ''}
             ${(item.tags && item.tags.length) ? `<div class="list-item-tags">${item.tags.map(t => `<span class="tag">${escapeHTML(t)}</span>`).join('')}</div>` : ''}
@@ -6008,9 +5401,17 @@
     }
 
     /* Map Rendering */
+    let directMarkersLayer = null; // For non-clustered mode
+
     function renderMap(items) {
-      if (!map || !markerCluster) return;
-      markerCluster.clearLayers();
+      if (!map) return;
+      
+      // Clear existing markers
+      if (markerCluster) markerCluster.clearLayers();
+      if (directMarkersLayer) {
+        map.removeLayer(directMarkersLayer);
+        directMarkersLayer = null;
+      }
       markerByIndex.clear();
 
       // Check if current tab is locked - don't show markers
@@ -6018,12 +5419,14 @@
       const isLocked = currentTabObj?.passwordHash && !unlockedTabs.has(currentTab);
       if (isLocked) return;
 
+      const markers = [];
+
       items.forEach(item => {
         const lat = parseCoord(item.coords?.[0]);
         const lng = parseCoord(item.coords?.[1]);
         if (isNaN(lat) || isNaN(lng)) return;
 
-        const color = item.statut === 'Gagné' ? '#22c55e' : item.statut === 'Perdu' ? '#f43f5e' : item.statut === 'Faste' ? '#3b82f6' : '#f59e0b';
+        const color = item.statut === 'Gagné' ? '#22c55e' : item.statut === 'Perdu' ? '#f43f5e' : item.statut === 'Faste' ? '#3b82f6' : item.statut === 'Non valorisé' ? '#737373' : '#f59e0b';
         
         const icon = L.divIcon({
           className: 'custom-marker',
@@ -6040,6 +5443,7 @@
             <div class="popup-title">${escapeHTML(item.affaires)}</div>
             <div class="popup-client">${escapeHTML(item.client)}${clientModeActive ? '' : ' · ' + escapeHTML(item.eg)}</div>
             ${clientModeActive ? '' : `<div class="popup-amount">${displayMontant(item.montant)}</div>`}
+            ${item.metreur && !clientModeActive ? `<div style="font-size:11px;color:var(--cyan);margin-top:4px;">📐 ${escapeHTML(item.metreur)}</div>` : ''}
             <button onclick="if(window.itineraryMode && window.itineraryMode()){window.addItineraryStop(${JSON.stringify(item).replace(/"/g, '&quot;')})}" 
                     style="margin-top:8px;padding:6px 10px;background:#e10600;color:white;border:none;border-radius:4px;font-size:11px;cursor:pointer;width:100%;">
               🚗 Ajouter à l'itinéraire
@@ -6047,13 +5451,32 @@
           </div>
         `);
         
-        if (clusterEnabled) {
-          markerCluster.addLayer(marker);
-        } else {
-          marker.addTo(map);
-        }
+        markers.push(marker);
         markerByIndex.set(item.id, marker);
       });
+
+      // Add markers based on cluster mode
+      if (clusterEnabled && markerCluster) {
+        markers.forEach(m => markerCluster.addLayer(m));
+      } else {
+        directMarkersLayer = L.layerGroup(markers);
+        directMarkersLayer.addTo(map);
+      }
+    }
+
+    function toggleCluster() {
+      clusterEnabled = !clusterEnabled;
+      const btn = document.getElementById('toggleClusterBtn');
+      if (clusterEnabled) {
+        btn.classList.add('active');
+        btn.title = 'Désactiver le regroupement';
+        showToast('Regroupement activé', 'info');
+      } else {
+        btn.classList.remove('active');
+        btn.title = 'Activer le regroupement';
+        showToast('Regroupement désactivé - Tous les marqueurs visibles', 'success');
+      }
+      renderMap(currentList);
     }
 
     /* CRUD Operations */
@@ -6070,10 +5493,14 @@
     function clearModalForm() {
       editingId = null;
       document.getElementById('modalTitle').textContent = 'Nouvelle affaire';
-      ['mAffaires', 'mClient', 'mDescription', 'mEG', 'mArchitect', 'mAdresse', 'mDate', 'mMontant', 'mResponsable', 'mChiffreur', 'mMetreur', 'mLat', 'mLng', 'mLink', 'mNotes', 'mEGNew', 'mMOENew', 'mChiffreurNew', 'mMetreurNew'].forEach(id => {
+      ['mAffaires', 'mClient', 'mDescription', 'mAdresse', 'mDate', 'mDateDevis', 'mMoisRemis', 'mMontant', 'mResponsable', 'mLat', 'mLng', 'mLink', 'mNotes', 'mEGCustom', 'mArchitectCustom', 'mChiffreurCustom', 'mMetreurCustom'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
       });
+      document.getElementById('mEG').value = '';
+      document.getElementById('mArchitect').value = '';
+      document.getElementById('mChiffreur').value = '';
+      document.getElementById('mMetreur').value = '';
       document.getElementById('mStatut').value = 'En cours';
       document.querySelectorAll('#mSmacChips .chip').forEach(c => c.classList.remove('active'));
       currentTags = [];
@@ -6085,32 +5512,34 @@
       const item = dataByTab[currentTab].find(i => i.id === id);
       if (!item) return;
       
-      editingId = id;
       updateAllDropdowns();
       
+      editingId = id;
       document.getElementById('modalTitle').textContent = 'Modifier l\'affaire';
       document.getElementById('mAffaires').value = item.affaires || '';
       document.getElementById('mClient').value = item.client || '';
       document.getElementById('mDescription').value = item.description || '';
       document.getElementById('mEG').value = item.eg || '';
       document.getElementById('mArchitect').value = item.architect || '';
+      document.getElementById('mChiffreur').value = item.chiffreur || '';
+      document.getElementById('mMetreur').value = item.metreur || '';
       document.getElementById('mAdresse').value = item.adresse || '';
       document.getElementById('mDate').value = item.datePrevisionnelle || '';
+      document.getElementById('mDateDevis').value = item.dateDevis || '';
+      document.getElementById('mMoisRemis').value = item.moisRemis || '';
       document.getElementById('mStatut').value = item.statut || 'En cours';
       document.getElementById('mMontant').value = item.montant || '';
       document.getElementById('mResponsable').value = item.responsable || '';
-      document.getElementById('mChiffreur').value = item.chiffreur || '';
-      document.getElementById('mMetreur').value = item.metreur || '';
       document.getElementById('mLat').value = item.coords?.[0] || '';
       document.getElementById('mLng').value = item.coords?.[1] || '';
       document.getElementById('mLink').value = item.link || '';
       document.getElementById('mNotes').value = item.notes || '';
       
-      // Clear "new" inputs
-      ['mEGNew', 'mMOENew', 'mChiffreurNew', 'mMetreurNew'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = '';
-      });
+      // Clear custom inputs
+      document.getElementById('mEGCustom').value = '';
+      document.getElementById('mArchitectCustom').value = '';
+      document.getElementById('mChiffreurCustom').value = '';
+      document.getElementById('mMetreurCustom').value = '';
       
       document.querySelectorAll('#mSmacChips .chip').forEach(c => {
         c.classList.toggle('active', c.dataset.value === item.smac);
@@ -6246,36 +5675,36 @@
 
       const smacChip = document.querySelector('#mSmacChips .chip.active');
       
-      // Handle EG - use dropdown value or new input
-      let egValue = document.getElementById('mEG').value.trim();
-      const egNew = document.getElementById('mEGNew')?.value.trim();
-      if (egNew) {
-        egValue = egNew;
-        addToEGList(egNew);
+      // Get EG from select or custom input
+      let eg = document.getElementById('mEG').value.trim();
+      const egCustom = document.getElementById('mEGCustom').value.trim();
+      if (egCustom) {
+        eg = egCustom;
+        addToEGList(egCustom);
       }
       
-      // Handle MOE - use dropdown value or new input
-      let moeValue = document.getElementById('mArchitect').value.trim();
-      const moeNew = document.getElementById('mMOENew')?.value.trim();
-      if (moeNew) {
-        moeValue = moeNew;
-        addToMOEList(moeNew);
+      // Get Architect from select or custom input
+      let architect = document.getElementById('mArchitect').value.trim();
+      const architectCustom = document.getElementById('mArchitectCustom').value.trim();
+      if (architectCustom) {
+        architect = architectCustom;
+        addToMOEList(architectCustom);
       }
       
-      // Handle Chiffreur - use dropdown value or new input
-      let chiffreurValue = document.getElementById('mChiffreur').value.trim();
-      const chiffreurNew = document.getElementById('mChiffreurNew')?.value.trim();
-      if (chiffreurNew) {
-        chiffreurValue = chiffreurNew;
-        addToChiffreurList(chiffreurNew);
+      // Get Chiffreur from select or custom input
+      let chiffreur = document.getElementById('mChiffreur').value.trim();
+      const chiffreurCustom = document.getElementById('mChiffreurCustom').value.trim();
+      if (chiffreurCustom) {
+        chiffreur = chiffreurCustom;
+        addToChiffreurList(chiffreurCustom);
       }
       
-      // Handle Métreur - use dropdown value or new input
-      let metreurValue = document.getElementById('mMetreur').value.trim();
-      const metreurNew = document.getElementById('mMetreurNew')?.value.trim();
-      if (metreurNew) {
-        metreurValue = metreurNew;
-        addToMetreurList(metreurNew);
+      // Get Metreur from select or custom input
+      let metreur = document.getElementById('mMetreur').value.trim();
+      const metreurCustom = document.getElementById('mMetreurCustom').value.trim();
+      if (metreurCustom) {
+        metreur = metreurCustom;
+        addToMetreurList(metreurCustom);
       }
       
       const itemData = {
@@ -6283,16 +5712,18 @@
         affaires,
         client,
         description: document.getElementById('mDescription').value.trim(),
-        eg: egValue,
-        architect: moeValue,
+        eg: normalizeEG(eg), // Normaliser EG (regroupe les VINCI)
+        architect,
         adresse: document.getElementById('mAdresse').value.trim(),
         smac: smacChip?.dataset.value || '',
         datePrevisionnelle: document.getElementById('mDate').value,
+        dateDevis: document.getElementById('mDateDevis').value,
+        moisRemis: document.getElementById('mMoisRemis').value,
         statut: document.getElementById('mStatut').value,
         montant: document.getElementById('mMontant').value.trim() || '-',
         responsable: document.getElementById('mResponsable').value.trim(),
-        chiffreur: chiffreurValue,
-        metreur: metreurValue,
+        chiffreur,
+        metreur,
         coords: [lat, lng],
         tags: currentTags,
         link: document.getElementById('mLink').value.trim(),
@@ -6385,8 +5816,8 @@
 
     function exportPDF() {
       // Check if current tab is locked
-      const currentTabObj = tabs.find(t => t.id === currentTab);
-      if (currentTabObj?.passwordHash && !unlockedTabs.has(currentTab)) {
+      const currentTabObjPDF = tabs.find(t => t.id === currentTab);
+      if (currentTabObjPDF?.passwordHash && !unlockedTabs.has(currentTab)) {
         showToast('🔒 Onglet verrouillé - Export impossible', 'error');
         return;
       }
@@ -6527,7 +5958,7 @@
         if (cloudData && Array.isArray(cloudData)) {
           dataByTab[tab.id] = migrateData(cloudData);
         } else {
-          dataByTab[tab.id] = [];
+          dataByTab[tab.id] = migrateData(defaultDataDC);
         }
       }
 
@@ -6709,6 +6140,9 @@
         }
       });
 
+      // Toggle cluster mode
+      document.getElementById('toggleClusterBtn')?.addEventListener('click', toggleCluster);
+
       itineraryClose.addEventListener('click', () => {
         itineraryMode = false;
         toggleItineraryBtn.classList.remove('active');
@@ -6805,6 +6239,9 @@
       // Initialize theme color
       updateThemeColor();
 
+      // Initialize dropdowns with auto-fed lists
+      updateAllDropdowns();
+
       // Initial render
       applyFilters();
 
@@ -6861,7 +6298,7 @@
 
       document.getElementById('applyAdvanced')?.addEventListener('click', applyFilters);
       document.getElementById('resetAdvanced')?.addEventListener('click', () => {
-        ['fClient', 'fEG', 'fArchitect', 'fAdresse', 'minMontant', 'maxMontant'].forEach(id => {
+        ['fClient', 'fEG', 'fChiffreur', 'fArchitect', 'fAdresse', 'minMontant', 'maxMontant'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.value = '';
         });
@@ -6869,7 +6306,8 @@
       });
       document.getElementById('resetData')?.addEventListener('click', async () => {
         if (confirm('Réinitialiser les données de cet onglet ? Cela affectera tous les utilisateurs.')) {
-          dataByTab[currentTab] = [];
+          const defaults = defaultDataDC;
+          dataByTab[currentTab] = migrateData(JSON.parse(JSON.stringify(defaults)));
           await saveToCloud(currentTab);
           updateTabCounts();
           applyFilters();
@@ -6993,9 +6431,6 @@
       // Client Mode Toggle
       document.getElementById('clientModeBtn')?.addEventListener('click', toggleClientMode);
 
-      // Cluster Toggle
-      document.getElementById('clusterToggleBtn')?.addEventListener('click', toggleCluster);
-
       // Mobile
       document.getElementById('mobileMenuBtn')?.addEventListener('click', () => {
         document.getElementById('mobileSidebar').classList.add('open');
@@ -7114,6 +6549,11 @@
         updateAdvancedStats();
       });
 
+      // Comparison period selectors
+      document.getElementById('compPeriod1')?.addEventListener('change', updateComparison);
+      document.getElementById('compPeriod2')?.addEventListener('change', updateComparison);
+      document.getElementById('compStatutFilter')?.addEventListener('change', updateComparison);
+
       // Stats configuration
       document.getElementById('statsConfigBtn')?.addEventListener('click', () => {
         document.getElementById('statsConfigPanel').classList.toggle('open');
@@ -7215,37 +6655,10 @@
       // Tags input
       document.getElementById('mTagsInput')?.addEventListener('keydown', handleTagInput);
 
-      // Initialize dropdowns
-      updateAllDropdowns();
-
-      // Person filter tabs (Chiffreur/Métreur)
-      document.querySelectorAll('.person-filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const target = btn.dataset.target;
-          const filter = btn.dataset.filter;
-          
-          // Update active state for this group
-          document.querySelectorAll(`.person-filter-btn[data-target="${target}"]`).forEach(b => {
-            b.classList.toggle('active', b === btn);
-          });
-          
-          // Update filter and re-render
-          if (target === 'chiffreur') {
-            chiffreurFilter = filter;
-          } else if (target === 'metreur') {
-            metreurFilter = filter;
-          }
-          
-          updatePersonStats();
-        });
-      });
-
-      // Chiffreur/Métreur config buttons
-      document.getElementById('chiffreurConfigBtn')?.addEventListener('click', openChiffreurConfig);
-      document.getElementById('metreurConfigBtn')?.addEventListener('click', openMetreurConfig);
-
       // Preload export libs
       injectJS(CDN.sheetJS);
       injectJS(CDN.jsPDF).then(() => injectJS(CDN.autoTable));
     });
   </script>
+</body>
+</html>
