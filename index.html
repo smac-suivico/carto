@@ -5980,6 +5980,10 @@
       if (cloudTabs && Array.isArray(cloudTabs) && cloudTabs.length > 0) {
         tabs = cloudTabs;
         currentTab = tabs[0]?.id || 'richad';
+      } else {
+        // Ensure default tab exists
+        tabs = [{ id: 'richad', name: 'Richad', color: '#8b5cf6' }];
+        currentTab = 'richad';
       }
 
       // Load data for each tab
@@ -5988,8 +5992,13 @@
         if (cloudData && Array.isArray(cloudData)) {
           dataByTab[tab.id] = migrateData(cloudData);
         } else {
-          dataByTab[tab.id] = migrateData(defaultDataDC);
+          dataByTab[tab.id] = [];
         }
+      }
+      
+      // Ensure current tab has data array
+      if (!dataByTab[currentTab]) {
+        dataByTab[currentTab] = [];
       }
 
       renderTabs();
