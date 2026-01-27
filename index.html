@@ -2673,25 +2673,14 @@
 
   <!-- TABS with Drag & Drop -->
   <div class="tabs-container">
-    <div class="tabs-wrapper" id="tabsWrapper"><button class="tab-btn active  " data-tab="datacenter" data-index="0" draggable="true">
-          <span class="drag-handle">⋮⋮</span>
-          <span class="tab-dot" style="background:#3b82f6"></span>
-          <span class="tab-name">Data-Centers</span>
-          
-          <span class="tab-count">19</span>
-          <span class="tab-actions">
-            <button class="tab-action-btn lock " title="Protéger">🔒</button>
-            <button class="tab-action-btn rename" title="Renommer">✏️</button>
-            <button class="tab-action-btn delete" title="Supprimer">✕</button>
-          </span>
-        </button><button class="tab-btn  locked protected" data-tab="projets" data-index="1" draggable="true">
+    <div class="tabs-wrapper" id="tabsWrapper"><button class="tab-btn active" data-tab="richad" data-index="0" draggable="true">
           <span class="drag-handle">⋮⋮</span>
           <span class="tab-dot" style="background:#8b5cf6"></span>
-          <span class="tab-name">Projets Chiffrés 2026</span>
-          <span class="lock-icon">🔒</span>
-          <span class="tab-count">1</span>
+          <span class="tab-name">Richad</span>
+          
+          <span class="tab-count">0</span>
           <span class="tab-actions">
-            <button class="tab-action-btn lock has-password" title="Retirer la protection">🔓</button>
+            <button class="tab-action-btn lock " title="Protéger">🔒</button>
             <button class="tab-action-btn rename" title="Renommer">✏️</button>
             <button class="tab-action-btn delete" title="Supprimer">✕</button>
           </span>
@@ -4888,29 +4877,9 @@
     }
 
     /* Default Data */
-    const defaultDataDC = [
-      {affaires:"1&2 - PAR2", client:"COLT", eg:"BY", architect:"RBA", adresse:"Villebon-sur-Yvette", smac:"", datePrevisionnelle:"", statut:"Gagné", montant:"5 000 000 €", coords:[48.69185845097801, 2.219128539789481]},
-      {affaires:"PAR03", client:"MICROSOFT", eg:"BY", architect:"RBA", adresse:"Vélizy-Villacoublay", smac:"", datePrevisionnelle:"", statut:"Gagné", montant:"913 057 €", coords:[48.784326576119696, 2.2091410968477154]},
-      {affaires:"Global Switch - Est", client:"GLOBAL SWITCH", eg:"BY", architect:"APL", adresse:"Clichy", smac:"", datePrevisionnelle:"", statut:"Gagné", montant:"410 000 €", coords:[48.89962692207227, 2.2960704688876863]},
-      {affaires:"PA10", client:"EQUINIX", eg:"BY", architect:"RBA", adresse:"Saint-Denis", smac:"", datePrevisionnelle:"", statut:"Gagné", montant:"14 541 €", coords:[48.927313927005734, 2.350674512495238]},
-      {affaires:"Telehouse", client:"TELEHOUSE", eg:"VINCI", architect:"AAMH ASSOCIES", adresse:"Paris 13e", smac:"", datePrevisionnelle:"", statut:"Gagné", montant:"495 000 €", coords:[48.8564370470459, 2.38353062630346]},
-      {affaires:"Interxion PAR7", client:"INTERXION", eg:"BY", architect:"DK ARCHITECTES", adresse:"La Courneuve", smac:"", datePrevisionnelle:"", statut:"Gagné", montant:"1 500 000 €", coords:[48.92530651461756, 2.401494431606759]},
-      {affaires:"PA14", client:"EQUINIX", eg:"BY", architect:"RBA", adresse:"Aubervilliers", smac:"", datePrevisionnelle:"", statut:"Perdu", montant:"2 945 000 €", coords:[48.908908655451164, 2.3728223956227543]},
-      {affaires:"Interxion PAR 10 & 11", client:"INTERXION", eg:"BY", architect:"DK ARCHITECTES", adresse:"La Courneuve", smac:"", datePrevisionnelle:"", statut:"Perdu", montant:"-", coords:[48.92776437259542, 2.397265110647607]},
-      {affaires:"SEGRO BONNEUIL", client:"SEGRO", eg:"BY-VINCI", architect:"RBA", adresse:"Bonneuil-sur-Marne", smac:"", datePrevisionnelle:"", statut:"En cours", montant:"2 000 000 €", coords:[48.76931916868814, 2.4948702109577447]},
-      {affaires:"PASS2", client:"EQUINIX", eg:"VINCI", architect:"RBA", adresse:"Meudon", smac:"", datePrevisionnelle:"", statut:"En cours", montant:"570 213 €", coords:[48.78869514855185, 2.2154677416418247]},
-      {affaires:"DATA VILLENEUVE", client:"GOODMAN", eg:"BY-EIFFAGE", architect:"RBA", adresse:"Villeneuve-Saint-Georges", smac:"", datePrevisionnelle:"", statut:"En cours", montant:"-", coords:[48.76129354753436, 2.4491614262989443]},
-      {affaires:"PAR1", client:"NTT DATA", eg:"BY-VINCI", architect:"HYPHEN", adresse:"Le Coudray-Montceaux", smac:"", datePrevisionnelle:"", statut:"Faste", montant:"11 500 000 €", coords:[48.57108084757299, 2.4643250379359993]},
-      {affaires:"DATA HILLS 3", client:"HILLS", eg:"VINCI", architect:"RBA", adresse:"Aulnay-sous-Bois", smac:"", datePrevisionnelle:"", statut:"En cours", montant:"-", coords:[48.970329166784175, 2.498289028922746]},
-      {affaires:"PA15", client:"EQUINIX", eg:"BY", architect:"RBA", adresse:"Meudon", smac:"", datePrevisionnelle:"", statut:"En cours", montant:"7 079 169 €", coords:[48.78864189170742, 2.212410539794085]},
-      {affaires:"PAR3", client:"DATA4", eg:"BY", architect:"IF ARCHITECTES", adresse:"Nozay", smac:"", datePrevisionnelle:"", statut:"En cours", montant:"2 630 346 €", coords:[48.66884520433203, 2.2376156970706473]},
-      {affaires:"PAR01", client:"GOODMAN", eg:"BY", architect:"A26 BLM", adresse:"Tremblay-en-France", smac:"", datePrevisionnelle:"", statut:"En cours", montant:"2 511 133 €", coords:[48.968398055972706, 2.5689678923018984]},
-      {affaires:"DATA VELIZY", client:"Nation Data Center", eg:"BY", architect:"Silvio d'Ascia Architecture", adresse:"Vélizy-Villacoublay", smac:"", datePrevisionnelle:"", statut:"En cours", montant:"2 275 398 €", coords:[48.78344102692218, 2.213381055135426]}
-    ];
+    const defaultDataDC = [];
 
-    const defaultDataProj = [
-      {affaires:"Projet Alpha 2026", client:"CLIENT A", eg:"BY", architect:"Architecte X", adresse:"Paris 15e", smac:"PARIS", datePrevisionnelle:"2026-03-15", statut:"En cours", montant:"3 500 000 €", coords:[48.8400, 2.2900]}
-    ];
+    const defaultDataProj = [];
 
     /* State */
     const MASTER_CODE = 'Villepinte'; // Code maître pour protéger/supprimer des onglets
@@ -6549,7 +6518,7 @@
       const cloudTabs = await loadTabsConfig();
       if (cloudTabs && Array.isArray(cloudTabs) && cloudTabs.length > 0) {
         tabs = cloudTabs;
-        currentTab = tabs[0]?.id || 'datacenter';
+        currentTab = tabs[0]?.id || 'richad';
       }
 
       // Load data for each tab
@@ -6558,7 +6527,7 @@
         if (cloudData && Array.isArray(cloudData)) {
           dataByTab[tab.id] = migrateData(cloudData);
         } else {
-          dataByTab[tab.id] = migrateData(tab.id === 'datacenter' ? defaultDataDC : defaultDataProj);
+          dataByTab[tab.id] = [];
         }
       }
 
@@ -6900,8 +6869,7 @@
       });
       document.getElementById('resetData')?.addEventListener('click', async () => {
         if (confirm('Réinitialiser les données de cet onglet ? Cela affectera tous les utilisateurs.')) {
-          const defaults = currentTab === 'datacenter' ? defaultDataDC : defaultDataProj;
-          dataByTab[currentTab] = migrateData(JSON.parse(JSON.stringify(defaults)));
+          dataByTab[currentTab] = [];
           await saveToCloud(currentTab);
           updateTabCounts();
           applyFilters();
