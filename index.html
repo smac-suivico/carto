@@ -5402,6 +5402,17 @@
     /* Supabase Configuration */
     const SUPABASE_URL = 'https://kaawdguztacoagfhhcgz.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImthYXdkZ3V6dGFjb2FnZmhoY2d6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc3NzgwNDYsImV4cCI6MjA4MzM1NDA0Nn0.XBNbYTrJkolGF6rZpoMZD5EwH068PCMqd_eiq7OCypA';
+    
+    // ⚠️ IMPORTANT: Identifiant unique du site pour isoler les données
+    // SITE_A = pn2beprix.github.io/smac-carto/ (Richad)
+    // SITE_B = smac-suivico.github.io/carto/ (Data-Centers)
+    const SITE_ID = 'SITE_B';
+    
+    // Clés localStorage préfixées pour isoler les préférences entre sites
+    const LS_OBJECTIVES = `${SITE_ID}_objectives`;
+    const LS_STATS_PREFS = `${SITE_ID}_stats_prefs`;
+    const LS_FORECAST_RATE = `${SITE_ID}_forecast_rate`;
+    const LS_FORECAST_AUTO = `${SITE_ID}_forecast_auto`;
 
     /* CDN URLs */
     const CDN = {
@@ -5748,9 +5759,15 @@
       return res;
     }
 
+    // Préfixer les noms de tab avec SITE_ID pour isoler les données
+    function getSiteTabName(tabName) {
+      return `${SITE_ID}_${tabName}`;
+    }
+
     async function loadFromCloud(tabName) {
       try {
-        const res = await supabaseFetch(`affaires?tab=eq.${tabName}&select=data`);
+        const siteTabName = getSiteTabName(tabName);
+        const res = await supabaseFetch(`affaires?tab=eq.${siteTabName}&select=data`);
         if (!res.ok) return null;
         const json = await res.json();
         if (json && json.length > 0 && json[0].data) {
@@ -5769,20 +5786,21 @@
       showSyncStatus('saving');
       
       const data = dataByTab[tabName];
+      const siteTabName = getSiteTabName(tabName);
       
       try {
-        const checkRes = await supabaseFetch(`affaires?tab=eq.${tabName}&select=id`);
+        const checkRes = await supabaseFetch(`affaires?tab=eq.${siteTabName}&select=id`);
         const existing = await checkRes.json();
         
         if (existing && existing.length > 0) {
-          await supabaseFetch(`affaires?tab=eq.${tabName}`, {
+          await supabaseFetch(`affaires?tab=eq.${siteTabName}`, {
             method: 'PATCH',
             body: JSON.stringify({ data: data })
           });
         } else {
           await supabaseFetch('affaires', {
             method: 'POST',
-            body: JSON.stringify({ tab: tabName, data: data })
+            body: JSON.stringify({ tab: siteTabName, data: data })
           });
         }
         showSyncStatus('saved');
@@ -5795,7 +5813,8 @@
 
     async function loadTabsConfig() {
       try {
-        const res = await supabaseFetch(`affaires?tab=eq._tabs_config&select=data`);
+        const siteTabName = getSiteTabName('_tabs_config');
+        const res = await supabaseFetch(`affaires?tab=eq.${siteTabName}&select=data`);
         if (!res.ok) return null;
         const json = await res.json();
         if (json && json.length > 0 && json[0].data) {
@@ -5810,18 +5829,19 @@
 
     async function saveTabsConfig() {
       try {
-        const checkRes = await supabaseFetch(`affaires?tab=eq._tabs_config&select=id`);
+        const siteTabName = getSiteTabName('_tabs_config');
+        const checkRes = await supabaseFetch(`affaires?tab=eq.${siteTabName}&select=id`);
         const existing = await checkRes.json();
         
         if (existing && existing.length > 0) {
-          await supabaseFetch(`affaires?tab=eq._tabs_config`, {
+          await supabaseFetch(`affaires?tab=eq.${siteTabName}`, {
             method: 'PATCH',
             body: JSON.stringify({ data: tabs })
           });
         } else {
           await supabaseFetch('affaires', {
             method: 'POST',
-            body: JSON.stringify({ tab: '_tabs_config', data: tabs })
+            body: JSON.stringify({ tab: siteTabName, data: tabs })
           });
         }
       } catch (e) {
@@ -5831,7 +5851,8 @@
 
     async function deleteTabData(tabId) {
       try {
-        await supabaseFetch(`affaires?tab=eq.${tabId}`, { method: 'DELETE' });
+        const siteTabName = getSiteTabName(tabId);
+        await supabaseFetch(`affaires?tab=eq.${siteTabName}`, { method: 'DELETE' });
       } catch (e) {
         console.error('Erreur suppression tab data:', e);
       }
@@ -6360,7 +6381,7 @@
       const currentQuarter = Math.floor(currentMonth / 3);
       
       // Get saved objectives
-      const savedObjectives = JSON.parse(localStorage.getItem('smac_objectives') || '{}');
+      const savedObjectives = JSON.parse(localStorage.getItem(LS_OBJECTIVES) || '{}');
       
       // Calculate amounts for each period (based on "Gagné" deals)
       let monthTotal = 0;
@@ -7800,7 +7821,7 @@
       });
 
       // Load saved stats preferences
-      const savedStatsPrefs = JSON.parse(localStorage.getItem('smac_stats_prefs') || '{}');
+      const savedStatsPrefs = JSON.parse(localStorage.getItem(LS_STATS_PREFS) || '{}');
       document.querySelectorAll('.stats-toggle').forEach(toggle => {
         const sectionId = toggle.dataset.section;
         const section = document.getElementById(sectionId);
@@ -7821,9 +7842,9 @@
           }
           
           // Save preference
-          const prefs = JSON.parse(localStorage.getItem('smac_stats_prefs') || '{}');
+          const prefs = JSON.parse(localStorage.getItem(LS_STATS_PREFS) || '{}');
           prefs[sectionId] = isActive;
-          localStorage.setItem('smac_stats_prefs', JSON.stringify(prefs));
+          localStorage.setItem(LS_STATS_PREFS, JSON.stringify(prefs));
         });
       });
 
@@ -7844,9 +7865,9 @@
           const value = parseMontant(inputEl.value);
           
           if (Number.isFinite(value) && value > 0) {
-            const objectives = JSON.parse(localStorage.getItem('smac_objectives') || '{}');
+            const objectives = JSON.parse(localStorage.getItem(LS_OBJECTIVES) || '{}');
             objectives[period] = value;
-            localStorage.setItem('smac_objectives', JSON.stringify(objectives));
+            localStorage.setItem(LS_OBJECTIVES, JSON.stringify(objectives));
             
             // Close input and update
             const inputGroup = document.getElementById(`obj${period.charAt(0).toUpperCase() + period.slice(1)}Input`);
