@@ -821,46 +821,6 @@
       gap: 3px;
     }
 
-    .surface-badge {
-      font-size: 10px;
-      color: var(--purple);
-      background: var(--purple-light);
-      padding: 2px 8px;
-      border-radius: 10px;
-      margin-left: 8px;
-      font-weight: 600;
-    }
-
-    .list-item-products {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-top: 6px;
-    }
-
-    .product-mini-badge {
-      font-size: 9px;
-      background: var(--theme-color-light);
-      color: var(--theme-color);
-      padding: 2px 6px;
-      border-radius: 6px;
-      font-weight: 600;
-    }
-
-    .list-item-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .list-item-footer > div:first-child {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
     /* Map cluster toggle */
     .map-control-btn.cluster-toggle.active {
       background: var(--cyan);
@@ -910,28 +870,26 @@
       border: 1px solid rgba(229, 229, 229, 0.8);
       border-radius: var(--radius);
       width: 100%;
-      max-width: 600px;
-      max-height: 98vh;
+      max-width: 520px;
+      max-height: 90vh;
       overflow-y: auto;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
       animation: modalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      transform: scale(0.78);
-      transform-origin: center center;
     }
 
     @keyframes modalIn {
       from { 
         opacity: 0; 
-        transform: scale(0.7) translateY(20px); 
+        transform: scale(0.9) translateY(20px); 
       }
       to { 
         opacity: 1; 
-        transform: scale(0.78) translateY(0); 
+        transform: scale(1) translateY(0); 
       }
     }
 
     .modal-header {
-      padding: 12px 16px;
+      padding: 18px 20px;
       border-bottom: 1px solid var(--gray-200);
       display: flex;
       justify-content: space-between;
@@ -939,16 +897,16 @@
     }
 
     .modal-title {
-      font-size: 15px;
+      font-size: 17px;
       font-weight: 600;
     }
 
     .modal-body { 
-      padding: 14px 16px;
+      padding: 20px;
     }
 
     .modal-footer {
-      padding: 10px 16px;
+      padding: 16px 20px;
       border-top: 1px solid var(--gray-200);
       display: flex;
       justify-content: flex-end;
@@ -959,24 +917,24 @@
     .form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 16px;
     }
 
-    .form-group { display: flex; flex-direction: column; gap: 2px; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; }
     .form-group.full { grid-column: span 2; }
 
     .form-label {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 500;
       color: var(--gray-500);
     }
 
     .form-input, .form-select, .form-textarea {
-      padding: 8px 10px;
+      padding: 10px 12px;
       border: 1px solid var(--gray-200);
       border-radius: var(--radius-sm);
       font-family: inherit;
-      font-size: 13px;
+      font-size: 14px;
       transition: all 0.2s;
     }
     .form-input:focus, .form-select:focus, .form-textarea:focus {
@@ -1342,22 +1300,17 @@
       color: var(--gray-500);
     }
 
-    /* Statistics Panel - ENHANCED */
+    /* Statistics Panel */
     .stats-panel {
       position: absolute;
       top: 124px;
-      left: 50%;
-      transform: translateX(-50%);
+      right: 430px;
       z-index: 1000;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 20px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.15);
-      padding: 24px;
-      width: calc(100% - 480px);
-      max-width: 1200px;
-      min-width: 700px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      padding: 20px;
+      width: 380px;
       max-height: calc(100vh - 150px);
       overflow-y: auto;
       display: none;
@@ -1365,29 +1318,14 @@
 
     .stats-panel.open {
       display: block;
-      animation: statsSlideIn 0.3s ease;
-    }
-
-    @keyframes statsSlideIn {
-      from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
-      to { opacity: 1; transform: translateX(-50%) translateY(0); }
-    }
-
-    @media (max-width: 1400px) {
-      .stats-panel {
-        width: calc(100% - 460px);
-        min-width: 500px;
-      }
+      animation: slideIn 0.2s ease;
     }
 
     @media (max-width: 1024px) {
       .stats-panel {
         right: 10px;
-        left: 10px;
         width: calc(100% - 20px);
-        min-width: auto;
-        max-width: none;
-        transform: none;
+        max-width: 380px;
       }
     }
 
@@ -1395,61 +1333,55 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 16px;
-      border-bottom: 2px solid var(--gray-100);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--gray-200);
     }
 
     .stats-title {
-      font-weight: 800;
-      font-size: 20px;
+      font-weight: 700;
+      font-size: 16px;
       color: var(--dark);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
     }
 
     .stats-close {
-      background: var(--gray-100);
+      background: none;
       border: none;
-      font-size: 18px;
+      font-size: 20px;
       cursor: pointer;
       color: var(--gray-500);
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: all 0.2s;
+      padding: 4px;
     }
 
     .stats-close:hover {
-      background: var(--rose-light);
-      color: var(--rose);
+      color: var(--dark);
     }
 
     .stats-config-btn {
-      background: var(--gray-100);
+      background: none;
       border: none;
-      font-size: 14px;
+      font-size: 16px;
       cursor: pointer;
       color: var(--gray-500);
-      padding: 8px 12px;
-      border-radius: 8px;
+      padding: 4px;
       margin-right: 8px;
-      transition: all 0.2s;
+      transition: transform 0.2s;
     }
 
     .stats-config-btn:hover {
-      background: var(--gray-200);
       color: var(--dark);
       transform: rotate(45deg);
     }
 
     .stats-config-panel {
-      background: linear-gradient(135deg, var(--gray-50), white);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 20px;
+      background: var(--gray-50);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 16px;
       display: none;
-      border: 1px solid var(--gray-200);
     }
 
     .stats-config-panel.open {
@@ -1458,19 +1390,19 @@
     }
 
     .stats-config-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--gray-600);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gray-500);
       text-transform: uppercase;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .stats-config-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--gray-100);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--gray-200);
     }
 
     .stats-config-item:last-child {
@@ -1478,19 +1410,18 @@
     }
 
     .stats-config-label {
-      font-size: 13px;
+      font-size: 12px;
       color: var(--gray-700);
-      font-weight: 500;
     }
 
     .stats-toggle {
       position: relative;
-      width: 44px;
-      height: 24px;
+      width: 40px;
+      height: 22px;
       background: var(--gray-300);
-      border-radius: 12px;
+      border-radius: 11px;
       cursor: pointer;
-      transition: background 0.3s;
+      transition: background 0.2s;
     }
 
     .stats-toggle.active {
@@ -1502,16 +1433,16 @@
       position: absolute;
       top: 2px;
       left: 2px;
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       background: white;
       border-radius: 50%;
-      transition: transform 0.3s;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
 
     .stats-toggle.active::after {
-      transform: translateX(20px);
+      transform: translateX(18px);
     }
 
     .stats-section {
@@ -1523,82 +1454,52 @@
     }
 
     .stats-section-title {
-      font-weight: 700;
-      font-size: 14px;
-      color: var(--gray-800);
-      margin-bottom: 14px;
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--gray-700);
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
-      gap: 8px;
-    }
-
-    /* Stats Grid Layout */
-    .stats-grid-wrapper {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
-
-    @media (max-width: 900px) {
-      .stats-grid-wrapper {
-        grid-template-columns: 1fr;
-      }
+      gap: 6px;
     }
 
     .stats-summary {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    @media (max-width: 900px) {
-      .stats-summary {
-        grid-template-columns: repeat(2, 1fr);
-      }
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
     }
 
     .stats-card {
-      background: linear-gradient(135deg, var(--gray-50), white);
-      border-radius: 14px;
-      padding: 16px;
+      background: var(--gray-50);
+      border-radius: 8px;
+      padding: 12px;
       text-align: center;
-      border: 1px solid var(--gray-100);
-      transition: all 0.3s ease;
-    }
-
-    .stats-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
     }
 
     .stats-card-value {
-      font-size: 26px;
-      font-weight: 800;
+      font-size: 20px;
+      font-weight: 700;
       color: var(--theme-color);
-      letter-spacing: -0.5px;
     }
 
     .stats-card-label {
       font-size: 11px;
       color: var(--gray-500);
-      margin-top: 4px;
-      font-weight: 600;
-      text-transform: uppercase;
+      margin-top: 2px;
     }
 
     .stats-chart-container {
-      background: linear-gradient(135deg, var(--gray-50), white);
-      border-radius: 14px;
-      padding: 18px;
+      background: var(--gray-50);
+      border-radius: 8px;
+      padding: 16px;
       margin-bottom: 12px;
-      border: 1px solid var(--gray-100);
     }
 
     .pie-chart {
-      width: 180px;
-      height: 180px;
-      margin: 0 auto 20px;
+      width: 160px;
+      height: 160px;
+      margin: 0 auto 16px;
       position: relative;
     }
 
@@ -1606,7 +1507,6 @@
       width: 100%;
       height: 100%;
       transform: rotate(-90deg);
-      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.1));
     }
 
     .pie-center {
@@ -1615,121 +1515,103 @@
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
-      background: white;
-      border-radius: 50%;
-      width: 90px;
-      height: 90px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
     .pie-center-value {
-      font-size: 28px;
-      font-weight: 800;
+      font-size: 24px;
+      font-weight: 700;
       color: var(--dark);
-      line-height: 1;
     }
 
     .pie-center-label {
       font-size: 10px;
       color: var(--gray-500);
-      font-weight: 600;
     }
 
     .pie-legend {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      display: flex;
+      flex-wrap: wrap;
       gap: 8px;
+      justify-content: center;
     }
 
     .pie-legend-item {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 12px;
+      gap: 4px;
+      font-size: 11px;
       color: var(--gray-700);
-      font-weight: 500;
-      padding: 6px 10px;
-      background: white;
-      border-radius: 6px;
-      border: 1px solid var(--gray-100);
     }
 
     .pie-legend-dot {
       width: 10px;
       height: 10px;
-      border-radius: 3px;
-      flex-shrink: 0;
+      border-radius: 50%;
     }
 
     .bar-chart {
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
 
     .bar-item {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
 
     .bar-label {
-      font-size: 12px;
-      color: var(--gray-700);
-      width: 65px;
+      font-size: 11px;
+      color: var(--gray-600);
+      width: 60px;
       flex-shrink: 0;
-      font-weight: 600;
     }
 
     .bar-track {
       flex: 1;
-      height: 24px;
-      background: var(--gray-100);
-      border-radius: 6px;
+      height: 20px;
+      background: var(--gray-200);
+      border-radius: 4px;
       overflow: hidden;
     }
 
     .bar-fill {
       height: 100%;
-      border-radius: 6px;
+      border-radius: 4px;
       transition: width 0.5s ease;
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      padding-right: 8px;
-      min-width: 50px;
+      padding-right: 6px;
     }
 
     .bar-value {
-      font-size: 11px;
-      font-weight: 700;
+      font-size: 10px;
+      font-weight: 600;
       color: white;
     }
 
     .timeline-chart {
-      height: 160px;
+      height: 150px;
       display: flex;
       align-items: flex-end;
-      gap: 5px;
-      padding: 12px 0;
+      gap: 4px;
+      padding: 10px 0;
     }
 
     .timeline-bar {
       flex: 1;
-      background: linear-gradient(to top, var(--theme-color), var(--theme-color-light));
-      border-radius: 4px 4px 0 0;
-      min-height: 6px;
+      background: var(--theme-color);
+      border-radius: 3px 3px 0 0;
+      min-height: 4px;
       position: relative;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: opacity 0.2s, background 0.3s;
     }
 
     .timeline-bar:hover {
-      filter: brightness(1.1);
+      opacity: 0.8;
     }
 
     .timeline-bar:hover::after {
@@ -1740,88 +1622,80 @@
       transform: translateX(-50%);
       background: var(--dark);
       color: white;
-      padding: 6px 10px;
-      border-radius: 6px;
-      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 10px;
       white-space: nowrap;
       z-index: 10;
-      margin-bottom: 6px;
     }
 
     .timeline-labels {
       display: flex;
       justify-content: space-between;
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
     .timeline-label {
-      font-size: 10px;
+      font-size: 9px;
       color: var(--gray-500);
-      font-weight: 600;
     }
 
-    /* Forecast (Prévisions) - Enhanced */
+    /* Forecast (Prévisions) */
     .forecast-container {
       text-align: center;
     }
 
     .forecast-main {
-      padding: 20px;
-      background: linear-gradient(135deg, var(--theme-color-light), rgba(255,255,255,0.8));
-      border-radius: 12px;
-      margin-bottom: 16px;
-      border: 1px solid var(--theme-color-light);
+      padding: 16px;
+      background: linear-gradient(135deg, var(--theme-color-light), transparent);
+      border-radius: 8px;
+      margin-bottom: 12px;
     }
 
     .forecast-value {
-      font-size: 32px;
-      font-weight: 800;
+      font-size: 28px;
+      font-weight: 700;
       color: var(--theme-color);
-      letter-spacing: -0.5px;
     }
 
     .forecast-label {
-      font-size: 12px;
-      color: var(--gray-600);
+      font-size: 11px;
+      color: var(--gray-500);
       margin-top: 4px;
-      font-weight: 500;
     }
 
     .forecast-details {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     .forecast-detail {
       display: flex;
-      flex-direction: column;
+      justify-content: space-between;
       align-items: center;
-      padding: 12px;
-      background: white;
-      border-radius: 10px;
-      border: 1px solid var(--gray-100);
+      padding: 8px 12px;
+      background: var(--gray-50);
+      border-radius: 6px;
     }
 
     .forecast-detail-label {
-      font-size: 11px;
-      color: var(--gray-500);
-      font-weight: 600;
+      font-size: 12px;
+      color: var(--gray-600);
     }
 
     .forecast-detail-value {
-      font-size: 16px;
-      font-weight: 700;
+      font-size: 13px;
+      font-weight: 600;
       color: var(--dark);
-      margin-top: 4px;
     }
 
     /* Forecast Rate Slider */
     .forecast-slider {
       -webkit-appearance: none;
       appearance: none;
-      height: 8px;
-      border-radius: 4px;
+      height: 6px;
+      border-radius: 3px;
       background: var(--gray-200);
       outline: none;
       cursor: pointer;
@@ -1829,79 +1703,71 @@
     .forecast-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
-      background: var(--theme-color);
+      background: var(--primary);
       cursor: pointer;
-      border: 3px solid white;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     .forecast-slider::-moz-range-thumb {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
-      background: var(--theme-color);
+      background: var(--primary);
       cursor: pointer;
-      border: 3px solid white;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      border: 2px solid white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
     .forecast-slider:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
 
-    /* Comparison (Comparaison) - Enhanced */
+    /* Comparison (Comparaison) */
     .comparison-container {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 14px;
+      gap: 12px;
     }
 
     .comparison-period {
       flex: 1;
       text-align: center;
-      padding: 16px;
-      background: white;
-      border-radius: 12px;
-      border: 1px solid var(--gray-100);
-      transition: all 0.2s;
-    }
-
-    .comparison-period:hover {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      padding: 12px;
+      background: var(--gray-50);
+      border-radius: 8px;
     }
 
     .comparison-period-label {
       font-size: 11px;
       color: var(--gray-500);
-      margin-bottom: 6px;
-      font-weight: 600;
-      text-transform: uppercase;
+      margin-bottom: 4px;
     }
 
     .comparison-period-value {
-      font-size: 22px;
-      font-weight: 800;
+      font-size: 18px;
+      font-weight: 700;
       color: var(--dark);
     }
 
     .comparison-period-count {
-      font-size: 11px;
+      font-size: 10px;
       color: var(--gray-500);
-      margin-top: 4px;
+      margin-top: 2px;
     }
 
     .comparison-vs {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
     }
 
     .comparison-arrow {
-      font-size: 22px;
+      font-size: 20px;
       transition: transform 0.3s;
     }
 
@@ -1916,10 +1782,10 @@
     }
 
     .comparison-percent {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 15px;
+      padding: 2px 8px;
+      border-radius: 10px;
       background: var(--gray-200);
     }
 
@@ -1933,31 +1799,30 @@
       color: var(--rose);
     }
 
-    /* Conversion - Enhanced */
+    /* Conversion */
     .conversion-container {
       text-align: center;
     }
 
     .conversion-gauge {
       position: relative;
-      width: 180px;
-      height: 110px;
+      width: 160px;
+      height: 100px;
       margin: 0 auto 16px;
     }
 
     .conversion-svg {
       width: 100%;
       height: 100%;
-      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.1));
     }
 
     .conversion-value {
       position: absolute;
-      bottom: 12px;
+      bottom: 10px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 32px;
-      font-weight: 800;
+      font-size: 28px;
+      font-weight: 700;
       color: var(--dark);
     }
 
@@ -1966,25 +1831,20 @@
       justify-content: center;
       gap: 16px;
       margin-bottom: 12px;
-      flex-wrap: wrap;
     }
 
     .conversion-detail {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 13px;
-      color: var(--gray-700);
-      padding: 6px 12px;
-      background: white;
-      border-radius: 6px;
-      border: 1px solid var(--gray-100);
+      font-size: 12px;
+      color: var(--gray-600);
     }
 
     .conversion-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 3px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
     }
 
     /* Client Ranking */
@@ -2337,527 +2197,6 @@
 
     .toast.success { background: var(--green); }
     .toast.error { background: var(--rose); }
-
-    /* Multi-person (Chiffreurs/Métreurs) */
-    .multi-person-container {
-      background: var(--gray-50);
-      border-radius: 8px;
-      padding: 10px;
-      border: 1px solid var(--gray-200);
-    }
-
-    .multi-person-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .multi-person-list:empty {
-      display: none;
-    }
-
-    .multi-person-item {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: white;
-      border: 1px solid var(--gray-200);
-      border-radius: 20px;
-      padding: 4px 8px 4px 12px;
-      font-size: 12px;
-    }
-
-    .multi-person-item .person-name {
-      font-weight: 600;
-      color: var(--dark);
-    }
-
-    .multi-person-item .person-taux {
-      background: var(--theme-color-light);
-      color: var(--theme-color);
-      padding: 2px 6px;
-      border-radius: 10px;
-      font-size: 10px;
-      font-weight: 700;
-    }
-
-    .multi-person-item .person-remove {
-      background: none;
-      border: none;
-      color: var(--gray-400);
-      cursor: pointer;
-      font-size: 14px;
-      padding: 0 2px;
-      line-height: 1;
-    }
-
-    .multi-person-item .person-remove:hover {
-      color: var(--rose);
-    }
-
-    .multi-person-add {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-add-person {
-      background: var(--theme-color);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .btn-add-person:hover {
-      filter: brightness(1.1);
-    }
-
-    /* Products with price/m² */
-    .btn-add-product {
-      background: var(--theme-color);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-
-    .btn-add-product:hover {
-      filter: brightness(1.1);
-    }
-
-    /* Product Tabs */
-    .product-tab-btn {
-      flex: 1;
-      padding: 8px 12px;
-      border: 1px solid var(--gray-200);
-      background: white;
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: var(--gray-600);
-    }
-
-    .product-tab-btn:hover {
-      border-color: var(--theme-color);
-      color: var(--theme-color);
-    }
-
-    .product-tab-btn.active {
-      background: var(--theme-color);
-      color: white;
-      border-color: var(--theme-color);
-    }
-
-    /* Complexe Components */
-    .btn-add-component {
-      background: var(--green);
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 6px 12px;
-      font-size: 11px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
-
-    .btn-add-component:hover {
-      background: var(--dark);
-      transform: scale(1.02);
-    }
-
-    .complexe-components-list {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .complexe-component-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 8px 10px;
-      background: var(--gray-50);
-      border-radius: 6px;
-      font-size: 11px;
-      border-left: 3px solid var(--theme-color);
-    }
-
-    .complexe-component-item .component-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .complexe-component-item .component-name {
-      font-weight: 600;
-      color: var(--dark);
-    }
-
-    .complexe-component-item .component-finition {
-      font-size: 10px;
-      color: var(--gray-500);
-    }
-
-    .complexe-component-item .component-price {
-      font-weight: 700;
-      color: var(--theme-color);
-      font-size: 12px;
-    }
-
-    .complexe-component-item .component-remove {
-      background: none;
-      border: none;
-      color: var(--gray-400);
-      cursor: pointer;
-      font-size: 14px;
-      padding: 0 4px;
-    }
-
-    .complexe-component-item .component-remove:hover {
-      color: var(--rose);
-    }
-
-    /* Product Category Badge */
-    .product-category-badge {
-      background: var(--gray-700);
-      color: white;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-size: 9px;
-      font-weight: 700;
-      text-transform: uppercase;
-    }
-
-    .product-item.is-complexe {
-      border-style: dashed;
-      border-width: 2px;
-    }
-
-    .product-item .complexe-indicator {
-      font-size: 10px;
-      color: var(--gray-500);
-      font-style: italic;
-    }
-
-    .products-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .product-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: linear-gradient(135deg, var(--theme-color-light), white);
-      border: 1px solid var(--theme-color);
-      border-radius: 8px;
-      padding: 8px 10px;
-      font-size: 12px;
-    }
-
-    .product-item .product-name {
-      font-weight: 700;
-      color: var(--theme-color);
-    }
-
-    .product-item .product-info {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-
-    .product-item .product-price {
-      background: var(--theme-color);
-      color: white;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 10px;
-      font-weight: 700;
-    }
-
-    .product-item .product-finition {
-      background: var(--gray-200);
-      color: var(--gray-700);
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 9px;
-      font-weight: 600;
-    }
-
-    .product-item .product-surface {
-      font-size: 10px;
-      color: var(--gray-600);
-    }
-
-    .product-item .product-total {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--green);
-    }
-
-    .product-item .product-remove {
-      background: none;
-      border: none;
-      color: var(--gray-400);
-      cursor: pointer;
-      font-size: 14px;
-      padding: 0 2px;
-      line-height: 1;
-    }
-
-    .product-item .product-remove:hover {
-      color: var(--rose);
-    }
-
-    /* Products Analysis Panel */
-    .products-panel {
-      position: absolute;
-      top: 124px;
-      left: 20px;
-      z-index: 1000;
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: blur(20px);
-      border-radius: 16px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-      padding: 20px;
-      width: 420px;
-      max-height: calc(100vh - 150px);
-      overflow-y: auto;
-      display: none;
-    }
-
-    .products-panel.open {
-      display: block;
-      animation: slideIn 0.3s ease;
-    }
-
-    @media (max-width: 1024px) {
-      .products-panel {
-        left: 10px;
-        width: calc(100% - 20px);
-        max-width: 420px;
-      }
-    }
-
-    .products-panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 2px solid var(--gray-100);
-    }
-
-    .products-panel-title {
-      font-weight: 800;
-      font-size: 18px;
-      color: var(--dark);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .products-search {
-      margin-bottom: 12px;
-    }
-
-    .products-search input {
-      width: 100%;
-      padding: 10px 14px;
-      border: 1px solid var(--gray-200);
-      border-radius: 8px;
-      font-size: 13px;
-    }
-
-    .products-filters {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-    }
-
-    .products-filter-btn {
-      padding: 6px 12px;
-      border: 1px solid var(--gray-200);
-      border-radius: 20px;
-      background: white;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .products-filter-btn:hover {
-      border-color: var(--theme-color);
-      color: var(--theme-color);
-    }
-
-    .products-filter-btn.active {
-      background: var(--theme-color);
-      color: white;
-      border-color: var(--theme-color);
-    }
-
-    .product-stats-card {
-      background: linear-gradient(135deg, var(--theme-color-light), white);
-      border: 1px solid var(--theme-color);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 12px;
-    }
-
-    .product-stats-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .product-stats-name {
-      font-weight: 700;
-      font-size: 15px;
-      color: var(--theme-color);
-    }
-
-    .product-stats-badges {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .product-stats-count {
-      background: var(--theme-color);
-      color: white;
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .product-stats-finition {
-      background: var(--gray-200);
-      color: var(--gray-700);
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 600;
-    }
-
-    .product-stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
-
-    .product-stat-item {
-      background: white;
-      border-radius: 8px;
-      padding: 10px;
-      text-align: center;
-    }
-
-    .product-stat-value {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--dark);
-    }
-
-    .product-stat-label {
-      font-size: 10px;
-      color: var(--gray-500);
-      text-transform: uppercase;
-      font-weight: 600;
-    }
-
-    .product-affaires-list {
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid var(--gray-200);
-    }
-
-    .product-affaire-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px;
-      background: white;
-      border-radius: 6px;
-      margin-bottom: 6px;
-      font-size: 12px;
-    }
-
-    .product-affaire-name {
-      font-weight: 600;
-      color: var(--dark);
-    }
-
-    .product-affaire-price {
-      color: var(--theme-color);
-      font-weight: 700;
-    }
-
-    /* Toggle buttons for analysis */
-    .finition-detail-btn {
-      padding: 4px 10px;
-      border: 1px solid var(--theme-color);
-      background: white;
-      border-radius: 15px;
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--theme-color);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .finition-detail-btn:hover {
-      background: var(--theme-color);
-      color: white;
-    }
-
-    .finition-detail-btn small {
-      opacity: 0.7;
-    }
-
-    .complexe-detail-toggle,
-    .affaires-toggle-btn {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1px dashed var(--gray-300);
-      background: var(--gray-50);
-      border-radius: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--gray-600);
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: left;
-    }
-
-    .complexe-detail-toggle:hover,
-    .affaires-toggle-btn:hover {
-      background: var(--gray-100);
-      border-color: var(--theme-color);
-      color: var(--theme-color);
-    }
 
     /* Duplicate Tab List */
     .duplicate-tab-list {
@@ -3250,27 +2589,6 @@
       <button class="map-control-btn cluster-toggle active" id="toggleClusterBtn" title="Activer/Désactiver le regroupement">
         🔘
       </button>
-      <button class="map-control-btn" id="toggleProductsBtn" title="Analyse produits / Prix m²">
-        📦
-      </button>
-    </div>
-    
-    <!-- Products Analysis Panel -->
-    <div class="products-panel" id="productsPanel">
-      <div class="products-panel-header">
-        <span class="products-panel-title">📦 Analyse Produits</span>
-        <button class="stats-close" id="productsPanelClose">✕</button>
-      </div>
-      <div class="products-search">
-        <input type="text" id="productSearchInput" placeholder="🔍 Rechercher un produit...">
-      </div>
-      <div class="products-filters" id="productsFilters">
-        <button class="products-filter-btn active" data-category="">Toutes</button>
-        <!-- Dynamic category buttons will be added by JS -->
-      </div>
-      <div id="productsAnalysisList">
-        <!-- Generated by JS -->
-      </div>
     </div>
     
     <!-- Itinerary Panel -->
@@ -3298,9 +2616,9 @@
     <!-- Statistics Panel -->
     <div class="stats-panel" id="statsPanel">
       <div class="stats-header">
-        <span class="stats-title">📊 Tableau de Bord Statistiques</span>
+        <span class="stats-title">📊 Statistiques</span>
         <div>
-          <button class="stats-config-btn" id="statsConfigBtn" title="Configurer l'affichage">⚙️</button>
+          <button class="stats-config-btn" id="statsConfigBtn" title="Configurer l&#39;affichage">⚙️</button>
           <button class="stats-close" id="statsClose">✕</button>
         </div>
       </div>
@@ -3359,48 +2677,37 @@
           <div class="stats-card-value" id="statsTotalMontant">🔒</div>
           <div class="stats-card-label">Montant total</div>
         </div>
-        <div class="stats-card">
-          <div class="stats-card-value" id="statsTotalGagne">🔒</div>
-          <div class="stats-card-label">CA Gagné</div>
-        </div>
-        <div class="stats-card">
-          <div class="stats-card-value" id="statsConversionKPI">🔒</div>
-          <div class="stats-card-label">Taux conv.</div>
+      </div>
+      
+      <div class="stats-section" id="pieSection">
+        <div class="stats-section-title">🎯 Répartition par statut</div>
+        <div class="stats-chart-container">
+          <div class="pie-chart" id="pieChart">
+            <svg viewBox="0 0 100 100">
+              <circle id="pieGagne" cx="50" cy="50" r="40" fill="none" stroke="#22c55e" stroke-width="20" stroke-dasharray="0 251.2"></circle>
+              <circle id="piePerdu" cx="50" cy="50" r="40" fill="none" stroke="#f43f5e" stroke-width="20" stroke-dasharray="0 251.2"></circle>
+              <circle id="pieEncours" cx="50" cy="50" r="40" fill="none" stroke="#f59e0b" stroke-width="20" stroke-dasharray="0 251.2"></circle>
+              <circle id="pieFaste" cx="50" cy="50" r="40" fill="none" stroke="#3b82f6" stroke-width="20" stroke-dasharray="0 251.2"></circle>
+            </svg>
+            <div class="pie-center">
+              <div class="pie-center-value" id="pieCenterValue">0</div>
+              <div class="pie-center-label">affaires</div>
+            </div>
+          </div>
+          <div class="pie-legend">
+            <div class="pie-legend-item"><span class="pie-legend-dot" style="background:#22c55e"></span> Gagné (<span id="legendGagne">0</span>)</div>
+            <div class="pie-legend-item"><span class="pie-legend-dot" style="background:#f43f5e"></span> Perdu (<span id="legendPerdu">0</span>)</div>
+            <div class="pie-legend-item"><span class="pie-legend-dot" style="background:#f59e0b"></span> En cours (<span id="legendEncours">0</span>)</div>
+            <div class="pie-legend-item"><span class="pie-legend-dot" style="background:#3b82f6"></span> Faste (<span id="legendFaste">0</span>)</div>
+          </div>
         </div>
       </div>
       
-      <!-- Grid Layout for Charts -->
-      <div class="stats-grid-wrapper">
-        <div class="stats-section" id="pieSection">
-          <div class="stats-section-title">🎯 Répartition par statut</div>
-          <div class="stats-chart-container">
-            <div class="pie-chart" id="pieChart">
-              <svg viewBox="0 0 100 100">
-                <circle id="pieGagne" cx="50" cy="50" r="40" fill="none" stroke="#22c55e" stroke-width="20" stroke-dasharray="0 251.2"></circle>
-                <circle id="piePerdu" cx="50" cy="50" r="40" fill="none" stroke="#f43f5e" stroke-width="20" stroke-dasharray="0 251.2"></circle>
-                <circle id="pieEncours" cx="50" cy="50" r="40" fill="none" stroke="#f59e0b" stroke-width="20" stroke-dasharray="0 251.2"></circle>
-                <circle id="pieFaste" cx="50" cy="50" r="40" fill="none" stroke="#3b82f6" stroke-width="20" stroke-dasharray="0 251.2"></circle>
-              </svg>
-              <div class="pie-center">
-                <div class="pie-center-value" id="pieCenterValue">0</div>
-                <div class="pie-center-label">affaires</div>
-              </div>
-            </div>
-            <div class="pie-legend">
-              <div class="pie-legend-item"><span class="pie-legend-dot" style="background:#22c55e"></span> Gagné (<span id="legendGagne">0</span>)</div>
-              <div class="pie-legend-item"><span class="pie-legend-dot" style="background:#f43f5e"></span> Perdu (<span id="legendPerdu">0</span>)</div>
-              <div class="pie-legend-item"><span class="pie-legend-dot" style="background:#f59e0b"></span> En cours (<span id="legendEncours">0</span>)</div>
-              <div class="pie-legend-item"><span class="pie-legend-dot" style="background:#3b82f6"></span> Faste (<span id="legendFaste">0</span>)</div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="stats-section" id="barSection">
-          <div class="stats-section-title">💰 Montants par statut</div>
-          <div class="stats-chart-container">
-            <div class="bar-chart" id="barChart">
-              <!-- Bars will be generated by JS -->
-            </div>
+      <div class="stats-section" id="barSection">
+        <div class="stats-section-title">💰 Montants par statut</div>
+        <div class="stats-chart-container">
+          <div class="bar-chart" id="barChart">
+            <!-- Bars will be generated by JS -->
           </div>
         </div>
       </div>
@@ -3417,137 +2724,132 @@
         </div>
       </div>
       
-      <div class="stats-grid-wrapper">
-        <div class="stats-section" id="forecastSection">
-          <div class="stats-section-title">🔮 Prévisions CA</div>
-          <div class="stats-chart-container">
-            <div class="forecast-container">
-              <div class="forecast-main">
-                <div class="forecast-value" id="forecastValue">0 €</div>
-                <div class="forecast-label">CA potentiel (avec taux)</div>
+      <div class="stats-section" id="forecastSection">
+        <div class="stats-section-title">🔮 Prévisions CA</div>
+        <div class="stats-chart-container">
+          <div class="forecast-container">
+            <div class="forecast-main">
+              <div class="forecast-value" id="forecastValue">0 €</div>
+              <div class="forecast-label">CA potentiel (avec taux)</div>
+            </div>
+            <div class="forecast-details">
+              <div class="forecast-detail">
+                <span class="forecast-detail-label">Affaires en cours</span>
+                <span class="forecast-detail-value" id="forecastCount">0</span>
               </div>
-              <div class="forecast-details">
-                <div class="forecast-detail">
-                  <span class="forecast-detail-label">En cours</span>
-                  <span class="forecast-detail-value" id="forecastCount">0</span>
-                </div>
-                <div class="forecast-detail">
-                  <span class="forecast-detail-label">Montant moy.</span>
-                  <span class="forecast-detail-value" id="forecastAvg">0 €</span>
-                </div>
-                <div class="forecast-detail">
-                  <span class="forecast-detail-label">Montant brut</span>
-                  <span class="forecast-detail-value" id="forecastPotential">0 €</span>
-                </div>
+              <div class="forecast-detail">
+                <span class="forecast-detail-label">Montant moyen</span>
+                <span class="forecast-detail-value" id="forecastAvg">0 €</span>
               </div>
-              <!-- Taux de conversion configurable -->
-              <div class="forecast-rate-config" style="margin-top:16px;padding-top:12px;border-top:1px solid var(--gray-200);">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-                  <span style="font-size:12px;font-weight:600;color:var(--gray-700);">Taux de conversion</span>
-                  <span id="forecastRateValue" style="font-size:14px;font-weight:700;color:var(--theme-color);">50%</span>
-                </div>
-                <input type="range" id="forecastRateSlider" min="0" max="100" value="50" class="forecast-slider" style="width:100%;margin-bottom:8px;">
-                <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gray-600);cursor:pointer;">
-                  <input type="checkbox" id="forecastAutoRate" style="cursor:pointer;">
-                  <span>Calcul auto basé sur l'historique</span>
-                  <span id="forecastAutoValue" style="color:var(--gray-400);"></span>
-                </label>
+              <div class="forecast-detail">
+                <span class="forecast-detail-label">Montant brut (En cours)</span>
+                <span class="forecast-detail-value" id="forecastPotential">0 €</span>
               </div>
+            </div>
+            <!-- Taux de conversion configurable -->
+            <div class="forecast-rate-config" style="margin-top:16px;padding-top:12px;border-top:1px solid var(--gray-200);">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                <span style="font-size:12px;font-weight:600;color:var(--gray-700);">Taux de conversion</span>
+                <span id="forecastRateValue" style="font-size:14px;font-weight:700;color:var(--primary);">50%</span>
+              </div>
+              <input type="range" id="forecastRateSlider" min="0" max="100" value="50" class="forecast-slider" style="width:100%;margin-bottom:8px;">
+              <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gray-600);cursor:pointer;">
+                <input type="checkbox" id="forecastAutoRate" style="cursor:pointer;">
+                <span>Calcul auto basé sur l'historique</span>
+                <span id="forecastAutoValue" style="color:var(--gray-400);"></span>
+              </label>
             </div>
           </div>
         </div>
-        
-        <div class="stats-section" id="conversionSection">
-          <div class="stats-section-title">🎯 Taux de conversion</div>
-          <div class="stats-chart-container">
-            <div class="conversion-container">
-              <div class="conversion-gauge">
-                <svg viewBox="0 0 100 60" class="conversion-svg">
-                  <path d="M10,50 A40,40 0 0,1 90,50" fill="none" stroke="#e5e5e5" stroke-width="8" stroke-linecap="round"></path>
-                  <path id="conversionArc" d="M10,50 A40,40 0 0,1 90,50" fill="none" stroke="#22c55e" stroke-width="8" stroke-linecap="round" stroke-dasharray="0 126"></path>
-                </svg>
-                <div class="conversion-value" id="conversionRate">0%</div>
+      </div>
+      
+      <div class="stats-section" id="comparisonSection">
+        <div class="stats-section-title">📊 Comparaison périodes</div>
+        <div class="stats-chart-container">
+          <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+            <select id="compPeriod1" class="form-select" style="flex:1;min-width:100px;font-size:11px;">
+              <option value="thisMonth">Ce mois</option>
+              <option value="lastMonth">Mois dernier</option>
+              <option value="thisQuarter">Ce trimestre</option>
+              <option value="lastQuarter">Trimestre dernier</option>
+              <option value="thisYear">Cette année</option>
+              <option value="lastYear">Année dernière</option>
+            </select>
+            <span style="align-self:center;color:var(--gray-500);">vs</span>
+            <select id="compPeriod2" class="form-select" style="flex:1;min-width:100px;font-size:11px;">
+              <option value="lastMonth" selected="">Mois dernier</option>
+              <option value="thisMonth">Ce mois</option>
+              <option value="thisQuarter">Ce trimestre</option>
+              <option value="lastQuarter">Trimestre dernier</option>
+              <option value="thisYear">Cette année</option>
+              <option value="lastYear">Année dernière</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:8px;margin-bottom:12px;">
+            <select id="compStatutFilter" class="form-select" style="flex:1;font-size:11px;">
+              <option value="all">Tous les statuts</option>
+              <option value="Gagné">Gagné seulement</option>
+              <option value="En cours">En cours seulement</option>
+              <option value="Perdu">Perdu seulement</option>
+            </select>
+          </div>
+          <div class="comparison-container">
+            <div class="comparison-period">
+              <div class="comparison-period-label" id="compLabel1">Ce mois</div>
+              <div class="comparison-period-value" id="compCurrentMonth">0 €</div>
+              <div class="comparison-period-count" id="compCurrentCount">0 affaires</div>
+            </div>
+            <div class="comparison-vs">
+              <div class="comparison-arrow" id="compArrow">→</div>
+              <div class="comparison-percent" id="compPercent">0%</div>
+            </div>
+            <div class="comparison-period">
+              <div class="comparison-period-label" id="compLabel2">Mois dernier</div>
+              <div class="comparison-period-value" id="compLastMonth">0 €</div>
+              <div class="comparison-period-count" id="compLastCount">0 affaires</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="stats-section" id="conversionSection">
+        <div class="stats-section-title">🎯 Taux de conversion</div>
+        <div class="stats-chart-container">
+          <div class="conversion-container">
+            <div class="conversion-gauge">
+              <svg viewBox="0 0 100 60" class="conversion-svg">
+                <path d="M10,50 A40,40 0 0,1 90,50" fill="none" stroke="#e5e5e5" stroke-width="8" stroke-linecap="round"></path>
+                <path id="conversionArc" d="M10,50 A40,40 0 0,1 90,50" fill="none" stroke="#22c55e" stroke-width="8" stroke-linecap="round" stroke-dasharray="0 126"></path>
+              </svg>
+              <div class="conversion-value" id="conversionRate">0%</div>
+            </div>
+            <div class="conversion-details">
+              <div class="conversion-detail">
+                <span class="conversion-dot" style="background:#22c55e"></span>
+                <span>Gagné: <strong id="convGagne">0</strong></span>
               </div>
-              <div class="conversion-details">
-                <div class="conversion-detail">
-                  <span class="conversion-dot" style="background:#22c55e"></span>
-                  <span>Gagné: <strong id="convGagne">0</strong></span>
-                </div>
-                <div class="conversion-detail">
-                  <span class="conversion-dot" style="background:#f43f5e"></span>
-                  <span>Perdu: <strong id="convPerdu">0</strong></span>
-                </div>
-                <div class="conversion-detail">
-                  <span class="conversion-dot" style="background:#f59e0b"></span>
-                  <span>En cours: <strong id="convEncours">0</strong></span>
-                </div>
+              <div class="conversion-detail">
+                <span class="conversion-dot" style="background:#f43f5e"></span>
+                <span>Perdu: <strong id="convPerdu">0</strong></span>
+              </div>
+              <div class="conversion-detail">
+                <span class="conversion-dot" style="background:#f59e0b"></span>
+                <span>En cours: <strong id="convEncours">0</strong></span>
               </div>
             </div>
           </div>
         </div>
       </div>
       
-      <div class="stats-grid-wrapper">
-        <div class="stats-section" id="comparisonSection">
-          <div class="stats-section-title">📊 Comparaison périodes</div>
-          <div class="stats-chart-container">
-            <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
-              <select id="compPeriod1" class="form-select" style="flex:1;min-width:100px;font-size:11px;">
-                <option value="thisMonth">Ce mois</option>
-                <option value="lastMonth">Mois dernier</option>
-                <option value="thisQuarter">Ce trimestre</option>
-                <option value="lastQuarter">Trimestre dernier</option>
-                <option value="thisYear">Cette année</option>
-                <option value="lastYear">Année dernière</option>
-              </select>
-              <span style="align-self:center;color:var(--gray-500);">vs</span>
-              <select id="compPeriod2" class="form-select" style="flex:1;min-width:100px;font-size:11px;">
-                <option value="lastMonth" selected="">Mois dernier</option>
-                <option value="thisMonth">Ce mois</option>
-                <option value="thisQuarter">Ce trimestre</option>
-                <option value="lastQuarter">Trimestre dernier</option>
-                <option value="thisYear">Cette année</option>
-                <option value="lastYear">Année dernière</option>
-              </select>
-            </div>
-            <div style="display:flex;gap:8px;margin-bottom:12px;">
-              <select id="compStatutFilter" class="form-select" style="flex:1;font-size:11px;">
-                <option value="all">Tous les statuts</option>
-                <option value="Gagné">Gagné seulement</option>
-                <option value="En cours">En cours seulement</option>
-                <option value="Perdu">Perdu seulement</option>
-              </select>
-            </div>
-            <div class="comparison-container">
-              <div class="comparison-period">
-                <div class="comparison-period-label" id="compLabel1">Ce mois</div>
-                <div class="comparison-period-value" id="compCurrentMonth">0 €</div>
-                <div class="comparison-period-count" id="compCurrentCount">0 affaires</div>
-              </div>
-              <div class="comparison-vs">
-                <div class="comparison-arrow" id="compArrow">→</div>
-                <div class="comparison-percent" id="compPercent">0%</div>
-              </div>
-              <div class="comparison-period">
-                <div class="comparison-period-label" id="compLabel2">Mois dernier</div>
-                <div class="comparison-period-value" id="compLastMonth">0 €</div>
-                <div class="comparison-period-count" id="compLastCount">0 affaires</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="stats-section" id="rankingSection">
-          <div class="stats-section-title">🏆 Classement EG (CA cumulé)</div>
+      <div class="stats-section" id="rankingSection">
+        <div class="stats-section-title">🏆 Classement EG (CA cumulé)</div>
         <div class="stats-chart-container">
           <div class="ranking-list" id="rankingList">
             <!-- Generated by JS -->
           </div>
         </div>
       </div>
-      </div>
       
-      <div class="stats-grid-wrapper">
       <div class="stats-section" id="objectivesSection">
         <div class="stats-section-title">
           🎯 Objectifs CA
@@ -3612,7 +2914,7 @@
       <div class="stats-section" id="chiffreurObjectivesSection">
         <div class="stats-section-title">
           🧮 Chiffreurs
-          <button class="objective-config-btn" onclick="openChiffreurConfig()" title="Configurer l'objectif chiffreurs" style="margin-left:8px;background:none;border:none;cursor:pointer;font-size:14px;">⚙️</button>
+          <button class="objective-config-btn" onclick="openChiffreurConfig()" title="Configurer l&#39;objectif chiffreurs" style="margin-left:8px;background:none;border:none;cursor:pointer;font-size:14px;">⚙️</button>
           <span style="font-size:11px;color:var(--gray-500);margin-left:8px;">Obj: <span id="chiffreurObjLabel">4.5M€</span></span>
         </div>
         <div class="stats-chart-container">
@@ -3621,13 +2923,12 @@
           </div>
         </div>
       </div>
-      </div>
 
       <!-- Objectifs par Métreur -->
       <div class="stats-section" id="metreurObjectivesSection">
         <div class="stats-section-title">
           📐 Métreurs
-          <button class="objective-config-btn" onclick="openMetreurConfig()" title="Configurer l'objectif métreurs" style="margin-left:8px;background:none;border:none;cursor:pointer;font-size:14px;">⚙️</button>
+          <button class="objective-config-btn" onclick="openMetreurConfig()" title="Configurer l&#39;objectif métreurs" style="margin-left:8px;background:none;border:none;cursor:pointer;font-size:14px;">⚙️</button>
           <span style="font-size:11px;color:var(--gray-500);margin-left:8px;">Obj: <span id="metreurObjLabel">4.5M€</span></span>
         </div>
         <div class="stats-chart-container">
@@ -3788,6 +3089,11 @@
             <select class="form-select" id="mArchitect"><option value="">-- Sélectionner --</option><option value="ADP">ADP</option><option value="AFA+SANAE">AFA+SANAE</option><option value="Agence Engasser et Associés">Agence Engasser et Associés</option><option value="Atelier COS">Atelier COS</option><option value="BAUMSCHLAGER EBERLE ARCHITECTS">BAUMSCHLAGER EBERLE ARCHITECTS</option><option value="IDEC SANTE">IDEC SANTE</option><option value="Patriarche">Patriarche</option><option value="RBA">RBA</option><option value="SARL ITEA">SARL ITEA</option></select>
             <input type="text" class="form-input" id="mArchitectCustom" placeholder="Ou saisir un nouveau..." style="margin-top:4px;font-size:12px;">
           </div>
+          <div class="form-group">
+            <label class="form-label">Chiffreur</label>
+            <select class="form-select" id="mChiffreur"><option value="">-- Sélectionner --</option><option value="Maxime">Maxime</option><option value="Melyssa">Melyssa</option><option value="Richad">Richad</option><option value="Walid">Walid</option><option value="Wijdane">Wijdane</option></select>
+            <input type="text" class="form-input" id="mChiffreurCustom" placeholder="Ou saisir un nouveau..." style="margin-top:4px;font-size:12px;">
+          </div>
           <div class="form-group full">
             <label class="form-label">Adresse</label>
             <div style="display:flex;gap:6px;">
@@ -3831,49 +3137,13 @@
             <input type="text" class="form-input" id="mMontant" placeholder="1 500 000">
           </div>
           <div class="form-group">
-            <label class="form-label">Surface (m²)</label>
-            <input type="text" class="form-input" id="mSurface" placeholder="Ex: 2500">
-          </div>
-          <div class="form-group">
             <label class="form-label">Responsable</label>
             <input type="text" class="form-input" id="mResponsable" placeholder="Jean Dupont">
           </div>
-          <div class="form-group full">
-            <label class="form-label">Chiffreurs (avec taux de participation %)</label>
-            <div class="multi-person-container" id="chiffreursContainer">
-              <div class="multi-person-list" id="chiffreursList"></div>
-              <div class="multi-person-add">
-                <select class="form-select" id="mChiffreurSelect" style="flex:2;">
-                  <option value="">-- Sélectionner --</option>
-                  <option value="Maxime">Maxime</option>
-                  <option value="Melyssa">Melyssa</option>
-                  <option value="Richad">Richad</option>
-                  <option value="Walid">Walid</option>
-                  <option value="Wijdane">Wijdane</option>
-                </select>
-                <input type="text" class="form-input" id="mChiffreurCustom" placeholder="Ou nouveau..." style="flex:2;">
-                <input type="number" class="form-input" id="mChiffreurTaux" placeholder="%" min="0" max="100" style="flex:1;width:60px;">
-                <button type="button" class="btn-add-person" id="addChiffreurBtn" title="Ajouter">+</button>
-              </div>
-            </div>
-          </div>
-          <div class="form-group full">
-            <label class="form-label">Métreurs (avec taux de participation %)</label>
-            <div class="multi-person-container" id="metreursContainer">
-              <div class="multi-person-list" id="metreursList"></div>
-              <div class="multi-person-add">
-                <select class="form-select" id="mMetreurSelect" style="flex:2;">
-                  <option value="">-- Sélectionner --</option>
-                  <option value="Melyssa">Melyssa</option>
-                  <option value="Richad">Richad</option>
-                  <option value="Walid">Walid</option>
-                  <option value="Youssef">Youssef</option>
-                </select>
-                <input type="text" class="form-input" id="mMetreurCustom" placeholder="Ou nouveau..." style="flex:2;">
-                <input type="number" class="form-input" id="mMetreurTaux" placeholder="%" min="0" max="100" style="flex:1;width:60px;">
-                <button type="button" class="btn-add-person" id="addMetreurBtn" title="Ajouter">+</button>
-              </div>
-            </div>
+          <div class="form-group">
+            <label class="form-label">Métreur</label>
+            <select class="form-select" id="mMetreur"><option value="">-- Sélectionner --</option><option value="Melyssa">Melyssa</option><option value="Richad">Richad</option><option value="Walid">Walid</option><option value="Youssef">Youssef</option></select>
+            <input type="text" class="form-input" id="mMetreurCustom" placeholder="Ou saisir un nouveau..." style="margin-top:4px;font-size:12px;">
           </div>
           <div class="form-group">
             <label class="form-label">Latitude *</label>
@@ -3884,98 +3154,10 @@
             <input type="text" class="form-input" id="mLng" placeholder="2.35">
           </div>
           <div class="form-group full">
-            <label class="form-label">Tags / Produits</label>
+            <label class="form-label">Tags (Entrée pour ajouter)</label>
             <div class="tags-input-container" id="tagsContainer">
               <input type="text" class="tags-input" id="mTagsInput" placeholder="Ajouter un tag...">
             </div>
-            <div class="product-add-section" style="margin-top:8px;padding:12px;background:var(--gray-50);border-radius:8px;">
-              <!-- Tabs pour basculer entre Produit simple et Complexe -->
-              <div class="product-tabs" style="display:flex;gap:4px;margin-bottom:12px;">
-                <button type="button" class="product-tab-btn active" id="tabProduitSimple" onclick="switchProductTab('simple')">📦 Produit simple</button>
-                <button type="button" class="product-tab-btn" id="tabProduitComplexe" onclick="switchProductTab('complexe')">🔧 Complexe</button>
-              </div>
-              
-              <!-- Produit Simple -->
-              <div id="produitSimpleForm">
-                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-                  <select class="form-select" id="mProductCategory" style="flex:1;min-width:100px;">
-                    <option value="">-- Catégorie --</option>
-                    <option value="Bardage">Bardage</option>
-                    <option value="Étanchéité">Étanchéité</option>
-                    <option value="Couverture">Couverture</option>
-                    <option value="Façade">Façade</option>
-                    <option value="Isolation">Isolation</option>
-                    <option value="Autre">Autre</option>
-                  </select>
-                  <input type="text" class="form-input" id="mProductName" placeholder="Nom produit" style="flex:2;min-width:100px;">
-                </div>
-                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-                  <input type="number" class="form-input" id="mProductPrice" placeholder="Prix €/m²" style="flex:1;min-width:70px;">
-                  <input type="number" class="form-input" id="mProductSurface" placeholder="Surface m²" style="flex:1;min-width:70px;">
-                </div>
-                <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
-                  <select class="form-select" id="mProductFinition" style="flex:1;min-width:100px;">
-                    <option value="">-- Finition --</option>
-                    <option value="Brut">Brut</option>
-                    <option value="Apprêté">Apprêté</option>
-                    <option value="Laqué">Laqué</option>
-                    <option value="Anodisé">Anodisé</option>
-                    <option value="Thermolaqué">Thermolaqué</option>
-                    <option value="Galvanisé">Galvanisé</option>
-                    <option value="Inox">Inox</option>
-                    <option value="RAL">RAL</option>
-                    <option value="Naturel">Naturel</option>
-                    <option value="Pré-patiné">Pré-patiné</option>
-                  </select>
-                  <input type="text" class="form-input" id="mProductFinitionCustom" placeholder="Ou autre finition..." style="flex:1;min-width:80px;">
-                  <button type="button" class="btn-add-product" id="addProductBtn" title="Ajouter produit">+ Ajouter</button>
-                </div>
-              </div>
-              
-              <!-- Complexe (assemblage) -->
-              <div id="produitComplexeForm" style="display:none;">
-                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
-                  <select class="form-select" id="mComplexeCategory" style="flex:1;min-width:100px;">
-                    <option value="">-- Catégorie --</option>
-                    <option value="Bardage">Bardage</option>
-                    <option value="Étanchéité">Étanchéité</option>
-                    <option value="Couverture">Couverture</option>
-                    <option value="Façade">Façade</option>
-                    <option value="Isolation">Isolation</option>
-                    <option value="Autre">Autre</option>
-                  </select>
-                  <input type="text" class="form-input" id="mComplexeName" placeholder="Nom du complexe" style="flex:2;min-width:120px;">
-                </div>
-                <div style="display:flex;gap:6px;margin-bottom:8px;">
-                  <input type="number" class="form-input" id="mComplexeSurface" placeholder="Surface totale m²" style="flex:1;">
-                </div>
-                
-                <!-- Liste des composants du complexe -->
-                <div class="complexe-components-section" style="background:white;border:1px solid var(--gray-200);border-radius:8px;padding:10px;margin-bottom:10px;">
-                  <div style="font-size:11px;font-weight:600;color:var(--gray-600);margin-bottom:8px;">📋 Composants du complexe</div>
-                  <div id="complexeComponentsList" class="complexe-components-list"></div>
-                  
-                  <!-- Ajouter un composant -->
-                  <div style="margin-top:8px;padding-top:8px;border-top:1px dashed var(--gray-200);">
-                    <div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center;">
-                      <input type="text" class="form-input" id="mComponentName" placeholder="Nom composant" style="flex:2;min-width:90px;font-size:11px;padding:6px;">
-                      <input type="number" class="form-input" id="mComponentPrice" placeholder="€/m²" style="width:60px;font-size:11px;padding:6px;">
-                      <input type="text" class="form-input" id="mComponentFinition" placeholder="Finition" style="width:70px;font-size:11px;padding:6px;">
-                      <button type="button" class="btn-add-component" id="addComponentBtn" title="Ajouter ce composant">+ Ajouter</button>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Total du complexe -->
-                <div class="complexe-total" style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:linear-gradient(135deg, var(--theme-color-light), white);border-radius:8px;margin-bottom:10px;">
-                  <span style="font-size:12px;font-weight:600;color:var(--gray-700);">💰 Prix total du complexe :</span>
-                  <span id="complexeTotalPrice" style="font-size:16px;font-weight:800;color:var(--theme-color);">0 €/m²</span>
-                </div>
-                
-                <button type="button" class="btn-add-product" id="addComplexeBtn" style="width:100%;" title="Ajouter le complexe">+ Ajouter le complexe</button>
-              </div>
-            </div>
-            <div class="products-list" id="productsList" style="margin-top:8px;"></div>
           </div>
           <div class="form-group full">
             <label class="form-label">Lien document</label>
@@ -4569,10 +3751,6 @@
     let tabModalMode = 'add';
     let renamingTabId = null;
     let currentTags = [];
-    let currentChiffreurs = []; // Array de {name, taux}
-    let currentMetreurs = [];   // Array de {name, taux}
-    let currentProducts = [];   // Array de {name, priceM2, surface, finition, category, isComplexe, components}
-    let currentComplexeComponents = []; // Composants temporaires pour le complexe en cours
     let selectedTabColor = '#3b82f6';
     let duplicatingItemId = null;
     let protectingTabId = null;
@@ -5114,10 +4292,6 @@
       if (isTabLocked(currentTab)) {
         document.getElementById('statsTotalAffaires').textContent = '🔒';
         document.getElementById('statsTotalMontant').textContent = '🔒';
-        const gagneEl = document.getElementById('statsTotalGagne');
-        const convKPIEl = document.getElementById('statsConversionKPI');
-        if (gagneEl) gagneEl.textContent = '🔒';
-        if (convKPIEl) convKPIEl.textContent = '🔒';
         return;
       }
       
@@ -5132,27 +4306,10 @@
         const val = parseMontant(item.montant);
         return Number.isFinite(val) ? sum + val : sum;
       }, 0);
-
-      // Calculate CA Gagné
-      const totalGagne = currentList.filter(i => i.statut === 'Gagné').reduce((sum, item) => {
-        const val = parseMontant(item.montant);
-        return Number.isFinite(val) ? sum + val : sum;
-      }, 0);
-
-      // Calculate conversion rate for KPI
-      const totalDecided = gagne + perdu;
-      const conversionKPI = totalDecided > 0 ? Math.round((gagne / totalDecided) * 100) : 0;
       
       // Update summary cards
       document.getElementById('statsTotalAffaires').textContent = total;
       document.getElementById('statsTotalMontant').textContent = formatMontantShort(totalMontant);
-      
-      // Update new KPI cards
-      const gagneEl = document.getElementById('statsTotalGagne');
-      if (gagneEl) gagneEl.textContent = formatMontantShort(totalGagne);
-      
-      const convKPIEl = document.getElementById('statsConversionKPI');
-      if (convKPIEl) convKPIEl.textContent = conversionKPI + '%';
       
       // Update pie chart
       updatePieChart(gagne, perdu, encours, faste, total);
@@ -5625,22 +4782,7 @@
         }
         
         // Track CHIFFREUR stats (ALL statuses - montant total chiffré)
-        // Utiliser le nouveau format multi-chiffreurs si disponible
-        if (item.chiffreurs && Array.isArray(item.chiffreurs) && item.chiffreurs.length > 0) {
-          item.chiffreurs.forEach(ch => {
-            if (!ch.name) return;
-            if (!chiffreurStats[ch.name]) {
-              chiffreurStats[ch.name] = { total: 0, count: 0, gagne: 0, encours: 0, perdu: 0 };
-            }
-            const weightedAmount = amount * (ch.taux / 100);
-            chiffreurStats[ch.name].total += weightedAmount;
-            chiffreurStats[ch.name].count += (ch.taux / 100); // Fractional count
-            if (item.statut === 'Gagné') chiffreurStats[ch.name].gagne += weightedAmount;
-            else if (item.statut === 'En cours') chiffreurStats[ch.name].encours += weightedAmount;
-            else if (item.statut === 'Perdu') chiffreurStats[ch.name].perdu += weightedAmount;
-          });
-        } else if (item.chiffreur) {
-          // Ancien format simple pour rétrocompatibilité
+        if (item.chiffreur) {
           if (!chiffreurStats[item.chiffreur]) {
             chiffreurStats[item.chiffreur] = { total: 0, count: 0, gagne: 0, encours: 0, perdu: 0 };
           }
@@ -5652,22 +4794,7 @@
         }
         
         // Track METREUR stats (ALL statuses - montant total chiffré)
-        // Utiliser le nouveau format multi-métreurs si disponible
-        if (item.metreurs && Array.isArray(item.metreurs) && item.metreurs.length > 0) {
-          item.metreurs.forEach(mt => {
-            if (!mt.name) return;
-            if (!metreurStats[mt.name]) {
-              metreurStats[mt.name] = { total: 0, count: 0, gagne: 0, encours: 0, perdu: 0 };
-            }
-            const weightedAmount = amount * (mt.taux / 100);
-            metreurStats[mt.name].total += weightedAmount;
-            metreurStats[mt.name].count += (mt.taux / 100); // Fractional count
-            if (item.statut === 'Gagné') metreurStats[mt.name].gagne += weightedAmount;
-            else if (item.statut === 'En cours') metreurStats[mt.name].encours += weightedAmount;
-            else if (item.statut === 'Perdu') metreurStats[mt.name].perdu += weightedAmount;
-          });
-        } else if (item.metreur) {
-          // Ancien format simple pour rétrocompatibilité
+        if (item.metreur) {
           if (!metreurStats[item.metreur]) {
             metreurStats[item.metreur] = { total: 0, count: 0, gagne: 0, encours: 0, perdu: 0 };
           }
@@ -6107,43 +5234,6 @@
           return mois[parseInt(mo)-1] + ' ' + y;
         };
         
-        // Formater les chiffreurs (multi ou simple)
-        let chiffreursHtml = '';
-        if (item.chiffreurs && Array.isArray(item.chiffreurs) && item.chiffreurs.length > 0) {
-          chiffreursHtml = item.chiffreurs.map(c => 
-            `<span class="chiffreur-badge">🧮 ${escapeHTML(c.name)} <small style="opacity:0.7">(${c.taux}%)</small></span>`
-          ).join('');
-        } else if (item.chiffreur) {
-          chiffreursHtml = `<span class="chiffreur-badge">🧮 ${escapeHTML(item.chiffreur)}</span>`;
-        }
-        
-        // Formater les métreurs (multi ou simple)
-        let metreursHtml = '';
-        if (item.metreurs && Array.isArray(item.metreurs) && item.metreurs.length > 0) {
-          metreursHtml = item.metreurs.map(m => 
-            `<span class="chiffreur-badge" style="color:var(--purple);">📐 ${escapeHTML(m.name)} <small style="opacity:0.7">(${m.taux}%)</small></span>`
-          ).join('');
-        } else if (item.metreur) {
-          metreursHtml = `<span class="chiffreur-badge" style="color:var(--purple);">📐 ${escapeHTML(item.metreur)}</span>`;
-        }
-        
-        // Calculer prix/m² si surface disponible
-        let surfaceInfo = '';
-        const montantValue = parseMontant(item.montant);
-        const surfaceValue = parseFloat(item.surface) || 0;
-        if (surfaceValue > 0) {
-          const prixM2 = montantValue / surfaceValue;
-          surfaceInfo = `<span class="surface-badge" title="Prix calculé par m²">📐 ${surfaceValue.toLocaleString('fr-FR')} m² · ${formatMontantShort(prixM2)}/m²</span>`;
-        }
-        
-        // Produits avec prix/m²
-        let productsHtml = '';
-        if (item.products && item.products.length > 0) {
-          productsHtml = `<div class="list-item-products">${item.products.map(p => 
-            `<span class="product-mini-badge" title="${p.surface || 0} m² × ${p.priceM2 || 0} €/m²">📦 ${escapeHTML(p.name)}</span>`
-          ).join('')}</div>`;
-        }
-        
         return `
           <div class="list-item" data-id="${item.id}" data-idx="${idx}">
             <div class="list-item-header">
@@ -6154,17 +5244,13 @@
               <span>${escapeHTML(item.client)} · ${escapeHTML(item.eg)}</span>
               <span>${escapeHTML(item.adresse)}${item.moisRemis ? `<span class="list-item-mois-remis">📅 ${formatMoisRemis(item.moisRemis)}</span>` : ''}</span>
               ${item.responsable ? `<span class="responsable-badge">👤 ${escapeHTML(item.responsable)}</span>` : ''}
-              ${chiffreursHtml}
-              ${metreursHtml}
+              ${item.chiffreur ? `<span class="chiffreur-badge">🧮 ${escapeHTML(item.chiffreur)}</span>` : ''}
+              ${item.metreur ? `<span class="chiffreur-badge" style="color:var(--purple);">📐 ${escapeHTML(item.metreur)}</span>` : ''}
             </div>
             ${item.description ? `<div class="list-item-description">${escapeHTML(item.description)}</div>` : ''}
             ${(item.tags && item.tags.length) ? `<div class="list-item-tags">${item.tags.map(t => `<span class="tag">${escapeHTML(t)}</span>`).join('')}</div>` : ''}
-            ${productsHtml}
             <div class="list-item-footer">
-              <div>
-                <span class="list-item-amount">${displayMontant(item.montant)}</span>
-                ${surfaceInfo}
-              </div>
+              <span class="list-item-amount">${displayMontant(item.montant)}</span>
               <div class="list-item-actions">
                 ${item.link ? `<button class="btn-icon link" title="Ouvrir document">🔗</button>` : ''}
                 <button class="btn-icon duplicate" title="Dupliquer">📋</button>
@@ -6291,36 +5377,18 @@
     function clearModalForm() {
       editingId = null;
       document.getElementById('modalTitle').textContent = 'Nouvelle affaire';
-      ['mAffaires', 'mClient', 'mDescription', 'mAdresse', 'mDate', 'mDateDevis', 'mMoisRemis', 'mMontant', 'mSurface', 'mResponsable', 'mLat', 'mLng', 'mLink', 'mNotes', 'mEGCustom', 'mArchitectCustom', 'mChiffreurCustom', 'mMetreurCustom', 'mChiffreurTaux', 'mMetreurTaux', 'mProductName', 'mProductPrice', 'mProductSurface', 'mProductFinitionCustom', 'mComplexeName', 'mComplexeSurface', 'mComponentName', 'mComponentPrice', 'mComponentFinition'].forEach(id => {
+      ['mAffaires', 'mClient', 'mDescription', 'mAdresse', 'mDate', 'mDateDevis', 'mMoisRemis', 'mMontant', 'mResponsable', 'mLat', 'mLng', 'mLink', 'mNotes', 'mEGCustom', 'mArchitectCustom', 'mChiffreurCustom', 'mMetreurCustom'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
       });
       document.getElementById('mEG').value = '';
       document.getElementById('mArchitect').value = '';
-      const chiffreurSelect = document.getElementById('mChiffreurSelect');
-      if (chiffreurSelect) chiffreurSelect.value = '';
-      const metreurSelect = document.getElementById('mMetreurSelect');
-      if (metreurSelect) metreurSelect.value = '';
-      const finitionSelect = document.getElementById('mProductFinition');
-      if (finitionSelect) finitionSelect.value = '';
-      const categorySelect = document.getElementById('mProductCategory');
-      if (categorySelect) categorySelect.value = '';
-      const complexeCategorySelect = document.getElementById('mComplexeCategory');
-      if (complexeCategorySelect) complexeCategorySelect.value = '';
+      document.getElementById('mChiffreur').value = '';
+      document.getElementById('mMetreur').value = '';
       document.getElementById('mStatut').value = 'En cours';
       document.querySelectorAll('#mSmacChips .chip').forEach(c => c.classList.remove('active'));
       currentTags = [];
-      currentChiffreurs = [];
-      currentMetreurs = [];
-      currentProducts = [];
-      currentComplexeComponents = [];
       renderTagsInput();
-      renderChiffreursList();
-      renderMetreursList();
-      renderProductsList();
-      renderComplexeComponents();
-      updateComplexeTotal();
-      switchProductTab('simple');
       updateAllDropdowns();
     }
 
@@ -6337,30 +5405,25 @@
       document.getElementById('mDescription').value = item.description || '';
       document.getElementById('mEG').value = item.eg || '';
       document.getElementById('mArchitect').value = item.architect || '';
+      document.getElementById('mChiffreur').value = item.chiffreur || '';
+      document.getElementById('mMetreur').value = item.metreur || '';
       document.getElementById('mAdresse').value = item.adresse || '';
       document.getElementById('mDate').value = item.datePrevisionnelle || '';
       document.getElementById('mDateDevis').value = item.dateDevis || '';
       document.getElementById('mMoisRemis').value = item.moisRemis || '';
       document.getElementById('mStatut').value = item.statut || 'En cours';
       document.getElementById('mMontant').value = item.montant || '';
-      document.getElementById('mSurface').value = item.surface || '';
       document.getElementById('mResponsable').value = item.responsable || '';
       document.getElementById('mLat').value = item.coords?.[0] || '';
       document.getElementById('mLng').value = item.coords?.[1] || '';
       document.getElementById('mLink').value = item.link || '';
       document.getElementById('mNotes').value = item.notes || '';
       
-      // Clear custom inputs and selects
+      // Clear custom inputs
       document.getElementById('mEGCustom').value = '';
       document.getElementById('mArchitectCustom').value = '';
       document.getElementById('mChiffreurCustom').value = '';
       document.getElementById('mMetreurCustom').value = '';
-      document.getElementById('mChiffreurTaux').value = '';
-      document.getElementById('mMetreurTaux').value = '';
-      const chiffreurSelect = document.getElementById('mChiffreurSelect');
-      if (chiffreurSelect) chiffreurSelect.value = '';
-      const metreurSelect = document.getElementById('mMetreurSelect');
-      if (metreurSelect) metreurSelect.value = '';
       
       document.querySelectorAll('#mSmacChips .chip').forEach(c => {
         c.classList.toggle('active', c.dataset.value === item.smac);
@@ -6368,32 +5431,6 @@
       
       currentTags = item.tags || [];
       renderTagsInput();
-      
-      // Charger les chiffreurs (nouveau format multi ou ancien format simple)
-      if (item.chiffreurs && Array.isArray(item.chiffreurs)) {
-        currentChiffreurs = item.chiffreurs;
-      } else if (item.chiffreur) {
-        // Migration depuis ancien format
-        currentChiffreurs = [{name: item.chiffreur, taux: 100}];
-      } else {
-        currentChiffreurs = [];
-      }
-      renderChiffreursList();
-      
-      // Charger les métreurs (nouveau format multi ou ancien format simple)
-      if (item.metreurs && Array.isArray(item.metreurs)) {
-        currentMetreurs = item.metreurs;
-      } else if (item.metreur) {
-        // Migration depuis ancien format
-        currentMetreurs = [{name: item.metreur, taux: 100}];
-      } else {
-        currentMetreurs = [];
-      }
-      renderMetreursList();
-      
-      // Charger les produits
-      currentProducts = item.products || [];
-      renderProductsList();
       
       openModal();
     }
@@ -6538,9 +5575,21 @@
         addToMOEList(architectCustom);
       }
       
-      // Extraire le chiffreur principal pour compatibilité avec ancien système de stats
-      const chiffreurPrincipal = currentChiffreurs.length > 0 ? currentChiffreurs[0].name : '';
-      const metreurPrincipal = currentMetreurs.length > 0 ? currentMetreurs[0].name : '';
+      // Get Chiffreur from select or custom input
+      let chiffreur = document.getElementById('mChiffreur').value.trim();
+      const chiffreurCustom = document.getElementById('mChiffreurCustom').value.trim();
+      if (chiffreurCustom) {
+        chiffreur = chiffreurCustom;
+        addToChiffreurList(chiffreurCustom);
+      }
+      
+      // Get Metreur from select or custom input
+      let metreur = document.getElementById('mMetreur').value.trim();
+      const metreurCustom = document.getElementById('mMetreurCustom').value.trim();
+      if (metreurCustom) {
+        metreur = metreurCustom;
+        addToMetreurList(metreurCustom);
+      }
       
       const itemData = {
         id: editingId || makeId(),
@@ -6556,13 +5605,9 @@
         moisRemis: document.getElementById('mMoisRemis').value,
         statut: document.getElementById('mStatut').value,
         montant: document.getElementById('mMontant').value.trim() || '-',
-        surface: document.getElementById('mSurface').value.trim(),
         responsable: document.getElementById('mResponsable').value.trim(),
-        chiffreur: chiffreurPrincipal, // Compatibilité ancien système
-        metreur: metreurPrincipal,      // Compatibilité ancien système
-        chiffreurs: currentChiffreurs,  // Nouveau: tableau multi-chiffreurs
-        metreurs: currentMetreurs,      // Nouveau: tableau multi-métreurs
-        products: currentProducts,       // Nouveau: produits avec prix/m²
+        chiffreur,
+        metreur,
         coords: [lat, lng],
         tags: currentTags,
         link: document.getElementById('mLink').value.trim(),
@@ -6610,728 +5655,6 @@
           renderTagsInput();
         }
         e.target.value = '';
-      }
-    }
-
-    /* Multi-Chiffreurs Functions */
-    function renderChiffreursList() {
-      const container = document.getElementById('chiffreursList');
-      if (!container) return;
-      container.innerHTML = '';
-      
-      currentChiffreurs.forEach((ch, idx) => {
-        const item = document.createElement('div');
-        item.className = 'multi-person-item';
-        item.innerHTML = `
-          <span class="person-name">${ch.name}</span>
-          <span class="person-taux">${ch.taux}%</span>
-          <button type="button" class="person-remove" data-idx="${idx}">✕</button>
-        `;
-        container.appendChild(item);
-      });
-      
-      // Add remove handlers
-      container.querySelectorAll('.person-remove').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const idx = parseInt(e.target.dataset.idx);
-          currentChiffreurs.splice(idx, 1);
-          renderChiffreursList();
-        });
-      });
-    }
-
-    function addChiffreur() {
-      const select = document.getElementById('mChiffreurSelect');
-      const custom = document.getElementById('mChiffreurCustom');
-      const tauxInput = document.getElementById('mChiffreurTaux');
-      
-      let name = select.value.trim() || custom.value.trim();
-      let taux = parseInt(tauxInput.value) || 100;
-      
-      if (!name) {
-        showToast('Veuillez sélectionner ou saisir un chiffreur', 'error');
-        return;
-      }
-      
-      // Vérifier si déjà présent
-      if (currentChiffreurs.some(c => c.name === name)) {
-        showToast('Ce chiffreur est déjà ajouté', 'error');
-        return;
-      }
-      
-      // Ajouter à la liste globale si nouveau
-      if (custom.value.trim()) {
-        addToChiffreurList(custom.value.trim());
-      }
-      
-      currentChiffreurs.push({ name, taux: Math.min(100, Math.max(0, taux)) });
-      renderChiffreursList();
-      
-      // Reset inputs
-      select.value = '';
-      custom.value = '';
-      tauxInput.value = '';
-    }
-
-    /* Multi-Métreurs Functions */
-    function renderMetreursList() {
-      const container = document.getElementById('metreursList');
-      if (!container) return;
-      container.innerHTML = '';
-      
-      currentMetreurs.forEach((mt, idx) => {
-        const item = document.createElement('div');
-        item.className = 'multi-person-item';
-        item.innerHTML = `
-          <span class="person-name">${mt.name}</span>
-          <span class="person-taux">${mt.taux}%</span>
-          <button type="button" class="person-remove" data-idx="${idx}">✕</button>
-        `;
-        container.appendChild(item);
-      });
-      
-      // Add remove handlers
-      container.querySelectorAll('.person-remove').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const idx = parseInt(e.target.dataset.idx);
-          currentMetreurs.splice(idx, 1);
-          renderMetreursList();
-        });
-      });
-    }
-
-    function addMetreur() {
-      const select = document.getElementById('mMetreurSelect');
-      const custom = document.getElementById('mMetreurCustom');
-      const tauxInput = document.getElementById('mMetreurTaux');
-      
-      let name = select.value.trim() || custom.value.trim();
-      let taux = parseInt(tauxInput.value) || 100;
-      
-      if (!name) {
-        showToast('Veuillez sélectionner ou saisir un métreur', 'error');
-        return;
-      }
-      
-      // Vérifier si déjà présent
-      if (currentMetreurs.some(m => m.name === name)) {
-        showToast('Ce métreur est déjà ajouté', 'error');
-        return;
-      }
-      
-      // Ajouter à la liste globale si nouveau
-      if (custom.value.trim()) {
-        addToMetreurList(custom.value.trim());
-      }
-      
-      currentMetreurs.push({ name, taux: Math.min(100, Math.max(0, taux)) });
-      renderMetreursList();
-      
-      // Reset inputs
-      select.value = '';
-      custom.value = '';
-      tauxInput.value = '';
-    }
-
-    /* Products with price/m² Functions */
-    function renderProductsList() {
-      const container = document.getElementById('productsList');
-      if (!container) return;
-      container.innerHTML = '';
-      
-      currentProducts.forEach((prod, idx) => {
-        const total = (prod.priceM2 || 0) * (prod.surface || 0);
-        const item = document.createElement('div');
-        item.className = 'product-item' + (prod.isComplexe ? ' is-complexe' : '');
-        
-        let componentsHtml = '';
-        if (prod.isComplexe && prod.components && prod.components.length > 0) {
-          componentsHtml = `<span class="complexe-indicator">${prod.components.length} composants</span>`;
-        }
-        
-        item.innerHTML = `
-          <div class="product-info">
-            ${prod.category ? `<span class="product-category-badge">${prod.category}</span>` : ''}
-            <span class="product-name">${prod.isComplexe ? '🔧 ' : ''}${prod.name}</span>
-            ${prod.finition ? `<span class="product-finition">${prod.finition}</span>` : ''}
-            <span class="product-price">${formatNumber(prod.priceM2)} €/m²</span>
-            <span class="product-surface">${formatNumber(prod.surface)} m²</span>
-            ${componentsHtml}
-          </div>
-          <span class="product-total">= ${formatMontantShort(total)}</span>
-          <button type="button" class="product-remove" data-idx="${idx}">✕</button>
-        `;
-        container.appendChild(item);
-      });
-      
-      // Add remove handlers
-      container.querySelectorAll('.product-remove').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const idx = parseInt(e.target.dataset.idx);
-          currentProducts.splice(idx, 1);
-          renderProductsList();
-        });
-      });
-    }
-
-    function addProduct() {
-      const nameInput = document.getElementById('mProductName');
-      const priceInput = document.getElementById('mProductPrice');
-      const surfaceInput = document.getElementById('mProductSurface');
-      const finitionSelect = document.getElementById('mProductFinition');
-      const finitionCustom = document.getElementById('mProductFinitionCustom');
-      const categorySelect = document.getElementById('mProductCategory');
-      
-      const name = nameInput.value.trim();
-      const priceM2 = parseFloat(priceInput.value) || 0;
-      const surface = parseFloat(surfaceInput.value) || 0;
-      const finition = finitionCustom.value.trim() || finitionSelect.value || '';
-      const category = categorySelect.value || '';
-      
-      if (!name) {
-        showToast('Veuillez saisir un nom de produit', 'error');
-        return;
-      }
-      
-      currentProducts.push({ 
-        name, 
-        priceM2, 
-        surface, 
-        finition, 
-        category,
-        isComplexe: false,
-        components: []
-      });
-      
-      // Ajouter aussi comme tag pour la recherche
-      if (!currentTags.includes(name)) {
-        currentTags.push(name);
-        renderTagsInput();
-      }
-      
-      renderProductsList();
-      
-      // Reset inputs
-      nameInput.value = '';
-      priceInput.value = '';
-      surfaceInput.value = '';
-      finitionSelect.value = '';
-      finitionCustom.value = '';
-      categorySelect.value = '';
-    }
-
-    /* Complexe (assemblage) Functions */
-    function switchProductTab(tab) {
-      const simpleForm = document.getElementById('produitSimpleForm');
-      const complexeForm = document.getElementById('produitComplexeForm');
-      const simpleTab = document.getElementById('tabProduitSimple');
-      const complexeTab = document.getElementById('tabProduitComplexe');
-      
-      if (tab === 'simple') {
-        simpleForm.style.display = 'block';
-        complexeForm.style.display = 'none';
-        simpleTab.classList.add('active');
-        complexeTab.classList.remove('active');
-      } else {
-        simpleForm.style.display = 'none';
-        complexeForm.style.display = 'block';
-        simpleTab.classList.remove('active');
-        complexeTab.classList.add('active');
-      }
-    }
-
-    function renderComplexeComponents() {
-      const container = document.getElementById('complexeComponentsList');
-      if (!container) return;
-      container.innerHTML = '';
-      
-      if (currentComplexeComponents.length === 0) {
-        container.innerHTML = '<div style="text-align:center;padding:12px;color:var(--gray-400);font-size:11px;">Aucun composant ajouté</div>';
-        return;
-      }
-      
-      currentComplexeComponents.forEach((comp, idx) => {
-        const item = document.createElement('div');
-        item.className = 'complexe-component-item';
-        item.innerHTML = `
-          <div class="component-info">
-            <span class="component-name">${comp.name}</span>
-            ${comp.finition ? `<span class="component-finition">${comp.finition}</span>` : ''}
-          </div>
-          <span class="component-price">${formatNumber(comp.priceM2)} €/m²</span>
-          <button type="button" class="component-remove" data-idx="${idx}">✕</button>
-        `;
-        container.appendChild(item);
-      });
-      
-      // Add remove handlers
-      container.querySelectorAll('.component-remove').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const idx = parseInt(e.target.dataset.idx);
-          currentComplexeComponents.splice(idx, 1);
-          renderComplexeComponents();
-          updateComplexeTotal();
-        });
-      });
-    }
-
-    function addComponent() {
-      const nameInput = document.getElementById('mComponentName');
-      const priceInput = document.getElementById('mComponentPrice');
-      const finitionInput = document.getElementById('mComponentFinition');
-      
-      if (!nameInput || !priceInput) return;
-      
-      const name = nameInput.value.trim();
-      const priceM2 = parseFloat(priceInput.value) || 0;
-      const finition = finitionInput ? finitionInput.value.trim() : '';
-      
-      if (!name) {
-        showToast('Veuillez saisir un nom de composant', 'error');
-        nameInput.focus();
-        return;
-      }
-      
-      currentComplexeComponents.push({ name, priceM2, finition });
-      renderComplexeComponents();
-      updateComplexeTotal();
-      
-      // Reset inputs et focus pour enchainer
-      nameInput.value = '';
-      priceInput.value = '';
-      if (finitionInput) finitionInput.value = '';
-      nameInput.focus();
-      
-      showToast('Composant ajouté !', 'success');
-    }
-
-    function updateComplexeTotal() {
-      const totalEl = document.getElementById('complexeTotalPrice');
-      if (!totalEl) return;
-      
-      const total = currentComplexeComponents.reduce((sum, comp) => sum + (comp.priceM2 || 0), 0);
-      totalEl.textContent = formatNumber(total) + ' €/m²';
-    }
-
-    function addComplexe() {
-      const nameInput = document.getElementById('mComplexeName');
-      const surfaceInput = document.getElementById('mComplexeSurface');
-      const categorySelect = document.getElementById('mComplexeCategory');
-      
-      const name = nameInput.value.trim();
-      const surface = parseFloat(surfaceInput.value) || 0;
-      const category = categorySelect.value || '';
-      
-      if (!name) {
-        showToast('Veuillez saisir un nom de complexe', 'error');
-        return;
-      }
-      
-      if (currentComplexeComponents.length === 0) {
-        showToast('Ajoutez au moins un composant au complexe', 'error');
-        return;
-      }
-      
-      // Calculer le prix total du complexe
-      const totalPriceM2 = currentComplexeComponents.reduce((sum, comp) => sum + (comp.priceM2 || 0), 0);
-      
-      // Créer les finitions combinées
-      const finitions = currentComplexeComponents
-        .filter(c => c.finition)
-        .map(c => c.finition)
-        .join(' + ');
-      
-      currentProducts.push({
-        name,
-        priceM2: totalPriceM2,
-        surface,
-        finition: finitions || '',
-        category,
-        isComplexe: true,
-        components: [...currentComplexeComponents]
-      });
-      
-      // Ajouter aussi comme tag
-      if (!currentTags.includes(name)) {
-        currentTags.push(name);
-        renderTagsInput();
-      }
-      
-      renderProductsList();
-      
-      // Reset
-      nameInput.value = '';
-      surfaceInput.value = '';
-      categorySelect.value = '';
-      currentComplexeComponents = [];
-      renderComplexeComponents();
-      updateComplexeTotal();
-      
-      showToast('Complexe ajouté !', 'success');
-    }
-
-    function formatNumber(num) {
-      return num.toLocaleString('fr-FR');
-    }
-
-    /* Products Analysis Panel */
-    let currentProductCategoryFilter = '';
-    
-    function toggleProductsPanel() {
-      const panel = document.getElementById('productsPanel');
-      if (panel.classList.contains('open')) {
-        panel.classList.remove('open');
-      } else {
-        panel.classList.add('open');
-        updateProductsFilters();
-        updateProductsAnalysis();
-      }
-    }
-
-    function updateProductsFilters() {
-      const container = document.getElementById('productsFilters');
-      if (!container) return;
-      
-      // Collecter toutes les catégories uniques
-      const categories = new Set();
-      Object.values(dataByTab).forEach(tabData => {
-        tabData.forEach(item => {
-          if (item.products && Array.isArray(item.products)) {
-            item.products.forEach(prod => {
-              if (prod.category) categories.add(prod.category);
-            });
-          }
-        });
-      });
-      
-      // Générer les boutons de filtre par catégorie
-      container.innerHTML = `
-        <button class="products-filter-btn ${currentProductCategoryFilter === '' ? 'active' : ''}" data-category="">Toutes</button>
-        ${Array.from(categories).sort().map(c => `
-          <button class="products-filter-btn ${currentProductCategoryFilter === c ? 'active' : ''}" data-category="${c}">${c}</button>
-        `).join('')}
-      `;
-      
-      // Ajouter les event listeners
-      container.querySelectorAll('.products-filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          currentProductCategoryFilter = btn.dataset.category;
-          container.querySelectorAll('.products-filter-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          updateProductsAnalysis(document.getElementById('productSearchInput')?.value || '');
-        });
-      });
-    }
-
-    function updateProductsAnalysis(searchTerm = '') {
-      const container = document.getElementById('productsAnalysisList');
-      if (!container) return;
-      
-      // Collecter tous les produits groupés par CATEGORIE puis par NOM (pas par finition)
-      const categoryStats = {};
-      
-      Object.values(dataByTab).forEach(tabData => {
-        tabData.forEach(item => {
-          if (item.products && Array.isArray(item.products)) {
-            item.products.forEach(prod => {
-              // Filtrer par catégorie
-              const category = prod.category || 'Non classé';
-              if (currentProductCategoryFilter && category !== currentProductCategoryFilter) return;
-              
-              // Filtrer par recherche
-              if (searchTerm && !prod.name.toLowerCase().includes(searchTerm.toLowerCase())) return;
-              
-              // Initialiser la catégorie
-              if (!categoryStats[category]) {
-                categoryStats[category] = {
-                  products: {},
-                  totalAmount: 0,
-                  totalSurface: 0,
-                  count: 0
-                };
-              }
-              
-              // Grouper par NOM de produit uniquement (pas par finition)
-              const key = prod.name.toLowerCase();
-              if (!categoryStats[category].products[key]) {
-                categoryStats[category].products[key] = {
-                  name: prod.name,
-                  isComplexe: prod.isComplexe || false,
-                  components: prod.components || [],
-                  count: 0,
-                  totalSurface: 0,
-                  totalAmount: 0,
-                  prices: [],
-                  byFinition: {},
-                  affaires: []
-                };
-              }
-              
-              const ps = categoryStats[category].products[key];
-              ps.count++;
-              ps.totalSurface += prod.surface || 0;
-              const amount = (prod.priceM2 || 0) * (prod.surface || 0);
-              ps.totalAmount += amount;
-              if (prod.priceM2 > 0) ps.prices.push(prod.priceM2);
-              
-              // Grouper aussi par finition pour le détail
-              const finKey = prod.finition || 'Sans finition';
-              if (!ps.byFinition[finKey]) {
-                ps.byFinition[finKey] = {
-                  count: 0,
-                  totalSurface: 0,
-                  totalAmount: 0,
-                  prices: [],
-                  affaires: []
-                };
-              }
-              ps.byFinition[finKey].count++;
-              ps.byFinition[finKey].totalSurface += prod.surface || 0;
-              ps.byFinition[finKey].totalAmount += amount;
-              if (prod.priceM2 > 0) ps.byFinition[finKey].prices.push(prod.priceM2);
-              ps.byFinition[finKey].affaires.push({
-                name: item.affaires,
-                priceM2: prod.priceM2,
-                surface: prod.surface,
-                statut: item.statut
-              });
-              
-              ps.affaires.push({
-                name: item.affaires,
-                priceM2: prod.priceM2,
-                surface: prod.surface,
-                statut: item.statut,
-                finition: prod.finition || 'Sans finition'
-              });
-              
-              // Totaux catégorie
-              categoryStats[category].totalAmount += amount;
-              categoryStats[category].totalSurface += prod.surface || 0;
-              categoryStats[category].count++;
-            });
-          }
-        });
-      });
-      
-      // Générer le HTML groupé par catégorie
-      const sortedCategories = Object.keys(categoryStats).sort();
-      
-      if (sortedCategories.length === 0) {
-        container.innerHTML = `
-          <div style="text-align:center;padding:40px 20px;color:var(--gray-500);">
-            <div style="font-size:48px;margin-bottom:12px;">📦</div>
-            <div style="font-size:14px;font-weight:600;">Aucun produit trouvé</div>
-            <div style="font-size:12px;margin-top:4px;">Ajoutez des produits avec prix/m² dans vos affaires</div>
-          </div>
-        `;
-        return;
-      }
-      
-      let html = '';
-      let cardIndex = 0;
-      
-      // Stocker les données pour les toggles
-      window.productAnalysisData = categoryStats;
-      
-      sortedCategories.forEach(category => {
-        const catData = categoryStats[category];
-        const sortedProducts = Object.values(catData.products).sort((a, b) => b.count - a.count);
-        
-        html += `
-          <div class="category-section" style="margin-bottom:20px;">
-            <div class="category-header" style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--gray-100);border-radius:10px;margin-bottom:12px;">
-              <span style="font-weight:800;font-size:14px;color:var(--dark);">📁 ${category}</span>
-              <div style="display:flex;gap:12px;font-size:11px;color:var(--gray-600);">
-                <span>${catData.count} produit${catData.count > 1 ? 's' : ''}</span>
-                <span>${formatNumber(Math.round(catData.totalSurface))} m²</span>
-                <span style="font-weight:700;color:var(--theme-color);">${formatMontantShort(catData.totalAmount)}</span>
-              </div>
-            </div>
-        `;
-        
-        sortedProducts.forEach(prod => {
-          const avgPrice = prod.prices.length > 0 
-            ? prod.prices.reduce((a, b) => a + b, 0) / prod.prices.length 
-            : 0;
-          const minPrice = prod.prices.length > 0 ? Math.min(...prod.prices) : 0;
-          const maxPrice = prod.prices.length > 0 ? Math.max(...prod.prices) : 0;
-          const finitions = Object.keys(prod.byFinition);
-          const currentCardId = `product-card-${cardIndex}`;
-          const prodDataKey = `${category}|${prod.name.toLowerCase()}`;
-          cardIndex++;
-          
-          html += `
-            <div class="product-stats-card" ${prod.isComplexe ? 'style="border-style:dashed;"' : ''} data-prodkey="${prodDataKey}">
-              <div class="product-stats-header">
-                <span class="product-stats-name">${prod.isComplexe ? '🔧 ' : ''}${prod.name}</span>
-                <div class="product-stats-badges">
-                  <span class="product-stats-count">${prod.count} affaire${prod.count > 1 ? 's' : ''}</span>
-                </div>
-              </div>
-              
-              <!-- Stats globales (toutes finitions) -->
-              <div class="product-stats-grid">
-                <div class="product-stat-item">
-                  <div class="product-stat-value">${formatMontantShort(avgPrice)}</div>
-                  <div class="product-stat-label">Prix moy./m²</div>
-                </div>
-                <div class="product-stat-item">
-                  <div class="product-stat-value">${formatNumber(Math.round(prod.totalSurface))}</div>
-                  <div class="product-stat-label">Surface totale m²</div>
-                </div>
-                <div class="product-stat-item">
-                  <div class="product-stat-value">${formatMontantShort(minPrice)} - ${formatMontantShort(maxPrice)}</div>
-                  <div class="product-stat-label">Fourchette €/m²</div>
-                </div>
-                <div class="product-stat-item">
-                  <div class="product-stat-value">${formatMontantShort(prod.totalAmount)}</div>
-                  <div class="product-stat-label">CA total</div>
-                </div>
-              </div>
-              
-              <!-- Filtre par finition (si plusieurs) -->
-              ${finitions.length > 1 || (finitions.length === 1 && finitions[0] !== 'Sans finition') ? `
-                <div class="product-finition-section" style="margin-top:12px;padding-top:10px;border-top:1px solid var(--gray-200);">
-                  <div style="font-size:10px;font-weight:600;color:var(--gray-500);margin-bottom:6px;">DÉTAIL PAR FINITION :</div>
-                  <div style="display:flex;flex-wrap:wrap;gap:4px;">
-                    ${finitions.map(fin => {
-                      const finData = prod.byFinition[fin];
-                      return `<button class="finition-detail-btn" onclick="showFinitionDetail('${currentCardId}', '${prodDataKey}', '${fin.replace(/'/g, "\\'")}')">
-                        ${fin} <small>(${finData.count})</small>
-                      </button>`;
-                    }).join('')}
-                  </div>
-                  <div id="${currentCardId}-finition-detail" class="finition-detail-panel" style="display:none;"></div>
-                </div>
-              ` : ''}
-              
-              <!-- Bouton détails complexe (masqué par défaut) -->
-              ${prod.isComplexe && prod.components && prod.components.length > 0 ? `
-                <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--gray-200);">
-                  <button class="complexe-detail-toggle" onclick="toggleComplexeDetail('${currentCardId}')">
-                    📋 Voir les ${prod.components.length} composants
-                  </button>
-                  <div id="${currentCardId}-complexe-detail" class="complexe-detail-panel" style="display:none;margin-top:8px;padding:10px;background:var(--gray-50);border-radius:8px;">
-                    ${prod.components.map(c => `
-                      <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 0;border-bottom:1px solid var(--gray-200);">
-                        <span>${c.name} ${c.finition ? `<small style="color:var(--gray-400)">(${c.finition})</small>` : ''}</span>
-                        <span style="font-weight:700;color:var(--theme-color);">${formatNumber(c.priceM2)} €/m²</span>
-                      </div>
-                    `).join('')}
-                    <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0 0;font-weight:800;color:var(--theme-color);">
-                      <span>TOTAL COMPLEXE</span>
-                      <span>${formatNumber(prod.components.reduce((s, c) => s + (c.priceM2 || 0), 0))} €/m²</span>
-                    </div>
-                  </div>
-                </div>
-              ` : ''}
-              
-              <!-- Liste des affaires (masquée par défaut) -->
-              <div style="margin-top:10px;">
-                <button class="affaires-toggle-btn" onclick="toggleAffairesList('${currentCardId}')">
-                  📄 Voir les affaires (${prod.affaires.length})
-                </button>
-                <div id="${currentCardId}-affaires" class="product-affaires-list" style="display:none;margin-top:8px;">
-                  ${prod.affaires.slice(0, 10).map(a => `
-                    <div class="product-affaire-item">
-                      <div style="display:flex;flex-direction:column;">
-                        <span class="product-affaire-name">${a.name}</span>
-                        ${a.finition && a.finition !== 'Sans finition' ? `<small style="color:var(--gray-400);">${a.finition}</small>` : ''}
-                      </div>
-                      <span class="product-affaire-price">${formatMontantShort(a.priceM2)} €/m² × ${formatNumber(a.surface || 0)} m²</span>
-                    </div>
-                  `).join('')}
-                  ${prod.affaires.length > 10 ? `<div style="text-align:center;font-size:11px;color:var(--gray-500);padding:6px;">+ ${prod.affaires.length - 10} autres...</div>` : ''}
-                </div>
-              </div>
-            </div>
-          `;
-        });
-        
-        html += '</div>';
-      });
-      
-      container.innerHTML = html;
-    }
-    
-    function showFinitionDetail(cardId, prodKey, finition) {
-      const panel = document.getElementById(`${cardId}-finition-detail`);
-      if (!panel) return;
-      
-      // Trouver les données
-      const [category, prodName] = prodKey.split('|');
-      const catData = window.productAnalysisData?.[category];
-      if (!catData) return;
-      const prodData = catData.products[prodName];
-      if (!prodData || !prodData.byFinition[finition]) return;
-      
-      const finData = prodData.byFinition[finition];
-      const avgPrice = finData.prices.length > 0 
-        ? finData.prices.reduce((a, b) => a + b, 0) / finData.prices.length 
-        : 0;
-      const minPrice = finData.prices.length > 0 ? Math.min(...finData.prices) : 0;
-      const maxPrice = finData.prices.length > 0 ? Math.max(...finData.prices) : 0;
-      
-      panel.innerHTML = `
-        <div style="margin-top:10px;padding:12px;background:var(--gray-50);border-radius:8px;border-left:3px solid var(--theme-color);">
-          <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--theme-color);">📌 ${finition}</div>
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;">
-            <div style="background:white;padding:10px;border-radius:6px;text-align:center;">
-              <div style="font-size:16px;font-weight:800;color:var(--dark);">${formatMontantShort(avgPrice)}</div>
-              <div style="font-size:9px;color:var(--gray-500);text-transform:uppercase;">Prix moy./m²</div>
-            </div>
-            <div style="background:white;padding:10px;border-radius:6px;text-align:center;">
-              <div style="font-size:16px;font-weight:800;color:var(--dark);">${finData.count}</div>
-              <div style="font-size:9px;color:var(--gray-500);text-transform:uppercase;">Affaires</div>
-            </div>
-            <div style="background:white;padding:10px;border-radius:6px;text-align:center;">
-              <div style="font-size:14px;font-weight:700;color:var(--dark);">${formatMontantShort(minPrice)} - ${formatMontantShort(maxPrice)}</div>
-              <div style="font-size:9px;color:var(--gray-500);text-transform:uppercase;">Fourchette</div>
-            </div>
-            <div style="background:white;padding:10px;border-radius:6px;text-align:center;">
-              <div style="font-size:16px;font-weight:800;color:var(--dark);">${formatNumber(Math.round(finData.totalSurface))}</div>
-              <div style="font-size:9px;color:var(--gray-500);text-transform:uppercase;">Surface m²</div>
-            </div>
-          </div>
-          <div style="font-size:10px;font-weight:600;color:var(--gray-500);margin-bottom:6px;">Affaires avec "${finition}" :</div>
-          ${finData.affaires.slice(0, 5).map(a => `
-            <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 8px;background:white;border-radius:4px;margin-bottom:4px;">
-              <span style="font-weight:500;">${a.name}</span>
-              <span style="font-weight:700;color:var(--theme-color);">${formatMontantShort(a.priceM2)} €/m²</span>
-            </div>
-          `).join('')}
-          ${finData.affaires.length > 5 ? `<div style="text-align:center;font-size:10px;color:var(--gray-400);padding:4px;">+ ${finData.affaires.length - 5} autres</div>` : ''}
-        </div>
-      `;
-      
-      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
-    }
-    
-    function toggleComplexeDetail(cardId) {
-      const panel = document.getElementById(`${cardId}-complexe-detail`);
-      const btn = panel?.previousElementSibling;
-      if (!panel) return;
-      
-      if (panel.style.display === 'none') {
-        panel.style.display = 'block';
-        if (btn) btn.textContent = btn.textContent.replace('Voir', 'Masquer');
-      } else {
-        panel.style.display = 'none';
-        if (btn) btn.textContent = btn.textContent.replace('Masquer', 'Voir');
-      }
-    }
-    
-    function toggleAffairesList(cardId) {
-      const panel = document.getElementById(`${cardId}-affaires`);
-      const btn = panel?.previousElementSibling;
-      if (!panel) return;
-      
-      if (panel.style.display === 'none') {
-        panel.style.display = 'block';
-        if (btn) btn.textContent = btn.textContent.replace('Voir', 'Masquer');
-      } else {
-        panel.style.display = 'none';
-        if (btn) btn.textContent = btn.textContent.replace('Masquer', 'Voir');
       }
     }
 
@@ -7911,36 +6234,6 @@
       document.getElementById('modalClose')?.addEventListener('click', closeModal);
       document.getElementById('modalCancel')?.addEventListener('click', closeModal);
       document.getElementById('modalSave')?.addEventListener('click', saveModal);
-
-      // Multi-Chiffreurs & Multi-Métreurs buttons
-      document.getElementById('addChiffreurBtn')?.addEventListener('click', addChiffreur);
-      document.getElementById('addMetreurBtn')?.addEventListener('click', addMetreur);
-      
-      // Products with price/m²
-      document.getElementById('addProductBtn')?.addEventListener('click', addProduct);
-      
-      // Complexe components
-      document.getElementById('addComponentBtn')?.addEventListener('click', addComponent);
-      document.getElementById('addComplexeBtn')?.addEventListener('click', addComplexe);
-      
-      // Support Entrée pour ajouter un composant
-      ['mComponentName', 'mComponentPrice', 'mComponentFinition'].forEach(id => {
-        document.getElementById(id)?.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            addComponent();
-          }
-        });
-      });
-      
-      // Products Analysis Panel
-      document.getElementById('toggleProductsBtn')?.addEventListener('click', toggleProductsPanel);
-      document.getElementById('productsPanelClose')?.addEventListener('click', () => {
-        document.getElementById('productsPanel').classList.remove('open');
-      });
-      document.getElementById('productSearchInput')?.addEventListener('input', (e) => {
-        updateProductsAnalysis(e.target.value);
-      });
 
       // Chips
       document.querySelectorAll('#mSmacChips .chip').forEach(chip => {
