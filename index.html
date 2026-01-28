@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="fr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- saved from url=(0037)https://smac-suivico.github.io/carto/ -->
+<html lang="fr" style="--theme-color: #22c55e; --theme-color-light: rgba(34, 197, 94, 0.15); --theme-color-dark: rgb(4, 167, 64);"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   
   <title>Cartographie SMAC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -820,6 +821,46 @@
       gap: 3px;
     }
 
+    .surface-badge {
+      font-size: 10px;
+      color: var(--purple);
+      background: var(--purple-light);
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-left: 8px;
+      font-weight: 600;
+    }
+
+    .list-item-products {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 6px;
+    }
+
+    .product-mini-badge {
+      font-size: 9px;
+      background: var(--purple-light);
+      color: var(--purple);
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    .list-item-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .list-item-footer > div:first-child {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
     /* Map cluster toggle */
     .map-control-btn.cluster-toggle.active {
       background: var(--cyan);
@@ -1299,17 +1340,22 @@
       color: var(--gray-500);
     }
 
-    /* Statistics Panel */
+    /* Statistics Panel - ENHANCED */
     .stats-panel {
       position: absolute;
       top: 124px;
-      right: 430px;
+      left: 50%;
+      transform: translateX(-50%);
       z-index: 1000;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-      padding: 20px;
-      width: 380px;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+      padding: 24px;
+      width: calc(100% - 480px);
+      max-width: 1200px;
+      min-width: 700px;
       max-height: calc(100vh - 150px);
       overflow-y: auto;
       display: none;
@@ -1317,14 +1363,29 @@
 
     .stats-panel.open {
       display: block;
-      animation: slideIn 0.2s ease;
+      animation: statsSlideIn 0.3s ease;
+    }
+
+    @keyframes statsSlideIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    @media (max-width: 1400px) {
+      .stats-panel {
+        width: calc(100% - 460px);
+        min-width: 500px;
+      }
     }
 
     @media (max-width: 1024px) {
       .stats-panel {
         right: 10px;
+        left: 10px;
         width: calc(100% - 20px);
-        max-width: 380px;
+        min-width: auto;
+        max-width: none;
+        transform: none;
       }
     }
 
@@ -1332,55 +1393,61 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--gray-200);
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--gray-100);
     }
 
     .stats-title {
-      font-weight: 700;
-      font-size: 16px;
+      font-weight: 800;
+      font-size: 20px;
       color: var(--dark);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
     }
 
     .stats-close {
-      background: none;
+      background: var(--gray-100);
       border: none;
-      font-size: 20px;
+      font-size: 18px;
       cursor: pointer;
       color: var(--gray-500);
-      padding: 4px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: all 0.2s;
     }
 
     .stats-close:hover {
-      color: var(--dark);
+      background: var(--rose-light);
+      color: var(--rose);
     }
 
     .stats-config-btn {
-      background: none;
+      background: var(--gray-100);
       border: none;
-      font-size: 16px;
+      font-size: 14px;
       cursor: pointer;
       color: var(--gray-500);
-      padding: 4px;
+      padding: 8px 12px;
+      border-radius: 8px;
       margin-right: 8px;
-      transition: transform 0.2s;
+      transition: all 0.2s;
     }
 
     .stats-config-btn:hover {
+      background: var(--gray-200);
       color: var(--dark);
       transform: rotate(45deg);
     }
 
     .stats-config-panel {
-      background: var(--gray-50);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--gray-50), white);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 20px;
       display: none;
+      border: 1px solid var(--gray-200);
     }
 
     .stats-config-panel.open {
@@ -1389,19 +1456,19 @@
     }
 
     .stats-config-title {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--gray-500);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gray-600);
       text-transform: uppercase;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
     .stats-config-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 8px 0;
-      border-bottom: 1px solid var(--gray-200);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--gray-100);
     }
 
     .stats-config-item:last-child {
@@ -1409,18 +1476,19 @@
     }
 
     .stats-config-label {
-      font-size: 12px;
+      font-size: 13px;
       color: var(--gray-700);
+      font-weight: 500;
     }
 
     .stats-toggle {
       position: relative;
-      width: 40px;
-      height: 22px;
+      width: 44px;
+      height: 24px;
       background: var(--gray-300);
-      border-radius: 11px;
+      border-radius: 12px;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.3s;
     }
 
     .stats-toggle.active {
@@ -1432,16 +1500,16 @@
       position: absolute;
       top: 2px;
       left: 2px;
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       background: white;
       border-radius: 50%;
-      transition: transform 0.2s;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
 
     .stats-toggle.active::after {
-      transform: translateX(18px);
+      transform: translateX(20px);
     }
 
     .stats-section {
@@ -1453,52 +1521,82 @@
     }
 
     .stats-section-title {
-      font-weight: 600;
-      font-size: 13px;
-      color: var(--gray-700);
-      margin-bottom: 12px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--gray-800);
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
+    }
+
+    /* Stats Grid Layout */
+    .stats-grid-wrapper {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .stats-grid-wrapper {
+        grid-template-columns: 1fr;
+      }
     }
 
     .stats-summary {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .stats-summary {
+        grid-template-columns: repeat(2, 1fr);
+      }
     }
 
     .stats-card {
-      background: var(--gray-50);
-      border-radius: 8px;
-      padding: 12px;
+      background: linear-gradient(135deg, var(--gray-50), white);
+      border-radius: 14px;
+      padding: 16px;
       text-align: center;
+      border: 1px solid var(--gray-100);
+      transition: all 0.3s ease;
+    }
+
+    .stats-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(0,0,0,0.08);
     }
 
     .stats-card-value {
-      font-size: 20px;
-      font-weight: 700;
+      font-size: 26px;
+      font-weight: 800;
       color: var(--theme-color);
+      letter-spacing: -0.5px;
     }
 
     .stats-card-label {
       font-size: 11px;
       color: var(--gray-500);
-      margin-top: 2px;
+      margin-top: 4px;
+      font-weight: 600;
+      text-transform: uppercase;
     }
 
     .stats-chart-container {
-      background: var(--gray-50);
-      border-radius: 8px;
-      padding: 16px;
+      background: linear-gradient(135deg, var(--gray-50), white);
+      border-radius: 14px;
+      padding: 18px;
       margin-bottom: 12px;
+      border: 1px solid var(--gray-100);
     }
 
     .pie-chart {
-      width: 160px;
-      height: 160px;
-      margin: 0 auto 16px;
+      width: 180px;
+      height: 180px;
+      margin: 0 auto 20px;
       position: relative;
     }
 
@@ -1506,6 +1604,7 @@
       width: 100%;
       height: 100%;
       transform: rotate(-90deg);
+      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.1));
     }
 
     .pie-center {
@@ -1514,103 +1613,121 @@
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
+      background: white;
+      border-radius: 50%;
+      width: 90px;
+      height: 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
     .pie-center-value {
-      font-size: 24px;
-      font-weight: 700;
+      font-size: 28px;
+      font-weight: 800;
       color: var(--dark);
+      line-height: 1;
     }
 
     .pie-center-label {
       font-size: 10px;
       color: var(--gray-500);
+      font-weight: 600;
     }
 
     .pie-legend {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 8px;
-      justify-content: center;
     }
 
     .pie-legend-item {
       display: flex;
       align-items: center;
-      gap: 4px;
-      font-size: 11px;
+      gap: 6px;
+      font-size: 12px;
       color: var(--gray-700);
+      font-weight: 500;
+      padding: 6px 10px;
+      background: white;
+      border-radius: 6px;
+      border: 1px solid var(--gray-100);
     }
 
     .pie-legend-dot {
       width: 10px;
       height: 10px;
-      border-radius: 50%;
+      border-radius: 3px;
+      flex-shrink: 0;
     }
 
     .bar-chart {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
 
     .bar-item {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .bar-label {
-      font-size: 11px;
-      color: var(--gray-600);
-      width: 60px;
+      font-size: 12px;
+      color: var(--gray-700);
+      width: 65px;
       flex-shrink: 0;
+      font-weight: 600;
     }
 
     .bar-track {
       flex: 1;
-      height: 20px;
-      background: var(--gray-200);
-      border-radius: 4px;
+      height: 24px;
+      background: var(--gray-100);
+      border-radius: 6px;
       overflow: hidden;
     }
 
     .bar-fill {
       height: 100%;
-      border-radius: 4px;
+      border-radius: 6px;
       transition: width 0.5s ease;
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      padding-right: 6px;
+      padding-right: 8px;
+      min-width: 50px;
     }
 
     .bar-value {
-      font-size: 10px;
-      font-weight: 600;
+      font-size: 11px;
+      font-weight: 700;
       color: white;
     }
 
     .timeline-chart {
-      height: 150px;
+      height: 160px;
       display: flex;
       align-items: flex-end;
-      gap: 4px;
-      padding: 10px 0;
+      gap: 5px;
+      padding: 12px 0;
     }
 
     .timeline-bar {
       flex: 1;
-      background: var(--theme-color);
-      border-radius: 3px 3px 0 0;
-      min-height: 4px;
+      background: linear-gradient(to top, var(--theme-color), var(--theme-color-light));
+      border-radius: 4px 4px 0 0;
+      min-height: 6px;
       position: relative;
       cursor: pointer;
-      transition: opacity 0.2s, background 0.3s;
+      transition: all 0.2s ease;
     }
 
     .timeline-bar:hover {
-      opacity: 0.8;
+      filter: brightness(1.1);
     }
 
     .timeline-bar:hover::after {
@@ -1621,80 +1738,88 @@
       transform: translateX(-50%);
       background: var(--dark);
       color: white;
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 10px;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 11px;
       white-space: nowrap;
       z-index: 10;
+      margin-bottom: 6px;
     }
 
     .timeline-labels {
       display: flex;
       justify-content: space-between;
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
     .timeline-label {
-      font-size: 9px;
+      font-size: 10px;
       color: var(--gray-500);
+      font-weight: 600;
     }
 
-    /* Forecast (Prévisions) */
+    /* Forecast (Prévisions) - Enhanced */
     .forecast-container {
       text-align: center;
     }
 
     .forecast-main {
-      padding: 16px;
-      background: linear-gradient(135deg, var(--theme-color-light), transparent);
-      border-radius: 8px;
-      margin-bottom: 12px;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--theme-color-light), rgba(255,255,255,0.8));
+      border-radius: 12px;
+      margin-bottom: 16px;
+      border: 1px solid var(--theme-color-light);
     }
 
     .forecast-value {
-      font-size: 28px;
-      font-weight: 700;
+      font-size: 32px;
+      font-weight: 800;
       color: var(--theme-color);
+      letter-spacing: -0.5px;
     }
 
     .forecast-label {
-      font-size: 11px;
-      color: var(--gray-500);
+      font-size: 12px;
+      color: var(--gray-600);
       margin-top: 4px;
+      font-weight: 500;
     }
 
     .forecast-details {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
     }
 
     .forecast-detail {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      padding: 8px 12px;
-      background: var(--gray-50);
-      border-radius: 6px;
+      padding: 12px;
+      background: white;
+      border-radius: 10px;
+      border: 1px solid var(--gray-100);
     }
 
     .forecast-detail-label {
-      font-size: 12px;
-      color: var(--gray-600);
+      font-size: 11px;
+      color: var(--gray-500);
+      font-weight: 600;
     }
 
     .forecast-detail-value {
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 16px;
+      font-weight: 700;
       color: var(--dark);
+      margin-top: 4px;
     }
 
     /* Forecast Rate Slider */
     .forecast-slider {
       -webkit-appearance: none;
       appearance: none;
-      height: 6px;
-      border-radius: 3px;
+      height: 8px;
+      border-radius: 4px;
       background: var(--gray-200);
       outline: none;
       cursor: pointer;
@@ -1702,71 +1827,79 @@
     .forecast-slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      background: var(--primary);
+      background: var(--theme-color);
       cursor: pointer;
-      border: 2px solid white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      border: 3px solid white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
     .forecast-slider::-moz-range-thumb {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
-      background: var(--primary);
+      background: var(--theme-color);
       cursor: pointer;
-      border: 2px solid white;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      border: 3px solid white;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
     .forecast-slider:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
 
-    /* Comparison (Comparaison) */
+    /* Comparison (Comparaison) - Enhanced */
     .comparison-container {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 14px;
     }
 
     .comparison-period {
       flex: 1;
       text-align: center;
-      padding: 12px;
-      background: var(--gray-50);
-      border-radius: 8px;
+      padding: 16px;
+      background: white;
+      border-radius: 12px;
+      border: 1px solid var(--gray-100);
+      transition: all 0.2s;
+    }
+
+    .comparison-period:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
 
     .comparison-period-label {
       font-size: 11px;
       color: var(--gray-500);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      font-weight: 600;
+      text-transform: uppercase;
     }
 
     .comparison-period-value {
-      font-size: 18px;
-      font-weight: 700;
+      font-size: 22px;
+      font-weight: 800;
       color: var(--dark);
     }
 
     .comparison-period-count {
-      font-size: 10px;
+      font-size: 11px;
       color: var(--gray-500);
-      margin-top: 2px;
+      margin-top: 4px;
     }
 
     .comparison-vs {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 6px;
     }
 
     .comparison-arrow {
-      font-size: 20px;
+      font-size: 22px;
       transition: transform 0.3s;
     }
 
@@ -1781,10 +1914,10 @@
     }
 
     .comparison-percent {
-      font-size: 12px;
+      font-size: 13px;
       font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 10px;
+      padding: 4px 10px;
+      border-radius: 15px;
       background: var(--gray-200);
     }
 
@@ -1798,30 +1931,31 @@
       color: var(--rose);
     }
 
-    /* Conversion */
+    /* Conversion - Enhanced */
     .conversion-container {
       text-align: center;
     }
 
     .conversion-gauge {
       position: relative;
-      width: 160px;
-      height: 100px;
+      width: 180px;
+      height: 110px;
       margin: 0 auto 16px;
     }
 
     .conversion-svg {
       width: 100%;
       height: 100%;
+      filter: drop-shadow(0 3px 6px rgba(0,0,0,0.1));
     }
 
     .conversion-value {
       position: absolute;
-      bottom: 10px;
+      bottom: 12px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 28px;
-      font-weight: 700;
+      font-size: 32px;
+      font-weight: 800;
       color: var(--dark);
     }
 
@@ -1830,20 +1964,25 @@
       justify-content: center;
       gap: 16px;
       margin-bottom: 12px;
+      flex-wrap: wrap;
     }
 
     .conversion-detail {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 12px;
-      color: var(--gray-600);
+      font-size: 13px;
+      color: var(--gray-700);
+      padding: 6px 12px;
+      background: white;
+      border-radius: 6px;
+      border: 1px solid var(--gray-100);
     }
 
     .conversion-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
     }
 
     /* Client Ranking */
@@ -2197,6 +2336,310 @@
     .toast.success { background: var(--green); }
     .toast.error { background: var(--rose); }
 
+    /* Multi-person (Chiffreurs/Métreurs) */
+    .multi-person-container {
+      background: var(--gray-50);
+      border-radius: 8px;
+      padding: 10px;
+      border: 1px solid var(--gray-200);
+    }
+
+    .multi-person-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .multi-person-list:empty {
+      display: none;
+    }
+
+    .multi-person-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 20px;
+      padding: 4px 8px 4px 12px;
+      font-size: 12px;
+    }
+
+    .multi-person-item .person-name {
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .multi-person-item .person-taux {
+      background: var(--theme-color-light);
+      color: var(--theme-color);
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .multi-person-item .person-remove {
+      background: none;
+      border: none;
+      color: var(--gray-400);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0 2px;
+      line-height: 1;
+    }
+
+    .multi-person-item .person-remove:hover {
+      color: var(--rose);
+    }
+
+    .multi-person-add {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-add-person {
+      background: var(--theme-color);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-add-person:hover {
+      filter: brightness(1.1);
+    }
+
+    /* Products with price/m² */
+    .btn-add-product {
+      background: var(--purple);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-add-product:hover {
+      filter: brightness(1.1);
+    }
+
+    .products-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .product-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--purple-light), white);
+      border: 1px solid var(--purple);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 12px;
+    }
+
+    .product-item .product-name {
+      font-weight: 700;
+      color: var(--purple);
+    }
+
+    .product-item .product-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .product-item .product-price {
+      background: var(--purple);
+      color: white;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .product-item .product-surface {
+      font-size: 10px;
+      color: var(--gray-600);
+    }
+
+    .product-item .product-total {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .product-item .product-remove {
+      background: none;
+      border: none;
+      color: var(--gray-400);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0 2px;
+      line-height: 1;
+    }
+
+    .product-item .product-remove:hover {
+      color: var(--rose);
+    }
+
+    /* Products Analysis Panel */
+    .products-panel {
+      position: absolute;
+      top: 124px;
+      left: 20px;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      padding: 20px;
+      width: 400px;
+      max-height: calc(100vh - 150px);
+      overflow-y: auto;
+      display: none;
+    }
+
+    .products-panel.open {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+
+    @media (max-width: 1024px) {
+      .products-panel {
+        left: 10px;
+        width: calc(100% - 20px);
+        max-width: 400px;
+      }
+    }
+
+    .products-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--gray-100);
+    }
+
+    .products-panel-title {
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .products-search {
+      margin-bottom: 16px;
+    }
+
+    .products-search input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      font-size: 13px;
+    }
+
+    .product-stats-card {
+      background: linear-gradient(135deg, var(--purple-light), white);
+      border: 1px solid var(--purple);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .product-stats-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .product-stats-name {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--purple);
+    }
+
+    .product-stats-count {
+      background: var(--purple);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .product-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .product-stat-item {
+      background: white;
+      border-radius: 8px;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .product-stat-value {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--dark);
+    }
+
+    .product-stat-label {
+      font-size: 10px;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .product-affaires-list {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--gray-200);
+    }
+
+    .product-affaire-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      background: white;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+
+    .product-affaire-name {
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .product-affaire-price {
+      color: var(--purple);
+      font-weight: 700;
+    }
+
     /* Duplicate Tab List */
     .duplicate-tab-list {
       display: flex;
@@ -2493,7 +2936,7 @@
       gap: 6px;
     }
   </style>
-<link rel="stylesheet" href="./Cartographie SMAC mdp_files/leaflet.css"><link rel="stylesheet" href="./Cartographie SMAC mdp_files/MarkerCluster.css"><link rel="stylesheet" href="./Cartographie SMAC mdp_files/MarkerCluster.Default.css"></head>
+<link rel="stylesheet" href="./Carto-suivico_files/leaflet.css"><link rel="stylesheet" href="./Carto-suivico_files/MarkerCluster.css"><link rel="stylesheet" href="./Carto-suivico_files/MarkerCluster.Default.css"><link rel="stylesheet" href="./Carto-suivico_files/leaflet(1).css"><link rel="stylesheet" href="./Carto-suivico_files/MarkerCluster(1).css"><link rel="stylesheet" href="./Carto-suivico_files/MarkerCluster(1).Default.css"></head>
 <body>
 
   <!-- Toast Container -->
@@ -2545,14 +2988,14 @@
 
   <!-- TABS with Drag & Drop -->
   <div class="tabs-container">
-    <div class="tabs-wrapper" id="tabsWrapper"><button class="tab-btn active" data-tab="richad" data-index="0" draggable="true">
+    <div class="tabs-wrapper" id="tabsWrapper"><button class="tab-btn active locked protected" data-tab="tab_1768425954814_re9q" data-index="0" draggable="true">
           <span class="drag-handle">⋮⋮</span>
-          <span class="tab-dot" style="background:#8b5cf6"></span>
+          <span class="tab-dot" style="background:#22c55e"></span>
           <span class="tab-name">Richad</span>
-          
-          <span class="tab-count">0</span>
+          <span class="lock-icon">🔒</span>
+          <span class="tab-count">10</span>
           <span class="tab-actions">
-            <button class="tab-action-btn lock " title="Protéger">🔒</button>
+            <button class="tab-action-btn lock has-password" title="Retirer la protection">🔓</button>
             <button class="tab-action-btn rename" title="Renommer">✏️</button>
             <button class="tab-action-btn delete" title="Supprimer">✕</button>
           </span>
@@ -2566,7 +3009,16 @@
 
   <!-- MAIN -->
   <main>
-    <div id="map"></div>
+    <div id="map" class="leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" tabindex="0"><div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(0px, 0px, 0px);"><div class="leaflet-pane leaflet-tile-pane"><div class="leaflet-layer " style="z-index: 1; opacity: 1;"><div class="leaflet-tile-container leaflet-zoom-animated" style="z-index: 18; transform: translate3d(0px, 0px, 0px) scale(1);"><img alt="" src="./Carto-suivico_files/351.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(292px, -172px, 0px); opacity: 1;"><img alt="" src="./Carto-suivico_files/352.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(292px, 84px, 0px); opacity: 1;"><img alt="" src="./Carto-suivico_files/351(1).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(36px, -172px, 0px); opacity: 1;"><img alt="" src="./Carto-suivico_files/351(2).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(548px, -172px, 0px); opacity: 1;"><img alt="" src="./Carto-suivico_files/352(1).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(36px, 84px, 0px); opacity: 1;"><img alt="" src="./Carto-suivico_files/352(2).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(548px, 84px, 0px); opacity: 1;"><img alt="" src="./Carto-suivico_files/351(3).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-220px, -172px, 0px); opacity: 1;"><img alt="" src="./Carto-suivico_files/351(4).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(804px, -172px, 0px); opacity: 1;"><img alt="" src="./Carto-suivico_files/352(3).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-220px, 84px, 0px); opacity: 1;"><img alt="" src="./Carto-suivico_files/352(4).png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(804px, 84px, 0px); opacity: 1;"></div></div></div><div class="leaflet-pane leaflet-overlay-pane"></div><div class="leaflet-pane leaflet-shadow-pane"></div><div class="leaflet-pane leaflet-marker-pane"><div class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -12px; margin-top: -12px; width: 24px; height: 24px; transform: translate3d(575px, 26px, 0px); z-index: 1226;"><span class="house-marker red">🏠</span></div><div class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -12px; margin-top: -12px; width: 24px; height: 24px; transform: translate3d(442px, 78px, 0px); z-index: 1278;"><span class="house-marker red">🏠</span></div><div class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -12px; margin-top: -12px; width: 24px; height: 24px; transform: translate3d(439px, 286px, 0px); z-index: 1486;"><span class="house-marker red">🏠</span></div><div class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -12px; margin-top: -12px; width: 24px; height: 24px; transform: translate3d(485px, 192px, 0px); z-index: 1392;"><span class="house-marker red">🏠</span></div><div class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -12px; margin-top: -12px; width: 24px; height: 24px; transform: translate3d(520px, 427px, 0px); z-index: 1627;"><span class="house-marker blue">🏠</span></div><div class="leaflet-marker-icon leaflet-zoom-animated leaflet-interactive" tabindex="0" role="button" style="margin-left: -12px; margin-top: -12px; width: 24px; height: 24px; transform: translate3d(395px, 199px, 0px); z-index: 1499;"><span class="house-marker ">🏢</span></div></div><div class="leaflet-pane leaflet-tooltip-pane"></div><div class="leaflet-pane leaflet-popup-pane"></div><div class="leaflet-proxy leaflet-zoom-animated" style="transform: translate3d(132785px, 90185px, 0px) scale(512);"></div></div><div class="leaflet-control-container"><div class="leaflet-top leaflet-left"><div class="leaflet-control-zoom leaflet-bar leaflet-control"><a class="leaflet-control-zoom-in" href="https://smac-suivico.github.io/carto/#" title="Zoom in" role="button" aria-label="Zoom in" aria-disabled="false"><span aria-hidden="true">+</span></a><a class="leaflet-control-zoom-out" href="https://smac-suivico.github.io/carto/#" title="Zoom out" role="button" aria-label="Zoom out" aria-disabled="false"><span aria-hidden="true">−</span></a></div></div><div class="leaflet-top leaflet-right"></div><div class="leaflet-bottom leaflet-left"></div><div class="leaflet-bottom leaflet-right"><div class="legend leaflet-control">
+          <div class="legend-title">Statut</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#22c55e"></span> Gagné</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#f43f5e"></span> Perdu</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#f59e0b"></span> En cours</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span> Faste</div>
+          <div class="legend-title" style="margin-top:8px;">Sites SMAC</div>
+          <div class="legend-item"><span style="font-size:14px;">🏢</span> Siège</div>
+          <div class="legend-item"><span style="font-size:14px;">🏠</span> Agences</div>
+        </div><div class="leaflet-control-attribution leaflet-control"><a href="https://leafletjs.com/" title="A JavaScript library for interactive maps"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="8" viewBox="0 0 12 8" class="leaflet-attribution-flag"><path fill="#4C7BE1" d="M0 0h12v4H0z"></path><path fill="#FFD500" d="M0 4h12v3H0z"></path><path fill="#E0BC00" d="M0 7h12v1H0z"></path></svg> Leaflet</a> <span aria-hidden="true">|</span> © OpenStreetMap</div></div></div></div>
     
     <!-- Map Controls -->
     <div class="map-controls">
@@ -2579,6 +3031,23 @@
       <button class="map-control-btn cluster-toggle active" id="toggleClusterBtn" title="Activer/Désactiver le regroupement">
         🔘
       </button>
+      <button class="map-control-btn" id="toggleProductsBtn" title="Analyse produits / Prix m²">
+        📦
+      </button>
+    </div>
+    
+    <!-- Products Analysis Panel -->
+    <div class="products-panel" id="productsPanel">
+      <div class="products-panel-header">
+        <span class="products-panel-title">📦 Analyse Produits</span>
+        <button class="stats-close" id="productsPanelClose">✕</button>
+      </div>
+      <div class="products-search">
+        <input type="text" id="productSearchInput" placeholder="🔍 Rechercher un produit...">
+      </div>
+      <div id="productsAnalysisList">
+        <!-- Generated by JS -->
+      </div>
     </div>
     
     <!-- Itinerary Panel -->
@@ -2595,7 +3064,7 @@
       </div>
       <div class="itinerary-actions">
         <button class="itinerary-clear" id="itineraryClear">Effacer</button>
-        <button class="itinerary-calc" id="itineraryCalc" disabled>Calculer</button>
+        <button class="itinerary-calc" id="itineraryCalc" disabled="">Calculer</button>
       </div>
       <div class="itinerary-result" id="itineraryResult">
         <div class="itinerary-result-title">📍 Résultat</div>
@@ -2606,7 +3075,7 @@
     <!-- Statistics Panel -->
     <div class="stats-panel" id="statsPanel">
       <div class="stats-header">
-        <span class="stats-title">📊 Statistiques</span>
+        <span class="stats-title">📊 Tableau de Bord Statistiques</span>
         <div>
           <button class="stats-config-btn" id="statsConfigBtn" title="Configurer l'affichage">⚙️</button>
           <button class="stats-close" id="statsClose">✕</button>
@@ -2660,44 +3129,55 @@
       
       <div class="stats-summary">
         <div class="stats-card">
-          <div class="stats-card-value" id="statsTotalAffaires">0</div>
+          <div class="stats-card-value" id="statsTotalAffaires">🔒</div>
           <div class="stats-card-label">Affaires</div>
         </div>
         <div class="stats-card">
-          <div class="stats-card-value" id="statsTotalMontant">0 €</div>
+          <div class="stats-card-value" id="statsTotalMontant">🔒</div>
           <div class="stats-card-label">Montant total</div>
         </div>
-      </div>
-      
-      <div class="stats-section" id="pieSection">
-        <div class="stats-section-title">🎯 Répartition par statut</div>
-        <div class="stats-chart-container">
-          <div class="pie-chart" id="pieChart">
-            <svg viewBox="0 0 100 100">
-              <circle id="pieGagne" cx="50" cy="50" r="40" fill="none" stroke="#22c55e" stroke-width="20" stroke-dasharray="0 251.2"/>
-              <circle id="piePerdu" cx="50" cy="50" r="40" fill="none" stroke="#f43f5e" stroke-width="20" stroke-dasharray="0 251.2"/>
-              <circle id="pieEncours" cx="50" cy="50" r="40" fill="none" stroke="#f59e0b" stroke-width="20" stroke-dasharray="0 251.2"/>
-              <circle id="pieFaste" cx="50" cy="50" r="40" fill="none" stroke="#3b82f6" stroke-width="20" stroke-dasharray="0 251.2"/>
-            </svg>
-            <div class="pie-center">
-              <div class="pie-center-value" id="pieCenterValue">0</div>
-              <div class="pie-center-label">affaires</div>
-            </div>
-          </div>
-          <div class="pie-legend">
-            <div class="pie-legend-item"><span class="pie-legend-dot" style="background:#22c55e"></span> Gagné (<span id="legendGagne">0</span>)</div>
-            <div class="pie-legend-item"><span class="pie-legend-dot" style="background:#f43f5e"></span> Perdu (<span id="legendPerdu">0</span>)</div>
-            <div class="pie-legend-item"><span class="pie-legend-dot" style="background:#f59e0b"></span> En cours (<span id="legendEncours">0</span>)</div>
-            <div class="pie-legend-item"><span class="pie-legend-dot" style="background:#3b82f6"></span> Faste (<span id="legendFaste">0</span>)</div>
-          </div>
+        <div class="stats-card">
+          <div class="stats-card-value" id="statsTotalGagne">🔒</div>
+          <div class="stats-card-label">CA Gagné</div>
+        </div>
+        <div class="stats-card">
+          <div class="stats-card-value" id="statsConversionKPI">🔒</div>
+          <div class="stats-card-label">Taux conv.</div>
         </div>
       </div>
       
-      <div class="stats-section" id="barSection">
-        <div class="stats-section-title">💰 Montants par statut</div>
-        <div class="stats-chart-container">
-          <div class="bar-chart" id="barChart">
-            <!-- Bars will be generated by JS -->
+      <!-- Grid Layout for Charts -->
+      <div class="stats-grid-wrapper">
+        <div class="stats-section" id="pieSection">
+          <div class="stats-section-title">🎯 Répartition par statut</div>
+          <div class="stats-chart-container">
+            <div class="pie-chart" id="pieChart">
+              <svg viewBox="0 0 100 100">
+                <circle id="pieGagne" cx="50" cy="50" r="40" fill="none" stroke="#22c55e" stroke-width="20" stroke-dasharray="0 251.2"></circle>
+                <circle id="piePerdu" cx="50" cy="50" r="40" fill="none" stroke="#f43f5e" stroke-width="20" stroke-dasharray="0 251.2"></circle>
+                <circle id="pieEncours" cx="50" cy="50" r="40" fill="none" stroke="#f59e0b" stroke-width="20" stroke-dasharray="0 251.2"></circle>
+                <circle id="pieFaste" cx="50" cy="50" r="40" fill="none" stroke="#3b82f6" stroke-width="20" stroke-dasharray="0 251.2"></circle>
+              </svg>
+              <div class="pie-center">
+                <div class="pie-center-value" id="pieCenterValue">0</div>
+                <div class="pie-center-label">affaires</div>
+              </div>
+            </div>
+            <div class="pie-legend">
+              <div class="pie-legend-item"><span class="pie-legend-dot" style="background:#22c55e"></span> Gagné (<span id="legendGagne">0</span>)</div>
+              <div class="pie-legend-item"><span class="pie-legend-dot" style="background:#f43f5e"></span> Perdu (<span id="legendPerdu">0</span>)</div>
+              <div class="pie-legend-item"><span class="pie-legend-dot" style="background:#f59e0b"></span> En cours (<span id="legendEncours">0</span>)</div>
+              <div class="pie-legend-item"><span class="pie-legend-dot" style="background:#3b82f6"></span> Faste (<span id="legendFaste">0</span>)</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="stats-section" id="barSection">
+          <div class="stats-section-title">💰 Montants par statut</div>
+          <div class="stats-chart-container">
+            <div class="bar-chart" id="barChart">
+              <!-- Bars will be generated by JS -->
+            </div>
           </div>
         </div>
       </div>
@@ -2714,132 +3194,137 @@
         </div>
       </div>
       
-      <div class="stats-section" id="forecastSection">
-        <div class="stats-section-title">🔮 Prévisions CA</div>
-        <div class="stats-chart-container">
-          <div class="forecast-container">
-            <div class="forecast-main">
-              <div class="forecast-value" id="forecastValue">0 €</div>
-              <div class="forecast-label">CA potentiel (avec taux)</div>
-            </div>
-            <div class="forecast-details">
-              <div class="forecast-detail">
-                <span class="forecast-detail-label">Affaires en cours</span>
-                <span class="forecast-detail-value" id="forecastCount">0</span>
+      <div class="stats-grid-wrapper">
+        <div class="stats-section" id="forecastSection">
+          <div class="stats-section-title">🔮 Prévisions CA</div>
+          <div class="stats-chart-container">
+            <div class="forecast-container">
+              <div class="forecast-main">
+                <div class="forecast-value" id="forecastValue">0 €</div>
+                <div class="forecast-label">CA potentiel (avec taux)</div>
               </div>
-              <div class="forecast-detail">
-                <span class="forecast-detail-label">Montant moyen</span>
-                <span class="forecast-detail-value" id="forecastAvg">0 €</span>
+              <div class="forecast-details">
+                <div class="forecast-detail">
+                  <span class="forecast-detail-label">En cours</span>
+                  <span class="forecast-detail-value" id="forecastCount">0</span>
+                </div>
+                <div class="forecast-detail">
+                  <span class="forecast-detail-label">Montant moy.</span>
+                  <span class="forecast-detail-value" id="forecastAvg">0 €</span>
+                </div>
+                <div class="forecast-detail">
+                  <span class="forecast-detail-label">Montant brut</span>
+                  <span class="forecast-detail-value" id="forecastPotential">0 €</span>
+                </div>
               </div>
-              <div class="forecast-detail">
-                <span class="forecast-detail-label">Montant brut (En cours)</span>
-                <span class="forecast-detail-value" id="forecastPotential">0 €</span>
+              <!-- Taux de conversion configurable -->
+              <div class="forecast-rate-config" style="margin-top:16px;padding-top:12px;border-top:1px solid var(--gray-200);">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                  <span style="font-size:12px;font-weight:600;color:var(--gray-700);">Taux de conversion</span>
+                  <span id="forecastRateValue" style="font-size:14px;font-weight:700;color:var(--theme-color);">50%</span>
+                </div>
+                <input type="range" id="forecastRateSlider" min="0" max="100" value="50" class="forecast-slider" style="width:100%;margin-bottom:8px;">
+                <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gray-600);cursor:pointer;">
+                  <input type="checkbox" id="forecastAutoRate" style="cursor:pointer;">
+                  <span>Calcul auto basé sur l'historique</span>
+                  <span id="forecastAutoValue" style="color:var(--gray-400);"></span>
+                </label>
               </div>
-            </div>
-            <!-- Taux de conversion configurable -->
-            <div class="forecast-rate-config" style="margin-top:16px;padding-top:12px;border-top:1px solid var(--gray-200);">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-                <span style="font-size:12px;font-weight:600;color:var(--gray-700);">Taux de conversion</span>
-                <span id="forecastRateValue" style="font-size:14px;font-weight:700;color:var(--primary);">50%</span>
-              </div>
-              <input type="range" id="forecastRateSlider" min="0" max="100" value="50" class="forecast-slider" style="width:100%;margin-bottom:8px;">
-              <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gray-600);cursor:pointer;">
-                <input type="checkbox" id="forecastAutoRate" style="cursor:pointer;">
-                <span>Calcul auto basé sur l'historique</span>
-                <span id="forecastAutoValue" style="color:var(--gray-400);"></span>
-              </label>
             </div>
           </div>
         </div>
-      </div>
-      
-      <div class="stats-section" id="comparisonSection">
-        <div class="stats-section-title">📊 Comparaison périodes</div>
-        <div class="stats-chart-container">
-          <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
-            <select id="compPeriod1" class="form-select" style="flex:1;min-width:100px;font-size:11px;">
-              <option value="thisMonth">Ce mois</option>
-              <option value="lastMonth">Mois dernier</option>
-              <option value="thisQuarter">Ce trimestre</option>
-              <option value="lastQuarter">Trimestre dernier</option>
-              <option value="thisYear">Cette année</option>
-              <option value="lastYear">Année dernière</option>
-            </select>
-            <span style="align-self:center;color:var(--gray-500);">vs</span>
-            <select id="compPeriod2" class="form-select" style="flex:1;min-width:100px;font-size:11px;">
-              <option value="lastMonth" selected>Mois dernier</option>
-              <option value="thisMonth">Ce mois</option>
-              <option value="thisQuarter">Ce trimestre</option>
-              <option value="lastQuarter">Trimestre dernier</option>
-              <option value="thisYear">Cette année</option>
-              <option value="lastYear">Année dernière</option>
-            </select>
-          </div>
-          <div style="display:flex;gap:8px;margin-bottom:12px;">
-            <select id="compStatutFilter" class="form-select" style="flex:1;font-size:11px;">
-              <option value="all">Tous les statuts</option>
-              <option value="Gagné">Gagné seulement</option>
-              <option value="En cours">En cours seulement</option>
-              <option value="Perdu">Perdu seulement</option>
-            </select>
-          </div>
-          <div class="comparison-container">
-            <div class="comparison-period">
-              <div class="comparison-period-label" id="compLabel1">Ce mois</div>
-              <div class="comparison-period-value" id="compCurrentMonth">0 €</div>
-              <div class="comparison-period-count" id="compCurrentCount">0 affaires</div>
-            </div>
-            <div class="comparison-vs">
-              <div class="comparison-arrow" id="compArrow">→</div>
-              <div class="comparison-percent" id="compPercent">0%</div>
-            </div>
-            <div class="comparison-period">
-              <div class="comparison-period-label" id="compLabel2">Mois dernier</div>
-              <div class="comparison-period-value" id="compLastMonth">0 €</div>
-              <div class="comparison-period-count" id="compLastCount">0 affaires</div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="stats-section" id="conversionSection">
-        <div class="stats-section-title">🎯 Taux de conversion</div>
-        <div class="stats-chart-container">
-          <div class="conversion-container">
-            <div class="conversion-gauge">
-              <svg viewBox="0 0 100 60" class="conversion-svg">
-                <path d="M10,50 A40,40 0 0,1 90,50" fill="none" stroke="#e5e5e5" stroke-width="8" stroke-linecap="round"/>
-                <path id="conversionArc" d="M10,50 A40,40 0 0,1 90,50" fill="none" stroke="#22c55e" stroke-width="8" stroke-linecap="round" stroke-dasharray="0 126"/>
-              </svg>
-              <div class="conversion-value" id="conversionRate">0%</div>
-            </div>
-            <div class="conversion-details">
-              <div class="conversion-detail">
-                <span class="conversion-dot" style="background:#22c55e"></span>
-                <span>Gagné: <strong id="convGagne">0</strong></span>
+        
+        <div class="stats-section" id="conversionSection">
+          <div class="stats-section-title">🎯 Taux de conversion</div>
+          <div class="stats-chart-container">
+            <div class="conversion-container">
+              <div class="conversion-gauge">
+                <svg viewBox="0 0 100 60" class="conversion-svg">
+                  <path d="M10,50 A40,40 0 0,1 90,50" fill="none" stroke="#e5e5e5" stroke-width="8" stroke-linecap="round"></path>
+                  <path id="conversionArc" d="M10,50 A40,40 0 0,1 90,50" fill="none" stroke="#22c55e" stroke-width="8" stroke-linecap="round" stroke-dasharray="0 126"></path>
+                </svg>
+                <div class="conversion-value" id="conversionRate">0%</div>
               </div>
-              <div class="conversion-detail">
-                <span class="conversion-dot" style="background:#f43f5e"></span>
-                <span>Perdu: <strong id="convPerdu">0</strong></span>
-              </div>
-              <div class="conversion-detail">
-                <span class="conversion-dot" style="background:#f59e0b"></span>
-                <span>En cours: <strong id="convEncours">0</strong></span>
+              <div class="conversion-details">
+                <div class="conversion-detail">
+                  <span class="conversion-dot" style="background:#22c55e"></span>
+                  <span>Gagné: <strong id="convGagne">0</strong></span>
+                </div>
+                <div class="conversion-detail">
+                  <span class="conversion-dot" style="background:#f43f5e"></span>
+                  <span>Perdu: <strong id="convPerdu">0</strong></span>
+                </div>
+                <div class="conversion-detail">
+                  <span class="conversion-dot" style="background:#f59e0b"></span>
+                  <span>En cours: <strong id="convEncours">0</strong></span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
       
-      <div class="stats-section" id="rankingSection">
-        <div class="stats-section-title">🏆 Classement EG (CA cumulé)</div>
+      <div class="stats-grid-wrapper">
+        <div class="stats-section" id="comparisonSection">
+          <div class="stats-section-title">📊 Comparaison périodes</div>
+          <div class="stats-chart-container">
+            <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+              <select id="compPeriod1" class="form-select" style="flex:1;min-width:100px;font-size:11px;">
+                <option value="thisMonth">Ce mois</option>
+                <option value="lastMonth">Mois dernier</option>
+                <option value="thisQuarter">Ce trimestre</option>
+                <option value="lastQuarter">Trimestre dernier</option>
+                <option value="thisYear">Cette année</option>
+                <option value="lastYear">Année dernière</option>
+              </select>
+              <span style="align-self:center;color:var(--gray-500);">vs</span>
+              <select id="compPeriod2" class="form-select" style="flex:1;min-width:100px;font-size:11px;">
+                <option value="lastMonth" selected="">Mois dernier</option>
+                <option value="thisMonth">Ce mois</option>
+                <option value="thisQuarter">Ce trimestre</option>
+                <option value="lastQuarter">Trimestre dernier</option>
+                <option value="thisYear">Cette année</option>
+                <option value="lastYear">Année dernière</option>
+              </select>
+            </div>
+            <div style="display:flex;gap:8px;margin-bottom:12px;">
+              <select id="compStatutFilter" class="form-select" style="flex:1;font-size:11px;">
+                <option value="all">Tous les statuts</option>
+                <option value="Gagné">Gagné seulement</option>
+                <option value="En cours">En cours seulement</option>
+                <option value="Perdu">Perdu seulement</option>
+              </select>
+            </div>
+            <div class="comparison-container">
+              <div class="comparison-period">
+                <div class="comparison-period-label" id="compLabel1">Ce mois</div>
+                <div class="comparison-period-value" id="compCurrentMonth">0 €</div>
+                <div class="comparison-period-count" id="compCurrentCount">0 affaires</div>
+              </div>
+              <div class="comparison-vs">
+                <div class="comparison-arrow" id="compArrow">→</div>
+                <div class="comparison-percent" id="compPercent">0%</div>
+              </div>
+              <div class="comparison-period">
+                <div class="comparison-period-label" id="compLabel2">Mois dernier</div>
+                <div class="comparison-period-value" id="compLastMonth">0 €</div>
+                <div class="comparison-period-count" id="compLastCount">0 affaires</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="stats-section" id="rankingSection">
+          <div class="stats-section-title">🏆 Classement EG (CA cumulé)</div>
         <div class="stats-chart-container">
           <div class="ranking-list" id="rankingList">
             <!-- Generated by JS -->
           </div>
         </div>
       </div>
+      </div>
       
+      <div class="stats-grid-wrapper">
       <div class="stats-section" id="objectivesSection">
         <div class="stats-section-title">
           🎯 Objectifs CA
@@ -2912,6 +3397,7 @@
             <!-- Generated by JS -->
           </div>
         </div>
+      </div>
       </div>
 
       <!-- Objectifs par Métreur -->
@@ -2993,16 +3479,22 @@
         </div>
       </div>
       <div class="stats-bar" id="statsBar">
-        <span id="statsBarContent">
+        <span id="statsBarContent" style="display: none;">
           <span><strong id="countDisplay">0</strong> affaires affichées</span>
           <span id="statusStats"></span>
         </span>
-        <span id="statsBarProtected" style="display:none;color:var(--gray-500);">🔒 Données masquées (onglet protégé)</span>
+        <span id="statsBarProtected" style="display: inline; color: var(--gray-500);">🔒 Données masquées (onglet protégé)</span>
       </div>
-      <div class="list-container" id="listContainer"></div>
+      <div class="list-container" id="listContainer">
+        <div style="padding:60px 20px;text-align:center;color:var(--gray-500);">
+          <div style="font-size:48px;margin-bottom:16px;">🔒</div>
+          <div style="font-size:16px;font-weight:600;margin-bottom:8px;">Onglet verrouillé</div>
+          <div style="font-size:13px;">Cliquez sur l'onglet pour entrer le mot de passe</div>
+        </div>
+      </div>
       <div class="total-bar">
         <span>Total</span>
-        <strong id="totalAmount">63 115 846&nbsp;€</strong>
+        <strong id="totalAmount">🔒</strong>
       </div>
     </div>
   </main>
@@ -3028,10 +3520,16 @@
           <span class="pill nonvalorise" data-filter="Non valorisé">⏸ Non val.</span>
         </div>
       </div>
-      <div class="list-container" id="mobileListContainer"></div>
+      <div class="list-container" id="mobileListContainer">
+        <div style="padding:60px 20px;text-align:center;color:var(--gray-500);">
+          <div style="font-size:48px;margin-bottom:16px;">🔒</div>
+          <div style="font-size:16px;font-weight:600;margin-bottom:8px;">Onglet verrouillé</div>
+          <div style="font-size:13px;">Cliquez sur l'onglet pour entrer le mot de passe</div>
+        </div>
+      </div>
       <div class="total-bar">
         <span>Total</span>
-        <strong id="mobileTotalAmount">63 115 846&nbsp;€</strong>
+        <strong id="mobileTotalAmount">🔒</strong>
       </div>
     </div>
   </div>
@@ -3059,34 +3557,13 @@
           </div>
           <div class="form-group">
             <label class="form-label">EG (Client SMAC)</label>
-            <select class="form-select" id="mEG">
-              <option value="">-- Sélectionner --</option>
-              <option value="BY">BY</option>
-              <option value="VINCI">VINCI</option>
-              <option value="EIFFAGE">EIFFAGE</option>
-              <option value="COLAS">COLAS</option>
-              <option value="DEMATHIEU&BARD">DEMATHIEU&BARD</option>
-              <option value="FAYAT">FAYAT</option>
-              <option value="GCC">GCC</option>
-              <option value="FAYOLLES">FAYOLLES</option>
-              <option value="SPIE BATIGNOLLES">SPIE BATIGNOLLES</option>
-              <option value="LEON GROSSE">LEON GROSSE</option>
-            </select>
+            <select class="form-select" id="mEG"><option value="">-- Sélectionner --</option><option value="BY">BY</option><option value="COLAS">COLAS</option><option value="DEMATHIEU&amp;BARD">DEMATHIEU&amp;BARD</option><option value="EIFFAGE">EIFFAGE</option><option value="FAYAT">FAYAT</option><option value="FAYOLLES">FAYOLLES</option><option value="GCC">GCC</option><option value="LEON GROSSE">LEON GROSSE</option><option value="SPIE BATIGNOLLES">SPIE BATIGNOLLES</option><option value="VINCI">VINCI</option></select>
             <input type="text" class="form-input" id="mEGCustom" placeholder="Ou saisir un nouveau..." style="margin-top:4px;font-size:12px;">
           </div>
           <div class="form-group">
             <label class="form-label">MOE (Architecte)</label>
-            <select class="form-select" id="mArchitect">
-              <option value="">-- Sélectionner --</option>
-            </select>
+            <select class="form-select" id="mArchitect"><option value="">-- Sélectionner --</option><option value="ADP">ADP</option><option value="AFA+SANAE">AFA+SANAE</option><option value="Agence Engasser et Associés">Agence Engasser et Associés</option><option value="Atelier COS">Atelier COS</option><option value="BAUMSCHLAGER EBERLE ARCHITECTS">BAUMSCHLAGER EBERLE ARCHITECTS</option><option value="IDEC SANTE">IDEC SANTE</option><option value="Patriarche">Patriarche</option><option value="RBA">RBA</option><option value="SARL ITEA">SARL ITEA</option></select>
             <input type="text" class="form-input" id="mArchitectCustom" placeholder="Ou saisir un nouveau..." style="margin-top:4px;font-size:12px;">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Chiffreur</label>
-            <select class="form-select" id="mChiffreur">
-              <option value="">-- Sélectionner --</option>
-            </select>
-            <input type="text" class="form-input" id="mChiffreurCustom" placeholder="Ou saisir un nouveau..." style="margin-top:4px;font-size:12px;">
           </div>
           <div class="form-group full">
             <label class="form-label">Adresse</label>
@@ -3131,15 +3608,49 @@
             <input type="text" class="form-input" id="mMontant" placeholder="1 500 000">
           </div>
           <div class="form-group">
+            <label class="form-label">Surface (m²)</label>
+            <input type="text" class="form-input" id="mSurface" placeholder="Ex: 2500">
+          </div>
+          <div class="form-group">
             <label class="form-label">Responsable</label>
             <input type="text" class="form-input" id="mResponsable" placeholder="Jean Dupont">
           </div>
-          <div class="form-group">
-            <label class="form-label">Métreur</label>
-            <select class="form-select" id="mMetreur">
-              <option value="">-- Sélectionner --</option>
-            </select>
-            <input type="text" class="form-input" id="mMetreurCustom" placeholder="Ou saisir un nouveau..." style="margin-top:4px;font-size:12px;">
+          <div class="form-group full">
+            <label class="form-label">Chiffreurs (avec taux de participation %)</label>
+            <div class="multi-person-container" id="chiffreursContainer">
+              <div class="multi-person-list" id="chiffreursList"></div>
+              <div class="multi-person-add">
+                <select class="form-select" id="mChiffreurSelect" style="flex:2;">
+                  <option value="">-- Sélectionner --</option>
+                  <option value="Maxime">Maxime</option>
+                  <option value="Melyssa">Melyssa</option>
+                  <option value="Richad">Richad</option>
+                  <option value="Walid">Walid</option>
+                  <option value="Wijdane">Wijdane</option>
+                </select>
+                <input type="text" class="form-input" id="mChiffreurCustom" placeholder="Ou nouveau..." style="flex:2;">
+                <input type="number" class="form-input" id="mChiffreurTaux" placeholder="%" min="0" max="100" style="flex:1;width:60px;">
+                <button type="button" class="btn-add-person" id="addChiffreurBtn" title="Ajouter">+</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group full">
+            <label class="form-label">Métreurs (avec taux de participation %)</label>
+            <div class="multi-person-container" id="metreursContainer">
+              <div class="multi-person-list" id="metreursList"></div>
+              <div class="multi-person-add">
+                <select class="form-select" id="mMetreurSelect" style="flex:2;">
+                  <option value="">-- Sélectionner --</option>
+                  <option value="Melyssa">Melyssa</option>
+                  <option value="Richad">Richad</option>
+                  <option value="Walid">Walid</option>
+                  <option value="Youssef">Youssef</option>
+                </select>
+                <input type="text" class="form-input" id="mMetreurCustom" placeholder="Ou nouveau..." style="flex:2;">
+                <input type="number" class="form-input" id="mMetreurTaux" placeholder="%" min="0" max="100" style="flex:1;width:60px;">
+                <button type="button" class="btn-add-person" id="addMetreurBtn" title="Ajouter">+</button>
+              </div>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-label">Latitude *</label>
@@ -3150,10 +3661,20 @@
             <input type="text" class="form-input" id="mLng" placeholder="2.35">
           </div>
           <div class="form-group full">
-            <label class="form-label">Tags (Entrée pour ajouter)</label>
+            <label class="form-label">Tags / Produits</label>
             <div class="tags-input-container" id="tagsContainer">
               <input type="text" class="tags-input" id="mTagsInput" placeholder="Ajouter un tag...">
             </div>
+            <div class="product-add-section" style="margin-top:8px;padding:10px;background:var(--gray-50);border-radius:8px;">
+              <div style="font-size:11px;color:var(--gray-600);margin-bottom:6px;font-weight:600;">➕ Ajouter un produit avec prix/m²</div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <input type="text" class="form-input" id="mProductName" placeholder="Nom produit" style="flex:2;min-width:100px;">
+                <input type="number" class="form-input" id="mProductPrice" placeholder="Prix €/m²" style="flex:1;min-width:80px;">
+                <input type="number" class="form-input" id="mProductSurface" placeholder="Surface m²" style="flex:1;min-width:80px;">
+                <button type="button" class="btn-add-product" id="addProductBtn" title="Ajouter produit">+ Produit</button>
+              </div>
+            </div>
+            <div class="products-list" id="productsList" style="margin-top:8px;"></div>
           </div>
           <div class="form-group full">
             <label class="form-label">Lien document</label>
@@ -3747,6 +4268,9 @@
     let tabModalMode = 'add';
     let renamingTabId = null;
     let currentTags = [];
+    let currentChiffreurs = []; // Array de {name, taux}
+    let currentMetreurs = [];   // Array de {name, taux}
+    let currentProducts = [];   // Array de {name, priceM2, surface}
     let selectedTabColor = '#3b82f6';
     let duplicatingItemId = null;
     let protectingTabId = null;
@@ -4288,6 +4812,10 @@
       if (isTabLocked(currentTab)) {
         document.getElementById('statsTotalAffaires').textContent = '🔒';
         document.getElementById('statsTotalMontant').textContent = '🔒';
+        const gagneEl = document.getElementById('statsTotalGagne');
+        const convKPIEl = document.getElementById('statsConversionKPI');
+        if (gagneEl) gagneEl.textContent = '🔒';
+        if (convKPIEl) convKPIEl.textContent = '🔒';
         return;
       }
       
@@ -4302,10 +4830,27 @@
         const val = parseMontant(item.montant);
         return Number.isFinite(val) ? sum + val : sum;
       }, 0);
+
+      // Calculate CA Gagné
+      const totalGagne = currentList.filter(i => i.statut === 'Gagné').reduce((sum, item) => {
+        const val = parseMontant(item.montant);
+        return Number.isFinite(val) ? sum + val : sum;
+      }, 0);
+
+      // Calculate conversion rate for KPI
+      const totalDecided = gagne + perdu;
+      const conversionKPI = totalDecided > 0 ? Math.round((gagne / totalDecided) * 100) : 0;
       
       // Update summary cards
       document.getElementById('statsTotalAffaires').textContent = total;
       document.getElementById('statsTotalMontant').textContent = formatMontantShort(totalMontant);
+      
+      // Update new KPI cards
+      const gagneEl = document.getElementById('statsTotalGagne');
+      if (gagneEl) gagneEl.textContent = formatMontantShort(totalGagne);
+      
+      const convKPIEl = document.getElementById('statsConversionKPI');
+      if (convKPIEl) convKPIEl.textContent = conversionKPI + '%';
       
       // Update pie chart
       updatePieChart(gagne, perdu, encours, faste, total);
@@ -4778,7 +5323,22 @@
         }
         
         // Track CHIFFREUR stats (ALL statuses - montant total chiffré)
-        if (item.chiffreur) {
+        // Utiliser le nouveau format multi-chiffreurs si disponible
+        if (item.chiffreurs && Array.isArray(item.chiffreurs) && item.chiffreurs.length > 0) {
+          item.chiffreurs.forEach(ch => {
+            if (!ch.name) return;
+            if (!chiffreurStats[ch.name]) {
+              chiffreurStats[ch.name] = { total: 0, count: 0, gagne: 0, encours: 0, perdu: 0 };
+            }
+            const weightedAmount = amount * (ch.taux / 100);
+            chiffreurStats[ch.name].total += weightedAmount;
+            chiffreurStats[ch.name].count += (ch.taux / 100); // Fractional count
+            if (item.statut === 'Gagné') chiffreurStats[ch.name].gagne += weightedAmount;
+            else if (item.statut === 'En cours') chiffreurStats[ch.name].encours += weightedAmount;
+            else if (item.statut === 'Perdu') chiffreurStats[ch.name].perdu += weightedAmount;
+          });
+        } else if (item.chiffreur) {
+          // Ancien format simple pour rétrocompatibilité
           if (!chiffreurStats[item.chiffreur]) {
             chiffreurStats[item.chiffreur] = { total: 0, count: 0, gagne: 0, encours: 0, perdu: 0 };
           }
@@ -4790,7 +5350,22 @@
         }
         
         // Track METREUR stats (ALL statuses - montant total chiffré)
-        if (item.metreur) {
+        // Utiliser le nouveau format multi-métreurs si disponible
+        if (item.metreurs && Array.isArray(item.metreurs) && item.metreurs.length > 0) {
+          item.metreurs.forEach(mt => {
+            if (!mt.name) return;
+            if (!metreurStats[mt.name]) {
+              metreurStats[mt.name] = { total: 0, count: 0, gagne: 0, encours: 0, perdu: 0 };
+            }
+            const weightedAmount = amount * (mt.taux / 100);
+            metreurStats[mt.name].total += weightedAmount;
+            metreurStats[mt.name].count += (mt.taux / 100); // Fractional count
+            if (item.statut === 'Gagné') metreurStats[mt.name].gagne += weightedAmount;
+            else if (item.statut === 'En cours') metreurStats[mt.name].encours += weightedAmount;
+            else if (item.statut === 'Perdu') metreurStats[mt.name].perdu += weightedAmount;
+          });
+        } else if (item.metreur) {
+          // Ancien format simple pour rétrocompatibilité
           if (!metreurStats[item.metreur]) {
             metreurStats[item.metreur] = { total: 0, count: 0, gagne: 0, encours: 0, perdu: 0 };
           }
@@ -5230,6 +5805,43 @@
           return mois[parseInt(mo)-1] + ' ' + y;
         };
         
+        // Formater les chiffreurs (multi ou simple)
+        let chiffreursHtml = '';
+        if (item.chiffreurs && Array.isArray(item.chiffreurs) && item.chiffreurs.length > 0) {
+          chiffreursHtml = item.chiffreurs.map(c => 
+            `<span class="chiffreur-badge">🧮 ${escapeHTML(c.name)} <small style="opacity:0.7">(${c.taux}%)</small></span>`
+          ).join('');
+        } else if (item.chiffreur) {
+          chiffreursHtml = `<span class="chiffreur-badge">🧮 ${escapeHTML(item.chiffreur)}</span>`;
+        }
+        
+        // Formater les métreurs (multi ou simple)
+        let metreursHtml = '';
+        if (item.metreurs && Array.isArray(item.metreurs) && item.metreurs.length > 0) {
+          metreursHtml = item.metreurs.map(m => 
+            `<span class="chiffreur-badge" style="color:var(--purple);">📐 ${escapeHTML(m.name)} <small style="opacity:0.7">(${m.taux}%)</small></span>`
+          ).join('');
+        } else if (item.metreur) {
+          metreursHtml = `<span class="chiffreur-badge" style="color:var(--purple);">📐 ${escapeHTML(item.metreur)}</span>`;
+        }
+        
+        // Calculer prix/m² si surface disponible
+        let surfaceInfo = '';
+        const montantValue = parseMontant(item.montant);
+        const surfaceValue = parseFloat(item.surface) || 0;
+        if (surfaceValue > 0) {
+          const prixM2 = montantValue / surfaceValue;
+          surfaceInfo = `<span class="surface-badge" title="Prix calculé par m²">📐 ${surfaceValue.toLocaleString('fr-FR')} m² · ${formatMontantShort(prixM2)}/m²</span>`;
+        }
+        
+        // Produits avec prix/m²
+        let productsHtml = '';
+        if (item.products && item.products.length > 0) {
+          productsHtml = `<div class="list-item-products">${item.products.map(p => 
+            `<span class="product-mini-badge" title="${p.surface || 0} m² × ${p.priceM2 || 0} €/m²">📦 ${escapeHTML(p.name)}</span>`
+          ).join('')}</div>`;
+        }
+        
         return `
           <div class="list-item" data-id="${item.id}" data-idx="${idx}">
             <div class="list-item-header">
@@ -5240,13 +5852,17 @@
               <span>${escapeHTML(item.client)} · ${escapeHTML(item.eg)}</span>
               <span>${escapeHTML(item.adresse)}${item.moisRemis ? `<span class="list-item-mois-remis">📅 ${formatMoisRemis(item.moisRemis)}</span>` : ''}</span>
               ${item.responsable ? `<span class="responsable-badge">👤 ${escapeHTML(item.responsable)}</span>` : ''}
-              ${item.chiffreur ? `<span class="chiffreur-badge">🧮 ${escapeHTML(item.chiffreur)}</span>` : ''}
-              ${item.metreur ? `<span class="chiffreur-badge" style="color:var(--purple);">📐 ${escapeHTML(item.metreur)}</span>` : ''}
+              ${chiffreursHtml}
+              ${metreursHtml}
             </div>
             ${item.description ? `<div class="list-item-description">${escapeHTML(item.description)}</div>` : ''}
             ${(item.tags && item.tags.length) ? `<div class="list-item-tags">${item.tags.map(t => `<span class="tag">${escapeHTML(t)}</span>`).join('')}</div>` : ''}
+            ${productsHtml}
             <div class="list-item-footer">
-              <span class="list-item-amount">${displayMontant(item.montant)}</span>
+              <div>
+                <span class="list-item-amount">${displayMontant(item.montant)}</span>
+                ${surfaceInfo}
+              </div>
               <div class="list-item-actions">
                 ${item.link ? `<button class="btn-icon link" title="Ouvrir document">🔗</button>` : ''}
                 <button class="btn-icon duplicate" title="Dupliquer">📋</button>
@@ -5373,18 +5989,26 @@
     function clearModalForm() {
       editingId = null;
       document.getElementById('modalTitle').textContent = 'Nouvelle affaire';
-      ['mAffaires', 'mClient', 'mDescription', 'mAdresse', 'mDate', 'mDateDevis', 'mMoisRemis', 'mMontant', 'mResponsable', 'mLat', 'mLng', 'mLink', 'mNotes', 'mEGCustom', 'mArchitectCustom', 'mChiffreurCustom', 'mMetreurCustom'].forEach(id => {
+      ['mAffaires', 'mClient', 'mDescription', 'mAdresse', 'mDate', 'mDateDevis', 'mMoisRemis', 'mMontant', 'mSurface', 'mResponsable', 'mLat', 'mLng', 'mLink', 'mNotes', 'mEGCustom', 'mArchitectCustom', 'mChiffreurCustom', 'mMetreurCustom', 'mChiffreurTaux', 'mMetreurTaux', 'mProductName', 'mProductPrice', 'mProductSurface'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
       });
       document.getElementById('mEG').value = '';
       document.getElementById('mArchitect').value = '';
-      document.getElementById('mChiffreur').value = '';
-      document.getElementById('mMetreur').value = '';
+      const chiffreurSelect = document.getElementById('mChiffreurSelect');
+      if (chiffreurSelect) chiffreurSelect.value = '';
+      const metreurSelect = document.getElementById('mMetreurSelect');
+      if (metreurSelect) metreurSelect.value = '';
       document.getElementById('mStatut').value = 'En cours';
       document.querySelectorAll('#mSmacChips .chip').forEach(c => c.classList.remove('active'));
       currentTags = [];
+      currentChiffreurs = [];
+      currentMetreurs = [];
+      currentProducts = [];
       renderTagsInput();
+      renderChiffreursList();
+      renderMetreursList();
+      renderProductsList();
       updateAllDropdowns();
     }
 
@@ -5401,25 +6025,30 @@
       document.getElementById('mDescription').value = item.description || '';
       document.getElementById('mEG').value = item.eg || '';
       document.getElementById('mArchitect').value = item.architect || '';
-      document.getElementById('mChiffreur').value = item.chiffreur || '';
-      document.getElementById('mMetreur').value = item.metreur || '';
       document.getElementById('mAdresse').value = item.adresse || '';
       document.getElementById('mDate').value = item.datePrevisionnelle || '';
       document.getElementById('mDateDevis').value = item.dateDevis || '';
       document.getElementById('mMoisRemis').value = item.moisRemis || '';
       document.getElementById('mStatut').value = item.statut || 'En cours';
       document.getElementById('mMontant').value = item.montant || '';
+      document.getElementById('mSurface').value = item.surface || '';
       document.getElementById('mResponsable').value = item.responsable || '';
       document.getElementById('mLat').value = item.coords?.[0] || '';
       document.getElementById('mLng').value = item.coords?.[1] || '';
       document.getElementById('mLink').value = item.link || '';
       document.getElementById('mNotes').value = item.notes || '';
       
-      // Clear custom inputs
+      // Clear custom inputs and selects
       document.getElementById('mEGCustom').value = '';
       document.getElementById('mArchitectCustom').value = '';
       document.getElementById('mChiffreurCustom').value = '';
       document.getElementById('mMetreurCustom').value = '';
+      document.getElementById('mChiffreurTaux').value = '';
+      document.getElementById('mMetreurTaux').value = '';
+      const chiffreurSelect = document.getElementById('mChiffreurSelect');
+      if (chiffreurSelect) chiffreurSelect.value = '';
+      const metreurSelect = document.getElementById('mMetreurSelect');
+      if (metreurSelect) metreurSelect.value = '';
       
       document.querySelectorAll('#mSmacChips .chip').forEach(c => {
         c.classList.toggle('active', c.dataset.value === item.smac);
@@ -5427,6 +6056,32 @@
       
       currentTags = item.tags || [];
       renderTagsInput();
+      
+      // Charger les chiffreurs (nouveau format multi ou ancien format simple)
+      if (item.chiffreurs && Array.isArray(item.chiffreurs)) {
+        currentChiffreurs = item.chiffreurs;
+      } else if (item.chiffreur) {
+        // Migration depuis ancien format
+        currentChiffreurs = [{name: item.chiffreur, taux: 100}];
+      } else {
+        currentChiffreurs = [];
+      }
+      renderChiffreursList();
+      
+      // Charger les métreurs (nouveau format multi ou ancien format simple)
+      if (item.metreurs && Array.isArray(item.metreurs)) {
+        currentMetreurs = item.metreurs;
+      } else if (item.metreur) {
+        // Migration depuis ancien format
+        currentMetreurs = [{name: item.metreur, taux: 100}];
+      } else {
+        currentMetreurs = [];
+      }
+      renderMetreursList();
+      
+      // Charger les produits
+      currentProducts = item.products || [];
+      renderProductsList();
       
       openModal();
     }
@@ -5571,21 +6226,9 @@
         addToMOEList(architectCustom);
       }
       
-      // Get Chiffreur from select or custom input
-      let chiffreur = document.getElementById('mChiffreur').value.trim();
-      const chiffreurCustom = document.getElementById('mChiffreurCustom').value.trim();
-      if (chiffreurCustom) {
-        chiffreur = chiffreurCustom;
-        addToChiffreurList(chiffreurCustom);
-      }
-      
-      // Get Metreur from select or custom input
-      let metreur = document.getElementById('mMetreur').value.trim();
-      const metreurCustom = document.getElementById('mMetreurCustom').value.trim();
-      if (metreurCustom) {
-        metreur = metreurCustom;
-        addToMetreurList(metreurCustom);
-      }
+      // Extraire le chiffreur principal pour compatibilité avec ancien système de stats
+      const chiffreurPrincipal = currentChiffreurs.length > 0 ? currentChiffreurs[0].name : '';
+      const metreurPrincipal = currentMetreurs.length > 0 ? currentMetreurs[0].name : '';
       
       const itemData = {
         id: editingId || makeId(),
@@ -5601,9 +6244,13 @@
         moisRemis: document.getElementById('mMoisRemis').value,
         statut: document.getElementById('mStatut').value,
         montant: document.getElementById('mMontant').value.trim() || '-',
+        surface: document.getElementById('mSurface').value.trim(),
         responsable: document.getElementById('mResponsable').value.trim(),
-        chiffreur,
-        metreur,
+        chiffreur: chiffreurPrincipal, // Compatibilité ancien système
+        metreur: metreurPrincipal,      // Compatibilité ancien système
+        chiffreurs: currentChiffreurs,  // Nouveau: tableau multi-chiffreurs
+        metreurs: currentMetreurs,      // Nouveau: tableau multi-métreurs
+        products: currentProducts,       // Nouveau: produits avec prix/m²
         coords: [lat, lng],
         tags: currentTags,
         link: document.getElementById('mLink').value.trim(),
@@ -5652,6 +6299,305 @@
         }
         e.target.value = '';
       }
+    }
+
+    /* Multi-Chiffreurs Functions */
+    function renderChiffreursList() {
+      const container = document.getElementById('chiffreursList');
+      if (!container) return;
+      container.innerHTML = '';
+      
+      currentChiffreurs.forEach((ch, idx) => {
+        const item = document.createElement('div');
+        item.className = 'multi-person-item';
+        item.innerHTML = `
+          <span class="person-name">${ch.name}</span>
+          <span class="person-taux">${ch.taux}%</span>
+          <button type="button" class="person-remove" data-idx="${idx}">✕</button>
+        `;
+        container.appendChild(item);
+      });
+      
+      // Add remove handlers
+      container.querySelectorAll('.person-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt(e.target.dataset.idx);
+          currentChiffreurs.splice(idx, 1);
+          renderChiffreursList();
+        });
+      });
+    }
+
+    function addChiffreur() {
+      const select = document.getElementById('mChiffreurSelect');
+      const custom = document.getElementById('mChiffreurCustom');
+      const tauxInput = document.getElementById('mChiffreurTaux');
+      
+      let name = select.value.trim() || custom.value.trim();
+      let taux = parseInt(tauxInput.value) || 100;
+      
+      if (!name) {
+        showToast('Veuillez sélectionner ou saisir un chiffreur', 'error');
+        return;
+      }
+      
+      // Vérifier si déjà présent
+      if (currentChiffreurs.some(c => c.name === name)) {
+        showToast('Ce chiffreur est déjà ajouté', 'error');
+        return;
+      }
+      
+      // Ajouter à la liste globale si nouveau
+      if (custom.value.trim()) {
+        addToChiffreurList(custom.value.trim());
+      }
+      
+      currentChiffreurs.push({ name, taux: Math.min(100, Math.max(0, taux)) });
+      renderChiffreursList();
+      
+      // Reset inputs
+      select.value = '';
+      custom.value = '';
+      tauxInput.value = '';
+    }
+
+    /* Multi-Métreurs Functions */
+    function renderMetreursList() {
+      const container = document.getElementById('metreursList');
+      if (!container) return;
+      container.innerHTML = '';
+      
+      currentMetreurs.forEach((mt, idx) => {
+        const item = document.createElement('div');
+        item.className = 'multi-person-item';
+        item.innerHTML = `
+          <span class="person-name">${mt.name}</span>
+          <span class="person-taux">${mt.taux}%</span>
+          <button type="button" class="person-remove" data-idx="${idx}">✕</button>
+        `;
+        container.appendChild(item);
+      });
+      
+      // Add remove handlers
+      container.querySelectorAll('.person-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt(e.target.dataset.idx);
+          currentMetreurs.splice(idx, 1);
+          renderMetreursList();
+        });
+      });
+    }
+
+    function addMetreur() {
+      const select = document.getElementById('mMetreurSelect');
+      const custom = document.getElementById('mMetreurCustom');
+      const tauxInput = document.getElementById('mMetreurTaux');
+      
+      let name = select.value.trim() || custom.value.trim();
+      let taux = parseInt(tauxInput.value) || 100;
+      
+      if (!name) {
+        showToast('Veuillez sélectionner ou saisir un métreur', 'error');
+        return;
+      }
+      
+      // Vérifier si déjà présent
+      if (currentMetreurs.some(m => m.name === name)) {
+        showToast('Ce métreur est déjà ajouté', 'error');
+        return;
+      }
+      
+      // Ajouter à la liste globale si nouveau
+      if (custom.value.trim()) {
+        addToMetreurList(custom.value.trim());
+      }
+      
+      currentMetreurs.push({ name, taux: Math.min(100, Math.max(0, taux)) });
+      renderMetreursList();
+      
+      // Reset inputs
+      select.value = '';
+      custom.value = '';
+      tauxInput.value = '';
+    }
+
+    /* Products with price/m² Functions */
+    function renderProductsList() {
+      const container = document.getElementById('productsList');
+      if (!container) return;
+      container.innerHTML = '';
+      
+      currentProducts.forEach((prod, idx) => {
+        const total = (prod.priceM2 || 0) * (prod.surface || 0);
+        const item = document.createElement('div');
+        item.className = 'product-item';
+        item.innerHTML = `
+          <div class="product-info">
+            <span class="product-name">${prod.name}</span>
+            <span class="product-price">${formatNumber(prod.priceM2)} €/m²</span>
+            <span class="product-surface">${formatNumber(prod.surface)} m²</span>
+          </div>
+          <span class="product-total">= ${formatMontantShort(total)}</span>
+          <button type="button" class="product-remove" data-idx="${idx}">✕</button>
+        `;
+        container.appendChild(item);
+      });
+      
+      // Add remove handlers
+      container.querySelectorAll('.product-remove').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const idx = parseInt(e.target.dataset.idx);
+          currentProducts.splice(idx, 1);
+          renderProductsList();
+        });
+      });
+    }
+
+    function addProduct() {
+      const nameInput = document.getElementById('mProductName');
+      const priceInput = document.getElementById('mProductPrice');
+      const surfaceInput = document.getElementById('mProductSurface');
+      
+      const name = nameInput.value.trim();
+      const priceM2 = parseFloat(priceInput.value) || 0;
+      const surface = parseFloat(surfaceInput.value) || 0;
+      
+      if (!name) {
+        showToast('Veuillez saisir un nom de produit', 'error');
+        return;
+      }
+      
+      currentProducts.push({ name, priceM2, surface });
+      
+      // Ajouter aussi comme tag pour la recherche
+      if (!currentTags.includes(name)) {
+        currentTags.push(name);
+        renderTagsInput();
+      }
+      
+      renderProductsList();
+      
+      // Reset inputs
+      nameInput.value = '';
+      priceInput.value = '';
+      surfaceInput.value = '';
+    }
+
+    function formatNumber(num) {
+      return num.toLocaleString('fr-FR');
+    }
+
+    /* Products Analysis Panel */
+    function toggleProductsPanel() {
+      const panel = document.getElementById('productsPanel');
+      if (panel.classList.contains('open')) {
+        panel.classList.remove('open');
+      } else {
+        panel.classList.add('open');
+        updateProductsAnalysis();
+      }
+    }
+
+    function updateProductsAnalysis(searchTerm = '') {
+      const container = document.getElementById('productsAnalysisList');
+      if (!container) return;
+      
+      // Collecter tous les produits de toutes les affaires
+      const productStats = {};
+      
+      Object.values(dataByTab).forEach(tabData => {
+        tabData.forEach(item => {
+          if (item.products && Array.isArray(item.products)) {
+            item.products.forEach(prod => {
+              const key = prod.name.toLowerCase();
+              
+              // Filtrer par recherche
+              if (searchTerm && !key.includes(searchTerm.toLowerCase())) return;
+              
+              if (!productStats[key]) {
+                productStats[key] = {
+                  name: prod.name,
+                  count: 0,
+                  totalSurface: 0,
+                  totalAmount: 0,
+                  prices: [],
+                  affaires: []
+                };
+              }
+              
+              productStats[key].count++;
+              productStats[key].totalSurface += prod.surface || 0;
+              const amount = (prod.priceM2 || 0) * (prod.surface || 0);
+              productStats[key].totalAmount += amount;
+              if (prod.priceM2 > 0) productStats[key].prices.push(prod.priceM2);
+              productStats[key].affaires.push({
+                name: item.affaires,
+                priceM2: prod.priceM2,
+                surface: prod.surface,
+                statut: item.statut
+              });
+            });
+          }
+        });
+      });
+      
+      // Générer le HTML
+      const sortedProducts = Object.values(productStats).sort((a, b) => b.count - a.count);
+      
+      if (sortedProducts.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center;padding:40px 20px;color:var(--gray-500);">
+            <div style="font-size:48px;margin-bottom:12px;">📦</div>
+            <div style="font-size:14px;font-weight:600;">Aucun produit trouvé</div>
+            <div style="font-size:12px;margin-top:4px;">Ajoutez des produits avec prix/m² dans vos affaires</div>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = sortedProducts.map(prod => {
+        const avgPrice = prod.prices.length > 0 
+          ? prod.prices.reduce((a, b) => a + b, 0) / prod.prices.length 
+          : 0;
+        const minPrice = prod.prices.length > 0 ? Math.min(...prod.prices) : 0;
+        const maxPrice = prod.prices.length > 0 ? Math.max(...prod.prices) : 0;
+        
+        return `
+          <div class="product-stats-card">
+            <div class="product-stats-header">
+              <span class="product-stats-name">${prod.name}</span>
+              <span class="product-stats-count">${prod.count} affaire${prod.count > 1 ? 's' : ''}</span>
+            </div>
+            <div class="product-stats-grid">
+              <div class="product-stat-item">
+                <div class="product-stat-value">${formatMontantShort(avgPrice)}</div>
+                <div class="product-stat-label">Prix moy./m²</div>
+              </div>
+              <div class="product-stat-item">
+                <div class="product-stat-value">${formatNumber(Math.round(prod.totalSurface))}</div>
+                <div class="product-stat-label">Surface totale m²</div>
+              </div>
+              <div class="product-stat-item">
+                <div class="product-stat-value">${formatMontantShort(minPrice)} - ${formatMontantShort(maxPrice)}</div>
+                <div class="product-stat-label">Fourchette €/m²</div>
+              </div>
+              <div class="product-stat-item">
+                <div class="product-stat-value">${formatMontantShort(prod.totalAmount)}</div>
+                <div class="product-stat-label">CA total</div>
+              </div>
+            </div>
+            <div class="product-affaires-list">
+              ${prod.affaires.slice(0, 5).map(a => `
+                <div class="product-affaire-item">
+                  <span class="product-affaire-name">${a.name}</span>
+                  <span class="product-affaire-price">${formatMontantShort(a.priceM2)} €/m² × ${formatNumber(a.surface || 0)} m²</span>
+                </div>
+              `).join('')}
+              ${prod.affaires.length > 5 ? `<div style="text-align:center;font-size:11px;color:var(--gray-500);padding:4px;">+ ${prod.affaires.length - 5} autres...</div>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
     }
 
     /* Export Functions */
@@ -6231,6 +7177,22 @@
       document.getElementById('modalCancel')?.addEventListener('click', closeModal);
       document.getElementById('modalSave')?.addEventListener('click', saveModal);
 
+      // Multi-Chiffreurs & Multi-Métreurs buttons
+      document.getElementById('addChiffreurBtn')?.addEventListener('click', addChiffreur);
+      document.getElementById('addMetreurBtn')?.addEventListener('click', addMetreur);
+      
+      // Products with price/m²
+      document.getElementById('addProductBtn')?.addEventListener('click', addProduct);
+      
+      // Products Analysis Panel
+      document.getElementById('toggleProductsBtn')?.addEventListener('click', toggleProductsPanel);
+      document.getElementById('productsPanelClose')?.addEventListener('click', () => {
+        document.getElementById('productsPanel').classList.remove('open');
+      });
+      document.getElementById('productSearchInput')?.addEventListener('input', (e) => {
+        updateProductsAnalysis(e.target.value);
+      });
+
       // Chips
       document.querySelectorAll('#mSmacChips .chip').forEach(chip => {
         chip.addEventListener('click', () => chip.classList.toggle('active'));
@@ -6537,5 +7499,6 @@
       injectJS(CDN.jsPDF).then(() => injectJS(CDN.autoTable));
     });
   </script>
-</body>
-</html>
+
+
+<script src="./Carto-suivico_files/leaflet.js.téléchargement" async=""></script><script src="./Carto-suivico_files/leaflet.markercluster.js.téléchargement" async=""></script><script src="./Carto-suivico_files/xlsx.full.min.js.téléchargement" async=""></script><script src="./Carto-suivico_files/jspdf.umd.min.js.téléchargement" async=""></script><script src="./Carto-suivico_files/jspdf.plugin.autotable.min.js.téléchargement" async=""></script></body></html>
