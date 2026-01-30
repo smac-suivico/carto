@@ -651,6 +651,66 @@
     .pill.faste { background: var(--blue-light); color: #1d4ed8; border-color: #bfdbfe; }
     .pill.faste.active { background: var(--blue); color: white; }
 
+    /* Tags Filter */
+    .tags-filter {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: var(--gray-50);
+      border-radius: 8px;
+      border: 1px solid var(--gray-200);
+    }
+
+    .tags-filter-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gray-500);
+      margin-bottom: 8px;
+    }
+
+    .tags-filter-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .tag-filter-pill {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: white;
+      border: 1px solid var(--gray-300);
+      color: var(--gray-600);
+    }
+
+    .tag-filter-pill:hover {
+      border-color: var(--theme-color, #8b5cf6);
+      color: var(--theme-color, #8b5cf6);
+    }
+
+    .tag-filter-pill.active {
+      background: var(--theme-color, #8b5cf6);
+      color: white;
+      border-color: var(--theme-color, #8b5cf6);
+    }
+
+    .tag-filter-pill.clear {
+      background: var(--gray-100);
+      border-style: dashed;
+    }
+
+    /* Marge Badge */
+    .marge-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-left: 8px;
+    }
+
     /* Stats Bar */
     .stats-bar {
       display: flex;
@@ -1344,27 +1404,28 @@
 
     /* Statistics Panel - ENHANCED */
     .stats-panel {
-      position: absolute;
-      top: 124px;
+      position: fixed;
+      top: 115px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 1000;
+      z-index: 1001;
       background: rgba(255, 255, 255, 0.98);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-radius: 20px;
-      box-shadow: 0 8px 40px rgba(0,0,0,0.15);
-      padding: 24px;
-      width: calc(100% - 480px);
-      max-width: 1200px;
-      min-width: 700px;
-      max-height: calc(100vh - 150px);
-      overflow-y: auto;
+      border-radius: 16px;
+      box-shadow: 0 12px 60px rgba(0,0,0,0.2);
+      padding: 0;
+      width: calc(100% - 460px);
+      max-width: 1400px;
+      min-width: 800px;
+      max-height: calc(100vh - 140px);
       display: none;
+      overflow: hidden;
     }
 
     .stats-panel.open {
-      display: block;
+      display: flex;
+      flex-direction: column;
       animation: statsSlideIn 0.3s ease;
     }
 
@@ -1373,9 +1434,16 @@
       to { opacity: 1; transform: translateX(-50%) translateY(0); }
     }
 
-    @media (max-width: 1400px) {
+    @media (max-width: 1600px) {
       .stats-panel {
-        width: calc(100% - 460px);
+        width: calc(100% - 440px);
+        min-width: 600px;
+      }
+    }
+
+    @media (max-width: 1200px) {
+      .stats-panel {
+        width: calc(100% - 420px);
         min-width: 500px;
       }
     }
@@ -1388,6 +1456,8 @@
         min-width: auto;
         max-width: none;
         transform: none;
+        top: 100px;
+        max-height: calc(100vh - 120px);
       }
     }
 
@@ -1395,52 +1465,85 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 16px;
-      border-bottom: 2px solid var(--gray-100);
+      padding: 14px 20px;
+      background: var(--theme-color, #8b5cf6);
+      color: white;
+      border-radius: 16px 16px 0 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      flex-shrink: 0;
     }
 
     .stats-title {
-      font-weight: 800;
-      font-size: 20px;
-      color: var(--dark);
+      font-weight: 700;
+      font-size: 16px;
+      color: white;
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
+    .stats-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
     .stats-close {
-      background: var(--gray-100);
+      background: rgba(255,255,255,0.2);
       border: none;
-      font-size: 18px;
+      font-size: 16px;
       cursor: pointer;
-      color: var(--gray-500);
+      color: white;
       padding: 8px 12px;
-      border-radius: 8px;
+      border-radius: 6px;
       transition: all 0.2s;
     }
 
     .stats-close:hover {
-      background: var(--rose-light);
-      color: var(--rose);
+      background: rgba(255,255,255,0.3);
     }
 
     .stats-config-btn {
-      background: var(--gray-100);
+      background: rgba(255,255,255,0.2);
       border: none;
       font-size: 14px;
       cursor: pointer;
-      color: var(--gray-500);
+      color: white;
       padding: 8px 12px;
-      border-radius: 8px;
-      margin-right: 8px;
+      border-radius: 6px;
       transition: all 0.2s;
     }
 
     .stats-config-btn:hover {
-      background: var(--gray-200);
-      color: var(--dark);
+      background: rgba(255,255,255,0.3);
       transform: rotate(45deg);
+    }
+
+    .stats-panel-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      padding-top: 20px;
+    }
+
+    .stats-panel-content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .stats-panel-content::-webkit-scrollbar-track {
+      background: var(--gray-100);
+      border-radius: 4px;
+    }
+
+    .stats-panel-content::-webkit-scrollbar-thumb {
+      background: var(--theme-color);
+      border-radius: 4px;
+    }
+
+    .stats-panel-content::-webkit-scrollbar-thumb:hover {
+      background: var(--theme-color-dark);
     }
 
     .stats-config-panel {
@@ -3290,12 +3393,13 @@
     <div class="stats-panel" id="statsPanel">
       <div class="stats-header">
         <span class="stats-title">📊 Tableau de Bord Statistiques</span>
-        <div>
+        <div class="stats-header-actions">
           <button class="stats-config-btn" id="statsConfigBtn" title="Configurer l'affichage">⚙️</button>
           <button class="stats-close" id="statsClose">✕</button>
         </div>
       </div>
       
+      <div class="stats-panel-content">
       <!-- Configuration Panel -->
       <div class="stats-config-panel" id="statsConfigPanel">
         <div class="stats-config-title">Afficher / Masquer</div>
@@ -3627,7 +3731,8 @@
           </div>
         </div>
       </div>
-    </div>
+      </div><!-- /stats-panel-content -->
+    </div><!-- /stats-panel -->
     
     <div class="sidebar">
       <div class="search-section">
@@ -3650,6 +3755,13 @@
           <span class="pill encours" data-filter="En cours">◷ En cours</span>
           <span class="pill faste" data-filter="Faste">⚡ Faste</span>
           <span class="pill nonvalorise" data-filter="Non valorisé">⏸ Non val.</span>
+        </div>
+        <!-- Filtre par Tags -->
+        <div class="tags-filter" id="tagsFilter">
+          <div class="tags-filter-label">🏷️ Filtrer par tag :</div>
+          <div class="tags-filter-pills" id="tagsFilterPills">
+            <!-- Généré par JS -->
+          </div>
         </div>
         <button class="advanced-toggle" id="advancedToggle">
           <span class="arrow">▼</span> Filtres avancés
@@ -4588,6 +4700,7 @@
     let currentFilter = 'Tous';
     let currentSort = 'name';
     let currentQuery = '';
+    let currentTagFilter = ''; // Filtre par tag
     let map, markerCluster;
     const markerByIndex = new Map();
     let editingId = null;
@@ -6034,6 +6147,9 @@
 
       let filtered = data.filter(item => {
         if (currentFilter !== 'Tous' && item.statut !== currentFilter) return false;
+        // Filtre par tag
+        if (currentTagFilter && item.tags && !item.tags.includes(currentTagFilter)) return false;
+        if (currentTagFilter && (!item.tags || item.tags.length === 0)) return false;
         if (currentQuery) {
           const q = normalize(currentQuery);
           const searchable = normalize(`${item.affaires} ${item.client} ${item.eg} ${item.architect} ${item.adresse} ${item.responsable} ${item.metreur} ${(item.tags||[]).join(' ')}`);
@@ -6068,6 +6184,47 @@
       renderList(filtered);
       renderMap(filtered);
       updateStats(filtered, data);
+      
+      // Mettre à jour les tags disponibles
+      updateTagsFilter(data);
+    }
+    
+    // Gestion du filtre par tags
+    function updateTagsFilter(data) {
+      const container = document.getElementById('tagsFilterPills');
+      if (!container) return;
+      
+      // Collecter tous les tags uniques
+      const allTags = new Set();
+      data.forEach(item => {
+        if (item.tags && Array.isArray(item.tags)) {
+          item.tags.forEach(t => allTags.add(t));
+        }
+      });
+      
+      if (allTags.size === 0) {
+        container.innerHTML = '<span style="font-size:10px;color:var(--gray-400);">Aucun tag</span>';
+        return;
+      }
+      
+      const sortedTags = Array.from(allTags).sort();
+      
+      container.innerHTML = `
+        <span class="tag-filter-pill clear ${currentTagFilter === '' ? 'active' : ''}" data-tag="">Tous</span>
+        ${sortedTags.map(tag => `
+          <span class="tag-filter-pill ${currentTagFilter === tag ? 'active' : ''}" data-tag="${escapeHTML(tag)}">${escapeHTML(tag)}</span>
+        `).join('')}
+      `;
+      
+      // Event listeners
+      container.querySelectorAll('.tag-filter-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+          currentTagFilter = pill.dataset.tag;
+          container.querySelectorAll('.tag-filter-pill').forEach(p => p.classList.remove('active'));
+          pill.classList.add('active');
+          applyFilters();
+        });
+      });
     }
 
     function updateStats(filtered, all) {
@@ -6176,6 +6333,21 @@
           ).join('')}</div>`;
         }
         
+        // Extraire et afficher la marge
+        let margeHtml = '';
+        if (item.marge) {
+          const margeValue = parseFloat(item.marge);
+          const margeColor = margeValue >= 25 ? 'var(--green)' : margeValue >= 15 ? 'var(--orange)' : 'var(--red)';
+          margeHtml = `<span class="marge-badge" style="background:${margeColor}20;color:${margeColor};border:1px solid ${margeColor}40;">📊 ${margeValue.toFixed(1)}%</span>`;
+        } else if (item.notes && item.notes.includes('Marge:')) {
+          const match = item.notes.match(/Marge:\s*([\d.]+)%/);
+          if (match) {
+            const margeValue = parseFloat(match[1]);
+            const margeColor = margeValue >= 25 ? 'var(--green)' : margeValue >= 15 ? 'var(--orange)' : 'var(--red)';
+            margeHtml = `<span class="marge-badge" style="background:${margeColor}20;color:${margeColor};border:1px solid ${margeColor}40;">📊 ${margeValue.toFixed(1)}%</span>`;
+          }
+        }
+        
         return `
           <div class="list-item" data-id="${item.id}" data-idx="${idx}">
             <div class="list-item-header">
@@ -6195,6 +6367,7 @@
             <div class="list-item-footer">
               <div>
                 <span class="list-item-amount">${displayMontant(item.montant)}</span>
+                ${margeHtml}
                 ${surfaceInfo}
               </div>
               <div class="list-item-actions">
@@ -7545,11 +7718,258 @@
       // Load data for each tab
       for (const tab of tabs) {
         const cloudData = await loadFromCloud(tab.id);
-        if (cloudData && Array.isArray(cloudData)) {
+        if (cloudData && Array.isArray(cloudData) && cloudData.length > 0) {
           dataByTab[tab.id] = migrateData(cloudData);
+          // Fusionner avec les nouvelles affaires si pas déjà présentes
+          const initialAffaires = getInitialAffaires();
+          let added = 0;
+          initialAffaires.forEach(newAff => {
+            const exists = dataByTab[tab.id].some(existing => 
+              existing.id === newAff.id || 
+              existing.affaires?.toLowerCase() === newAff.affaires?.toLowerCase()
+            );
+            if (!exists) {
+              dataByTab[tab.id].push(newAff);
+              added++;
+            }
+          });
+          if (added > 0) {
+            console.log(`${added} nouvelles affaires ajoutées`);
+            setTimeout(() => saveToCloud(tab.id), 1000);
+          }
         } else {
-          dataByTab[tab.id] = []; // Pas de données par défaut pour SITE_B
+          // Base vide - charger les données initiales
+          dataByTab[tab.id] = getInitialAffaires();
+          if (dataByTab[tab.id].length > 0) {
+            setTimeout(() => saveToCloud(tab.id), 1000);
+          }
         }
+      }
+      
+      // Données initiales Remis Client - Janvier 2026 (avec marges)
+      function getInitialAffaires() {
+        return [
+          {
+            id: 'aff-001',
+            affaires: 'Westin Henry Vendôme Paris',
+            client: 'DP.r OUVRAGES FONCTIONNELS REHABILITES',
+            description: 'Hôtels - Bardage Neuf',
+            eg: 'Hôtels',
+            architect: '',
+            adresse: 'Paris',
+            smac: 'Villepinte',
+            datePrevisionnelle: '2026-01-20',
+            statut: 'En cours',
+            montant: '79 095 €',
+            marge: 29.49,
+            surface: '',
+            responsable: '',
+            products: [{ name: 'Bardage', category: 'Bardage', priceM2: 0, surface: 0 }],
+            coords: [48.8686, 2.3290],
+            tags: ['Remis Client', 'Neuf'],
+            notes: 'N° devis: S304-25-0412-RN1'
+          },
+          {
+            id: 'aff-002',
+            affaires: 'SEPTODONT - Étanchéité',
+            client: 'SEPTODONT',
+            description: 'Industrie - Étanchéité Tx béton Neuf',
+            eg: 'Industrie',
+            architect: '',
+            adresse: '',
+            smac: 'Villepinte',
+            datePrevisionnelle: '2026-01-22',
+            statut: 'En cours',
+            montant: '204 432 €',
+            marge: 25.87,
+            surface: '',
+            responsable: '',
+            products: [{ name: 'Étanchéité Tx béton', category: 'Étanchéité', priceM2: 0, surface: 0 }],
+            coords: [48.9362, 2.4280],
+            tags: ['Remis Client', 'Neuf'],
+            notes: 'N° devis: S304-25-0405-MM2'
+          },
+          {
+            id: 'aff-003',
+            affaires: 'SEPTODONT - Bardage',
+            client: 'SEPTODONT',
+            description: 'Industrie - Façade architecturale Neuf',
+            eg: 'Industrie',
+            architect: '',
+            adresse: '',
+            smac: 'Villepinte',
+            datePrevisionnelle: '2026-01-22',
+            statut: 'En cours',
+            montant: '356 456 €',
+            marge: 26.87,
+            surface: '',
+            responsable: '',
+            products: [{ name: 'Façade architecturale', category: 'Façade', priceM2: 0, surface: 0 }],
+            coords: [48.9365, 2.4285],
+            tags: ['Remis Client', 'Neuf'],
+            notes: 'N° devis: S304-25-0406-MM2'
+          },
+          {
+            id: 'aff-004',
+            affaires: 'RTE - PSEM Le Bourget',
+            client: 'COLAS FRANCE - GENIE CIVIL IDF',
+            description: 'Industrie - Bardage Neuf',
+            eg: 'Industrie',
+            architect: '',
+            adresse: 'Le Bourget',
+            smac: 'Villepinte',
+            datePrevisionnelle: '2026-01-20',
+            statut: 'En cours',
+            montant: '198 497 €',
+            marge: 25.49,
+            surface: '',
+            responsable: '',
+            products: [{ name: 'Bardage', category: 'Bardage', priceM2: 0, surface: 0 }],
+            coords: [48.9319, 2.4253],
+            tags: ['Remis Client', 'Neuf'],
+            notes: 'N° devis: S304-25-0411-RN1'
+          },
+          {
+            id: 'aff-005',
+            affaires: 'Data Hills - B3',
+            client: 'BC.n BATEG',
+            description: 'Industrie - Bardage Neuf',
+            eg: 'Industrie',
+            architect: '',
+            adresse: '',
+            smac: 'Villepinte',
+            datePrevisionnelle: '2026-01-19',
+            statut: 'En cours',
+            montant: '10 642 079 €',
+            marge: 5.29,
+            surface: '',
+            responsable: '',
+            products: [{ name: 'Bardage', category: 'Bardage', priceM2: 0, surface: 0 }],
+            coords: [48.8800, 2.4500],
+            tags: ['Remis Client', 'Neuf', 'Data Center'],
+            notes: 'N° devis: S304-25-0416-OS1'
+          },
+          {
+            id: 'aff-006',
+            affaires: 'Shell 5L NANTERRE - Bâtiment process',
+            client: 'Bouygues Construction IEP',
+            description: 'Industrie - Bardage Réfection',
+            eg: 'Industrie',
+            architect: '',
+            adresse: 'Nanterre',
+            smac: 'Villepinte',
+            datePrevisionnelle: '2026-01-20',
+            statut: 'En cours',
+            montant: '493 815 €',
+            marge: 26.49,
+            surface: '',
+            responsable: '',
+            products: [{ name: 'Bardage', category: 'Bardage', priceM2: 0, surface: 0 }],
+            coords: [48.8924, 2.2069],
+            tags: ['Remis Client', 'Réfection'],
+            notes: 'N° devis: S304-25-0420-RN1'
+          },
+          {
+            id: 'aff-007',
+            affaires: 'EQUINIX PASS 2',
+            client: 'BC.n BATEG',
+            description: 'Logistique - Façade architecturale Neuf',
+            eg: 'Logistique',
+            architect: '',
+            adresse: '',
+            smac: 'Villepinte',
+            datePrevisionnelle: '2026-01-20',
+            statut: 'En cours',
+            montant: '570 213 €',
+            marge: 27.39,
+            surface: '',
+            responsable: '',
+            products: [{ name: 'Façade architecturale', category: 'Façade', priceM2: 0, surface: 0 }],
+            coords: [48.8750, 2.4200],
+            tags: ['Remis Client', 'Neuf', 'Data Center'],
+            notes: 'N° devis: S304-24-0271-DL2'
+          },
+          {
+            id: 'aff-008',
+            affaires: 'SEMMARIS I10B - RUNGIS 94',
+            client: 'IDEC SANTE',
+            description: 'Logistique - Étanchéité Tx acier Neuf',
+            eg: 'Logistique',
+            architect: '',
+            adresse: 'Rungis',
+            smac: 'Villepinte',
+            datePrevisionnelle: '2026-01-23',
+            statut: 'En cours',
+            montant: '3 011 788 €',
+            marge: 22.88,
+            surface: '',
+            responsable: '',
+            products: [{ name: 'Étanchéité Tx acier', category: 'Étanchéité', priceM2: 0, surface: 0 }],
+            coords: [48.7467, 2.3508],
+            tags: ['Remis Client', 'Neuf'],
+            notes: 'N° devis: S304-26-0423-MP2'
+          },
+          {
+            id: 'aff-009',
+            affaires: 'AMBITION ORLY PORTE E',
+            client: 'EIFFAGE CONSTRUCTION TERTIAIRE',
+            description: 'Service public - Bardage Réfection',
+            eg: 'Service public',
+            architect: '',
+            adresse: 'Orly',
+            smac: 'Villepinte',
+            datePrevisionnelle: '2026-01-20',
+            statut: 'En cours',
+            montant: '613 991 €',
+            marge: 27.99,
+            surface: '',
+            responsable: '',
+            products: [{ name: 'Bardage', category: 'Bardage', priceM2: 0, surface: 0 }],
+            coords: [48.7262, 2.3652],
+            tags: ['Remis Client', 'Réfection'],
+            notes: 'N° devis: S304-26-0424-YA1'
+          },
+          {
+            id: 'aff-010',
+            affaires: 'Ecole Polytechnique - Projet Green X',
+            client: 'BOUYGUES BATIMENT IDF',
+            description: 'Service public - Bardage Neuf',
+            eg: 'Service public',
+            architect: '',
+            adresse: 'Palaiseau',
+            smac: 'Villepinte',
+            datePrevisionnelle: '2026-01-22',
+            statut: 'En cours',
+            montant: '1 143 499 €',
+            marge: 26.50,
+            surface: '',
+            responsable: '',
+            products: [{ name: 'Bardage', category: 'Bardage', priceM2: 0, surface: 0 }],
+            coords: [48.7116, 2.2078],
+            tags: ['Remis Client', 'Neuf'],
+            notes: 'N° devis: S304-26-0425-RN1'
+          },
+          {
+            id: 'aff-011',
+            affaires: 'MONTFERMEIL COLLEGE JEAN JAURES',
+            client: 'BOUYGUES BATIMENT ILE DE FRANCE',
+            description: 'Service public - Façade architecturale Réfection',
+            eg: 'Service public',
+            architect: '',
+            adresse: 'Montfermeil',
+            smac: 'Villepinte',
+            datePrevisionnelle: '2026-01-22',
+            statut: 'En cours',
+            montant: '359 680 €',
+            marge: 28.48,
+            surface: '',
+            responsable: '',
+            products: [{ name: 'Façade architecturale', category: 'Façade', priceM2: 0, surface: 0 }],
+            coords: [48.8986, 2.5583],
+            tags: ['Remis Client', 'Réfection'],
+            notes: 'N° devis: S304-26-0426-WB1'
+          }
+        ];
       }
 
       renderTabs();
