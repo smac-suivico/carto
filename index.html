@@ -43,6 +43,13 @@
       --theme-color: #e10600;
       --theme-color-light: rgba(225, 6, 0, 0.1);
       --theme-color-dark: #b30500;
+      
+      /* Background colors */
+      --bg-main: #e8e8e8;
+      --bg-card: #ffffff;
+      --bg-sidebar: #ffffff;
+      --text-primary: #1a1a1a;
+      --text-secondary: #737373;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -53,8 +60,8 @@
     }
     body {
       font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: #e5e5e5;
-      color: var(--dark);
+      background: var(--bg-main);
+      color: var(--text-primary);
       line-height: 1.5;
       min-height: 100vh;
       min-height: -webkit-fill-available;
@@ -78,6 +85,42 @@
       height: 56px;
       z-index: 1000;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    /* KPIs Bar - Style discret */
+    .kpis-bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .kpi-item {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    .kpi-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--gray-700);
+      line-height: 1;
+    }
+
+    .kpi-label {
+      font-size: 10px;
+      color: var(--gray-500);
+      font-weight: 400;
+    }
+
+    .kpi-separator {
+      width: 1px;
+      height: 14px;
+      background: var(--gray-300);
+    }
+
+    @media (max-width: 768px) {
+      .kpis-bar { display: none; }
     }
 
     .logo {
@@ -3345,6 +3388,66 @@
     body.client-mode .header-actions {
       gap: 6px;
     }
+
+    /* Filtre par période */
+    .date-filter {
+      display: flex;
+      gap: 6px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .date-filter-btn {
+      padding: 5px 12px;
+      border-radius: 16px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid var(--gray-200);
+      background: white;
+      color: var(--gray-600);
+      transition: all 0.2s;
+    }
+
+    .date-filter-btn:hover {
+      border-color: var(--theme-color);
+      color: var(--theme-color);
+    }
+
+    .date-filter-btn.active {
+      background: var(--theme-color);
+      color: white;
+      border-color: var(--theme-color);
+    }
+
+    /* Donut chart center text */
+    .donut-center {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      pointer-events: none;
+    }
+
+    .donut-center-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1;
+    }
+
+    .donut-center-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* Mode client - Cacher KPIs sensibles */
+    body.client-mode .kpi-item:not(:first-child) {
+      filter: blur(6px);
+      user-select: none;
+    }
   </style>
 </head>
 <body>
@@ -3365,6 +3468,30 @@
         <div class="logo-subtitle">Cartographie des affaires</div>
       </div>
     </div>
+    
+    <!-- KPIs discrets -->
+    <div class="kpis-bar">
+      <div class="kpi-item">
+        <span class="kpi-value" id="kpiAffaires">0</span>
+        <span class="kpi-label">affaires</span>
+      </div>
+      <div class="kpi-separator"></div>
+      <div class="kpi-item">
+        <span class="kpi-value" id="kpiCA">0 €</span>
+        <span class="kpi-label">CA</span>
+      </div>
+      <div class="kpi-separator"></div>
+      <div class="kpi-item">
+        <span class="kpi-value" id="kpiGagne">0 €</span>
+        <span class="kpi-label">gagné</span>
+      </div>
+      <div class="kpi-separator"></div>
+      <div class="kpi-item">
+        <span class="kpi-value" id="kpiMarge">0%</span>
+        <span class="kpi-label">marge</span>
+      </div>
+    </div>
+    
     <div class="header-actions">
       <span id="syncStatus" style="font-size: 12px; margin-right: 8px; color: #71717a;">☁️ En ligne</span>
       <button class="btn btn-ghost btn-sm" id="refreshBtn" title="Actualiser (R)">
@@ -3566,9 +3693,9 @@
                 <circle id="pieEncours" cx="50" cy="50" r="40" fill="none" stroke="#f59e0b" stroke-width="20" stroke-dasharray="0 251.2"></circle>
                 <circle id="pieFaste" cx="50" cy="50" r="40" fill="none" stroke="#3b82f6" stroke-width="20" stroke-dasharray="0 251.2"></circle>
               </svg>
-              <div class="pie-center">
-                <div class="pie-center-value" id="pieCenterValue">0</div>
-                <div class="pie-center-label">affaires</div>
+              <div class="donut-center">
+                <div class="donut-center-value" id="donutCenterValue">0 €</div>
+                <div class="donut-center-label">CA Total</div>
               </div>
             </div>
             <div class="pie-legend">
@@ -3845,6 +3972,13 @@
           <span class="pill encours" data-filter="En cours">◷ En cours</span>
           <span class="pill faste" data-filter="Faste">⚡ Faste</span>
           <span class="pill nonvalorise" data-filter="Non valorisé">⏸ Non val.</span>
+        </div>
+        <!-- Filtre par période -->
+        <div class="date-filter" id="dateFilter">
+          <button class="date-filter-btn active" data-period="all">📅 Tout</button>
+          <button class="date-filter-btn" data-period="month">Ce mois</button>
+          <button class="date-filter-btn" data-period="quarter">Ce trimestre</button>
+          <button class="date-filter-btn" data-period="year">Cette année</button>
         </div>
         <button class="advanced-toggle" id="advancedToggle">
           <span class="arrow">▼</span> Filtres avancés
@@ -4674,10 +4808,22 @@
       const hash = hashPassword(password);
       
       if (hash === tab.passwordHash) {
+        // Déverrouiller l'onglet
         unlockedTabs.add(unlockingTabId);
+        
+        // Fermer le modal
         closeUnlockModal();
-        switchTab(unlockingTabId);
-        showToast(`Onglet "${tab.name}" déverrouillé ! 🔓`, 'success');
+        
+        // Forcer le changement d'onglet et rafraîchissement
+        currentTab = unlockingTabId;
+        updateThemeColor();
+        renderTabs();
+        
+        // Petit délai pour s'assurer que le DOM est prêt
+        setTimeout(() => {
+          applyFilters();
+          showToast(`Onglet "${tab.name}" déverrouillé ! 🔓`, 'success');
+        }, 50);
       } else {
         document.getElementById('unlockError').style.display = 'block';
         document.getElementById('unlockPasswordInput').value = '';
@@ -4784,6 +4930,7 @@
     let currentSort = 'name';
     let currentQuery = '';
     let currentTagFilter = ''; // Filtre par tag
+    let currentPeriodFilter = 'all'; // Filtre par période (all, month, quarter, year)
     let map, markerCluster;
     const markerByIndex = new Map();
     let editingId = null;
@@ -5382,8 +5529,8 @@
       const convKPIEl = document.getElementById('statsConversionKPI');
       if (convKPIEl) convKPIEl.textContent = conversionKPI + '%';
       
-      // Update pie chart
-      updatePieChart(gagne, perdu, encours, faste, total);
+      // Update pie chart with total amount in center
+      updatePieChart(gagne, perdu, encours, faste, total, totalMontant);
       
       // Update bar chart
       updateBarChart();
@@ -5413,7 +5560,7 @@
       return value.toFixed(0) + ' €';
     }
 
-    function updatePieChart(gagne, perdu, encours, faste, total) {
+    function updatePieChart(gagne, perdu, encours, faste, total, totalMontant = 0) {
       const circumference = 2 * Math.PI * 40; // ~251.2
       
       // Update legend
@@ -5421,7 +5568,12 @@
       document.getElementById('legendPerdu').textContent = perdu;
       document.getElementById('legendEncours').textContent = encours;
       document.getElementById('legendFaste').textContent = faste;
-      document.getElementById('pieCenterValue').textContent = total;
+      
+      // Update donut center with total amount
+      const donutCenter = document.getElementById('donutCenterValue');
+      if (donutCenter) {
+        donutCenter.textContent = formatMontantShort(totalMontant);
+      }
       
       if (total === 0) {
         document.getElementById('pieGagne').setAttribute('stroke-dasharray', '0 251.2');
@@ -6215,6 +6367,7 @@
         renderList([]);
         renderMap([]);
         updateStats([], []);
+        updateKPIs([], []);
         showLockedMessage();
         return;
       }
@@ -6227,12 +6380,33 @@
       const fAdresse = (document.getElementById('fAdresse')?.value || '').toLowerCase();
       const minM = parseMontant(document.getElementById('minMontant')?.value);
       const maxM = parseMontant(document.getElementById('maxMontant')?.value);
+      
+      // Dates pour le filtre par période
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const currentYear = now.getFullYear();
+      const currentQuarter = Math.floor(currentMonth / 3);
 
       let filtered = data.filter(item => {
         if (currentFilter !== 'Tous' && item.statut !== currentFilter) return false;
         // Filtre par tag
         if (currentTagFilter && item.tags && !item.tags.includes(currentTagFilter)) return false;
         if (currentTagFilter && (!item.tags || item.tags.length === 0)) return false;
+        
+        // Filtre par période
+        if (currentPeriodFilter !== 'all') {
+          const itemDate = item.datePrevisionnelle || item.moisRemis;
+          if (!itemDate) return false;
+          const date = new Date(itemDate);
+          const itemMonth = date.getMonth();
+          const itemYear = date.getFullYear();
+          const itemQuarter = Math.floor(itemMonth / 3);
+          
+          if (currentPeriodFilter === 'month' && (itemMonth !== currentMonth || itemYear !== currentYear)) return false;
+          if (currentPeriodFilter === 'quarter' && (itemQuarter !== currentQuarter || itemYear !== currentYear)) return false;
+          if (currentPeriodFilter === 'year' && itemYear !== currentYear) return false;
+        }
+        
         if (currentQuery) {
           const q = normalize(currentQuery);
           const searchable = normalize(`${item.affaires} ${item.client} ${item.eg} ${item.architect} ${item.adresse} ${item.responsable} ${item.metreur} ${(item.tags||[]).join(' ')}`);
@@ -6267,9 +6441,51 @@
       renderList(filtered);
       renderMap(filtered);
       updateStats(filtered, data);
+      updateKPIs(filtered, data);
       
       // Mettre à jour les tags disponibles
       updateTagsFilter(data);
+    }
+    
+    // Mise à jour des KPIs en header
+    function updateKPIs(filtered, all) {
+      const kpiAffaires = document.getElementById('kpiAffaires');
+      const kpiCA = document.getElementById('kpiCA');
+      const kpiGagne = document.getElementById('kpiGagne');
+      const kpiMarge = document.getElementById('kpiMarge');
+      
+      if (!kpiAffaires) return;
+      
+      // Calculs
+      let totalCA = 0;
+      let totalGagne = 0;
+      let totalMarge = 0;
+      let countMarge = 0;
+      
+      filtered.forEach(item => {
+        const montant = parseMontant(item.montant) || 0;
+        totalCA += montant;
+        if (item.statut === 'Gagné') totalGagne += montant;
+        
+        // Calculer marge moyenne
+        let marge = item.marge;
+        if (!marge && item.notes && item.notes.includes('Marge:')) {
+          const match = item.notes.match(/Marge:\s*([\d.]+)%/);
+          if (match) marge = parseFloat(match[1]);
+        }
+        if (marge) {
+          totalMarge += parseFloat(marge);
+          countMarge++;
+        }
+      });
+      
+      const avgMarge = countMarge > 0 ? totalMarge / countMarge : 0;
+      
+      // Afficher
+      kpiAffaires.textContent = filtered.length;
+      kpiCA.textContent = formatMontantShort(totalCA);
+      kpiGagne.textContent = formatMontantShort(totalGagne);
+      kpiMarge.textContent = avgMarge.toFixed(1) + '%';
     }
     
     // Gestion du filtre par tags
@@ -8565,6 +8781,16 @@
       // Export
       document.getElementById('exportExcel')?.addEventListener('click', exportExcel);
       document.getElementById('exportPdf')?.addEventListener('click', exportPDF);
+      
+      // Filtre par période
+      document.querySelectorAll('.date-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.date-filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentPeriodFilter = btn.dataset.period;
+          applyFilters();
+        });
+      });
 
       // Client Mode Toggle
       document.getElementById('clientModeBtn')?.addEventListener('click', toggleClientMode);
