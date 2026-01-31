@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!-- saved from url=(0037)https://smac-suivico.github.io/carto/ -->
 <html lang="fr" style="--theme-color: #22c55e; --theme-color-light: rgba(34, 197, 94, 0.15); --theme-color-dark: rgb(4, 167, 64);"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -6,6 +7,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="SMAC Carto">
+  <meta name="theme-color" content="#e10600">
+  <meta name="description" content="Cartographie des affaires SMAC">
+  <!-- PWA Manifest inline -->
+  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiU01BQyBDYXJ0b2dyYXBoaWUiLCJzaG9ydF9uYW1lIjoiU01BQyBDYXJ0byIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZThlOGU4IiwidGhlbWVfY29sb3IiOiIjZTEwNjAwIiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbCw8c3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDEwMCAxMDAnPjxyZWN0IHdpZHRoPScxMDAnIGhlaWdodD0nMTAwJyBmaWxsPSclMjNlMTA2MDAnIHJ4PScyMCcvPjx0ZXh0IHg9JzUwJScgeT0nNTUlJyBkb21pbmFudC1iYXNlbGluZT0nbWlkZGxlJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LXNpemU9JzQwJyBmaWxsPSd3aGl0ZScgZm9udC1mYW1pbHk9J3NhbnMtc2VyaWYnIGZvbnQtd2VpZ2h0PSdib2xkJz5TPC90ZXh0Pjwvc3ZnPiIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn1dfQ==">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23e10600' rx='20'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' font-size='40' fill='white' font-family='sans-serif' font-weight='bold'>S</text></svg>">
   <style>
     :root {
       --red: #e10600;
@@ -813,6 +820,169 @@
       cursor: pointer;
       transition: all 0.2s;
       animation: listItemIn 0.3s ease backwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Vue condensée */
+    body.condensed-view .list-item {
+      padding: 8px 12px;
+    }
+    body.condensed-view .list-item-title {
+      font-size: 13px;
+    }
+    body.condensed-view .list-item-meta {
+      font-size: 11px;
+    }
+    body.condensed-view .list-item-description,
+    body.condensed-view .list-item-tags,
+    body.condensed-view .list-item-products {
+      display: none;
+    }
+    body.condensed-view .list-item-footer {
+      margin-top: 4px;
+    }
+    body.condensed-view .person-badge {
+      padding: 2px 6px;
+      font-size: 10px;
+    }
+
+    /* Alerte dates */
+    .date-alert {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 600;
+      margin-left: 8px;
+      animation: alertPulse 2s ease-in-out infinite;
+    }
+    .date-alert.urgent {
+      background: var(--rose-light);
+      color: var(--rose);
+      border: 1px solid var(--rose);
+    }
+    .date-alert.soon {
+      background: var(--orange-light);
+      color: var(--orange);
+      border: 1px solid var(--orange);
+    }
+    .date-alert.ok {
+      background: var(--green-light);
+      color: var(--green);
+      border: 1px solid var(--green);
+    }
+    @keyframes alertPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Swipe actions mobile */
+    .swipe-actions {
+      position: absolute;
+      top: 0;
+      right: 0;
+      height: 100%;
+      display: flex;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+    }
+    .swipe-action {
+      width: 70px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      font-weight: 600;
+      gap: 4px;
+      cursor: pointer;
+    }
+    .swipe-action span {
+      font-size: 10px;
+    }
+    .swipe-action.edit {
+      background: var(--blue);
+    }
+    .swipe-action.delete {
+      background: var(--rose);
+    }
+    .list-item.swiped {
+      transform: translateX(-140px);
+      transition: transform 0.3s ease;
+    }
+    .list-item.swiped .swipe-actions {
+      transform: translateX(0);
+    }
+    @media (min-width: 769px) {
+      .swipe-actions { display: none; }
+    }
+
+    /* Toggle vue condensée */
+    .view-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      background: var(--gray-100);
+      border-radius: 8px;
+      font-size: 11px;
+      color: var(--gray-600);
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+    .view-toggle:hover {
+      background: var(--gray-200);
+    }
+    .view-toggle.active {
+      background: var(--theme-color);
+      color: white;
+    }
+
+    /* PWA Install prompt */
+    .pwa-install-prompt {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      padding: 12px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 9999;
+      display: none;
+    }
+    .pwa-install-prompt.visible {
+      display: flex;
+      animation: slideUp 0.3s ease;
+    }
+    @keyframes slideUp {
+      from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+      to { transform: translateX(-50%) translateY(0); opacity: 1; }
+    }
+    .pwa-install-btn {
+      padding: 8px 16px;
+      background: var(--theme-color);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .pwa-install-close {
+      background: none;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--gray-500);
     }
 
     .list-item:nth-child(1) { animation-delay: 0.02s; }
@@ -1257,7 +1427,7 @@
     /* Map Controls Custom */
     .map-controls {
       position: absolute;
-      top: 124px;
+      top: 175px;
       left: 10px;
       z-index: 1000;
       display: flex;
@@ -1297,7 +1467,7 @@
     /* Itinerary Panel */
     .itinerary-panel {
       position: absolute;
-      top: 124px;
+      top: 175px;
       left: 60px;
       z-index: 1000;
       background: white;
@@ -2814,7 +2984,7 @@
     /* Products Analysis Panel */
     .products-panel {
       position: absolute;
-      top: 115px;
+      top: 175px;
       left: 20px;
       z-index: 1000;
       background: white;
@@ -3464,9 +3634,8 @@
     }
 
     .logo::before {
-      content: '📍';
-      font-size: 24px;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+      content: none;
+      display: none;
     }
 
     .logo-text {
@@ -3559,7 +3728,7 @@
 
     /* Enhanced map controls */
     .map-controls {
-      top: 80px;
+      top: 130px;
       left: 20px;
     }
 
@@ -3619,6 +3788,19 @@
         grid-template-columns: 1fr;
       }
 
+      .map-controls {
+        top: 115px;
+      }
+
+      .itinerary-panel {
+        top: 115px;
+        left: 60px;
+      }
+
+      .products-panel {
+        top: 115px;
+      }
+
       .stats-panel {
         left: 10px;
         right: 10px;
@@ -3657,17 +3839,35 @@
         top: 52px;
         height: 48px;
         padding: 0 12px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .tabs-container::-webkit-scrollbar {
+        display: none;
+      }
+
+      .tabs-wrapper {
+        flex-wrap: nowrap;
+        min-width: max-content;
       }
 
       .tab-btn {
         padding: 6px 10px;
         font-size: 12px;
+        flex-shrink: 0;
       }
 
       .tab-btn .tab-text {
         max-width: 60px;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+
+      .add-tab-btn {
+        flex-shrink: 0;
       }
 
       main {
@@ -3687,6 +3887,21 @@
 
       .form-group.full {
         grid-column: span 1;
+      }
+
+      .map-controls {
+        top: 105px;
+      }
+
+      .itinerary-panel {
+        top: 105px;
+        left: 10px;
+        right: 10px;
+        width: auto;
+      }
+
+      .products-panel {
+        top: 105px;
       }
 
       .stats-panel {
@@ -4053,6 +4268,13 @@
   <!-- Toast Container -->
   <div class="toast-container" id="toastContainer"></div>
 
+  <!-- PWA Install Prompt -->
+  <div class="pwa-install-prompt" id="pwaInstallPrompt">
+    <span>📱 Installer l'application</span>
+    <button class="pwa-install-btn" id="pwaInstallBtn">Installer</button>
+    <button class="pwa-install-close" id="pwaInstallClose">✕</button>
+  </div>
+
   <!-- Client Mode Indicator -->
   <div class="client-mode-indicator" id="clientModeIndicator">
     👁️ Mode Présentation Client · <span style="opacity:0.8">Données confidentielles masquées</span>
@@ -4218,7 +4440,8 @@
       <div class="stats-header">
         <span class="stats-title">📊 Tableau de Bord Statistiques</span>
         <div class="stats-header-actions">
-          <button class="stats-config-btn" id="statsConfigBtn" title="Configurer l&#39;affichage">⚙️</button>
+          <button class="btn btn-sm" id="exportStatsPdf" title="Exporter les stats en PDF" style="padding:6px 12px;font-size:12px;background:var(--theme-color);color:white;border:none;border-radius:6px;cursor:pointer;">📄 PDF</button>
+          <button class="stats-config-btn" id="statsConfigBtn" title="Configurer l'affichage">⚙️</button>
           <button class="stats-close" id="statsClose">✕</button>
         </div>
       </div>
@@ -4571,6 +4794,9 @@
             <option value="chiffreur">Tri: Chiffreur A-Z</option>
             <option value="mois-remis">Tri: Mois remis</option>
           </select>
+          <button class="view-toggle" id="viewToggle" title="Vue condensée">
+            <span>☰</span>
+          </button>
         </div>
         <div class="filter-pills">
           <span class="pill active" data-filter="Tous">Tous</span>
@@ -6167,6 +6393,25 @@
       return value.toFixed(0) + ' €';
     }
 
+    // Fonction pour générer l'alerte de date
+    function getDateAlert(dateStr) {
+      if (!dateStr) return '';
+      const date = new Date(dateStr);
+      const now = new Date();
+      const diffDays = Math.ceil((date - now) / (1000 * 60 * 60 * 24));
+      
+      if (diffDays < 0) {
+        return `<span class="date-alert urgent">⚠️ Passée</span>`;
+      } else if (diffDays <= 7) {
+        return `<span class="date-alert urgent">🔔 ${diffDays}j</span>`;
+      } else if (diffDays <= 30) {
+        return `<span class="date-alert soon">⏰ ${diffDays}j</span>`;
+      } else if (diffDays <= 90) {
+        return `<span class="date-alert ok">📅 ${Math.ceil(diffDays/7)}sem</span>`;
+      }
+      return '';
+    }
+
     function updatePieChart(gagne, perdu, encours, faste, total, totalMontant = 0) {
       const circumference = 2 * Math.PI * 40; // ~251.2
       
@@ -7260,10 +7505,16 @@
           }
         }
         
+        // Alerte de date prévisionnelle (seulement pour En cours)
+        let dateAlertHtml = '';
+        if (item.statut === 'En cours' && item.datePrevisionnelle) {
+          dateAlertHtml = getDateAlert(item.datePrevisionnelle);
+        }
+        
         return `
           <div class="list-item" data-id="${item.id}" data-idx="${idx}">
             <div class="list-item-header">
-              <span class="list-item-title">${escapeHTML(item.affaires)}</span>
+              <span class="list-item-title">${escapeHTML(item.affaires)}${dateAlertHtml}</span>
               <span class="status ${statusClass}">${statusIcon} ${item.statut}</span>
             </div>
             <div class="list-item-meta">
@@ -7289,6 +7540,10 @@
                 <button class="btn-icon delete" title="Supprimer">🗑️</button>
               </div>
             </div>
+            <div class="swipe-actions">
+              <div class="swipe-action edit" onclick="editItem('${item.id}')">✏️<span>Modifier</span></div>
+              <div class="swipe-action delete" onclick="askDelete('${item.id}')">🗑️<span>Suppr.</span></div>
+            </div>
           </div>
         `;
       }).join('');
@@ -7301,6 +7556,10 @@
         c.querySelectorAll('.list-item').forEach(el => {
           el.addEventListener('click', (e) => {
             if (e.target.closest('.btn-icon')) return;
+            if (el.classList.contains('swiped')) {
+              el.classList.remove('swiped');
+              return;
+            }
             const item = currentList[parseInt(el.dataset.idx)];
             if (item && map) {
               map.flyTo(item.coords, 14, { duration: 0.8 });
@@ -7316,6 +7575,31 @@
             const item = dataByTab[currentTab].find(i => i.id === el.dataset.id);
             if (item?.link) window.open(item.link, '_blank');
           });
+          
+          // Swipe mobile
+          let touchStartX = 0;
+          let touchEndX = 0;
+          
+          el.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+          }, { passive: true });
+          
+          el.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            
+            // Swipe left to show actions
+            if (diff > 80) {
+              c.querySelectorAll('.list-item.swiped').forEach(item => {
+                if (item !== el) item.classList.remove('swiped');
+              });
+              el.classList.add('swiped');
+            }
+            // Swipe right to hide actions
+            else if (diff < -50) {
+              el.classList.remove('swiped');
+            }
+          }, { passive: true });
         });
       });
     }
@@ -8634,6 +8918,178 @@ marker.bindPopup(`
       showToast('Export PDF téléchargé !', 'success');
     }
 
+    // Export des statistiques en PDF
+    function exportStatsPDF() {
+      if (typeof jspdf === 'undefined' || typeof jspdf.jsPDF === 'undefined') {
+        showToast('Chargement en cours...', 'error');
+        return;
+      }
+      
+      const { jsPDF } = jspdf;
+      const doc = new jsPDF('portrait', 'mm', 'a4');
+      
+      const currentTabObj = tabs.find(t => t.id === currentTab);
+      const tabName = currentTabObj ? currentTabObj.name : 'Data';
+      const today = new Date();
+      const dateStr = `${today.getDate().toString().padStart(2,'0')}/${(today.getMonth()+1).toString().padStart(2,'0')}/${today.getFullYear()}`;
+      
+      // Header
+      doc.setFontSize(20);
+      doc.setFont(undefined, 'bold');
+      doc.setTextColor(225, 6, 0);
+      doc.text('SMAC - Rapport Statistiques', 105, 20, { align: 'center' });
+      
+      doc.setFontSize(10);
+      doc.setFont(undefined, 'normal');
+      doc.setTextColor(100);
+      doc.text(`Onglet: ${tabName} | Généré le ${dateStr}`, 105, 28, { align: 'center' });
+      
+      // Ligne de séparation
+      doc.setDrawColor(225, 6, 0);
+      doc.setLineWidth(0.5);
+      doc.line(20, 33, 190, 33);
+      
+      let y = 45;
+      
+      // Statistiques globales
+      const data = dataByTab[currentTab] || [];
+      const filtered = currentList || [];
+      
+      const totalAffaires = filtered.length;
+      const gagne = filtered.filter(i => i.statut === 'Gagné').length;
+      const perdu = filtered.filter(i => i.statut === 'Perdu').length;
+      const encours = filtered.filter(i => i.statut === 'En cours').length;
+      const faste = filtered.filter(i => i.statut === 'Faste').length;
+      
+      let totalMontant = 0;
+      let totalGagne = 0;
+      let totalMarge = 0;
+      let countMarge = 0;
+      
+      filtered.forEach(item => {
+        const montant = parseMontant(item.montant) || 0;
+        totalMontant += montant;
+        if (item.statut === 'Gagné') totalGagne += montant;
+        
+        let marge = item.marge;
+        if (!marge && item.notes && item.notes.includes('Marge:')) {
+          const match = item.notes.match(/Marge:\s*([\d.]+)%/);
+          if (match) marge = parseFloat(match[1]);
+        }
+        if (marge) {
+          totalMarge += parseFloat(marge);
+          countMarge++;
+        }
+      });
+      
+      const avgMarge = countMarge > 0 ? (totalMarge / countMarge).toFixed(1) : '0';
+      const txConversion = (gagne + perdu) > 0 ? Math.round((gagne / (gagne + perdu)) * 100) : 0;
+      
+      // Section KPIs
+      doc.setFontSize(14);
+      doc.setFont(undefined, 'bold');
+      doc.setTextColor(30);
+      doc.text('📊 Indicateurs Clés', 20, y);
+      y += 10;
+      
+      // KPIs en boîtes
+      const kpis = [
+        { label: 'Affaires', value: totalAffaires.toString() },
+        { label: 'CA Total', value: formatMontantShort(totalMontant) },
+        { label: 'CA Gagné', value: formatMontantShort(totalGagne) },
+        { label: 'Marge Moy.', value: avgMarge + '%' },
+        { label: 'Taux Conversion', value: txConversion + '%' }
+      ];
+      
+      doc.setFontSize(10);
+      kpis.forEach((kpi, i) => {
+        const x = 20 + (i * 35);
+        doc.setFillColor(250, 250, 250);
+        doc.roundedRect(x, y, 32, 18, 2, 2, 'F');
+        doc.setFont(undefined, 'bold');
+        doc.setTextColor(225, 6, 0);
+        doc.text(kpi.value, x + 16, y + 7, { align: 'center' });
+        doc.setFont(undefined, 'normal');
+        doc.setTextColor(100);
+        doc.setFontSize(8);
+        doc.text(kpi.label, x + 16, y + 14, { align: 'center' });
+        doc.setFontSize(10);
+      });
+      
+      y += 30;
+      
+      // Répartition par statut
+      doc.setFontSize(14);
+      doc.setFont(undefined, 'bold');
+      doc.setTextColor(30);
+      doc.text('🎯 Répartition par Statut', 20, y);
+      y += 10;
+      
+      const statuts = [
+        { label: 'Gagné', count: gagne, color: [34, 197, 94] },
+        { label: 'Perdu', count: perdu, color: [244, 63, 94] },
+        { label: 'En cours', count: encours, color: [245, 158, 11] },
+        { label: 'Faste', count: faste, color: [139, 92, 246] }
+      ];
+      
+      statuts.forEach((s, i) => {
+        const barWidth = totalAffaires > 0 ? (s.count / totalAffaires) * 120 : 0;
+        doc.setFillColor(240, 240, 240);
+        doc.roundedRect(60, y + (i * 10), 120, 7, 1, 1, 'F');
+        doc.setFillColor(...s.color);
+        if (barWidth > 0) doc.roundedRect(60, y + (i * 10), barWidth, 7, 1, 1, 'F');
+        
+        doc.setFont(undefined, 'normal');
+        doc.setTextColor(30);
+        doc.text(s.label, 20, y + 5 + (i * 10));
+        doc.text(`${s.count} (${totalAffaires > 0 ? Math.round(s.count/totalAffaires*100) : 0}%)`, 185, y + 5 + (i * 10));
+      });
+      
+      y += 55;
+      
+      // Top 5 affaires
+      doc.setFontSize(14);
+      doc.setFont(undefined, 'bold');
+      doc.setTextColor(30);
+      doc.text('🏆 Top 5 Affaires (par montant)', 20, y);
+      y += 8;
+      
+      const top5 = [...filtered]
+        .sort((a, b) => (parseMontant(b.montant) || 0) - (parseMontant(a.montant) || 0))
+        .slice(0, 5);
+      
+      doc.autoTable({
+        startY: y,
+        head: [['#', 'Affaire', 'Client', 'Montant', 'Statut']],
+        body: top5.map((item, i) => [
+          (i + 1).toString(),
+          item.affaires?.substring(0, 30) || '-',
+          item.client?.substring(0, 20) || '-',
+          formatMontantShort(parseMontant(item.montant) || 0),
+          item.statut || '-'
+        ]),
+        theme: 'striped',
+        styles: { fontSize: 9, cellPadding: 2 },
+        headStyles: { fillColor: [225, 6, 0], textColor: [255, 255, 255] },
+        columnStyles: {
+          0: { cellWidth: 10 },
+          1: { cellWidth: 60 },
+          2: { cellWidth: 40 },
+          3: { cellWidth: 35, halign: 'right' },
+          4: { cellWidth: 25 }
+        },
+        margin: { left: 20, right: 20 }
+      });
+      
+      // Footer
+      doc.setFontSize(8);
+      doc.setTextColor(150);
+      doc.text('SMAC - Cartographie des affaires | Document généré automatiquement', 105, 285, { align: 'center' });
+      
+      doc.save(`SMAC_Stats_${tabName}_${dateStr.replace(/\//g, '-')}.pdf`);
+      showToast('📊 Rapport statistiques exporté !', 'success');
+    }
+
     /* Initialize */
     document.addEventListener('DOMContentLoaded', async () => {
       // Load CSS
@@ -9406,6 +9862,55 @@ marker.bindPopup(`
       // Export
       document.getElementById('exportExcel')?.addEventListener('click', exportExcel);
       document.getElementById('exportPdf')?.addEventListener('click', exportPDF);
+      
+      // Vue condensée toggle
+      document.getElementById('viewToggle')?.addEventListener('click', () => {
+        document.body.classList.toggle('condensed-view');
+        const btn = document.getElementById('viewToggle');
+        btn.classList.toggle('active');
+        const isCondensed = document.body.classList.contains('condensed-view');
+        localStorage.setItem(`${SITE_ID}_condensedView`, isCondensed);
+        showToast(isCondensed ? '📋 Vue condensée activée' : '📄 Vue normale activée', 'info');
+      });
+      
+      // Restaurer la vue condensée
+      if (localStorage.getItem(`${SITE_ID}_condensedView`) === 'true') {
+        document.body.classList.add('condensed-view');
+        document.getElementById('viewToggle')?.classList.add('active');
+      }
+      
+      // Export Stats PDF
+      document.getElementById('exportStatsPdf')?.addEventListener('click', exportStatsPDF);
+      
+      // PWA Install
+      let deferredPrompt;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        // Afficher le prompt après 5 secondes
+        setTimeout(() => {
+          if (!localStorage.getItem('pwaInstallDismissed')) {
+            document.getElementById('pwaInstallPrompt')?.classList.add('visible');
+          }
+        }, 5000);
+      });
+      
+      document.getElementById('pwaInstallBtn')?.addEventListener('click', async () => {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          const { outcome } = await deferredPrompt.userChoice;
+          if (outcome === 'accepted') {
+            showToast('✅ Application installée !', 'success');
+          }
+          deferredPrompt = null;
+        }
+        document.getElementById('pwaInstallPrompt')?.classList.remove('visible');
+      });
+      
+      document.getElementById('pwaInstallClose')?.addEventListener('click', () => {
+        document.getElementById('pwaInstallPrompt')?.classList.remove('visible');
+        localStorage.setItem('pwaInstallDismissed', 'true');
+      });
       
       // Filtre par période
       document.querySelectorAll('.date-filter-btn').forEach(btn => {
