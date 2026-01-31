@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!-- saved from url=(0037)https://smac-suivico.github.io/carto/ -->
 <html lang="fr" style="--theme-color: #22c55e; --theme-color-light: rgba(34, 197, 94, 0.15); --theme-color-dark: rgb(4, 167, 64);"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -3447,9 +3448,621 @@
       filter: blur(6px);
       user-select: none;
     }
-  </style>
+  
+
+    /* ===== MODERN ENHANCEMENTS ===== */
+
+    /* Glassmorphism improvements */
+    header, .tabs-container {
+      background: rgba(255, 255, 255, 0.75);
+    }
+
+    /* Enhanced logo */
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo::before {
+      content: '📍';
+      font-size: 24px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+
+    .logo-text {
+      font-size: 18px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--theme-color), var(--theme-color-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.5px;
+    }
+
+    /* Enhanced buttons */
+    .btn {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn:hover::after {
+      left: 100%;
+    }
+
+    /* Enhanced list items */
+    .list-item {
+      background: white;
+      border-radius: 12px;
+      margin: 8px;
+      padding: 14px 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border: 1px solid transparent;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .list-item:hover {
+      transform: translateX(6px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      border-color: var(--theme-color-light);
+    }
+
+    /* Enhanced status badges */
+    .status {
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+      font-size: 10px;
+    }
+
+    /* Enhanced modal */
+    .modal {
+      border-radius: 16px;
+      box-shadow: 0 24px 48px rgba(0,0,0,0.2);
+    }
+
+    .modal-header {
+      background: rgba(255,255,255,0.5);
+      border-radius: 16px 16px 0 0;
+    }
+
+    /* Enhanced stats panel */
+    .stats-panel {
+      border-radius: 20px;
+      box-shadow: 0 24px 48px rgba(0,0,0,0.15);
+    }
+
+    .stats-header {
+      background: linear-gradient(135deg, var(--theme-color), var(--theme-color-dark));
+      border-radius: 20px 20px 0 0;
+    }
+
+    .stats-card {
+      border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .stats-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    /* Enhanced map controls */
+    .map-controls {
+      top: 80px;
+      left: 20px;
+    }
+
+    .map-control-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .map-control-btn:hover {
+      transform: scale(1.08);
+    }
+
+    /* Enhanced toast */
+    .toast {
+      border-radius: 12px;
+      padding: 14px 24px;
+    }
+
+    /* Smooth animations */
+    .tab-content {
+      animation: fadeInUp 0.4s ease;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Enhanced scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--gray-300);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--gray-400);
+    }
+
+    /* ===== MOBILE ENHANCEMENTS ===== */
+    @media (max-width: 1024px) {
+      .sidebar {
+        display: none;
+      }
+
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-panel {
+        left: 10px;
+        right: 10px;
+        width: auto;
+        min-width: auto;
+        transform: none;
+        top: 100px;
+        border-radius: 16px;
+      }
+
+      .stats-panel.open {
+        animation: statsSlideInMobile 0.3s ease;
+      }
+
+      @keyframes statsSlideInMobile {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+    }
+
+    @media (max-width: 768px) {
+      header {
+        height: 52px;
+        padding: 0 12px;
+      }
+
+      .logo-text {
+        font-size: 16px;
+      }
+
+      .logo-subtitle {
+        display: none;
+      }
+
+      .tabs-container {
+        top: 52px;
+        height: 48px;
+        padding: 0 12px;
+      }
+
+      .tab-btn {
+        padding: 6px 10px;
+        font-size: 12px;
+      }
+
+      .tab-btn .tab-text {
+        max-width: 60px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      main {
+        padding-top: 100px;
+      }
+
+      .modal {
+        width: 95%;
+        max-height: 85vh;
+        border-radius: 12px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .form-group.full {
+        grid-column: span 1;
+      }
+
+      .stats-panel {
+        top: 90px;
+        left: 8px;
+        right: 8px;
+        max-height: calc(100vh - 110px);
+      }
+
+      .stats-header {
+        padding: 14px 16px;
+      }
+
+      .stats-title {
+        font-size: 15px;
+      }
+
+      .stats-summary {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .stats-card {
+        padding: 14px;
+      }
+
+      .stats-card-value {
+        font-size: 22px;
+      }
+
+      .toast-container {
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .tab-btn {
+        padding: 5px 8px;
+      }
+
+      .tab-dot {
+        width: 6px;
+        height: 6px;
+      }
+
+      .stats-card-value {
+        font-size: 18px;
+      }
+
+      .stats-card-label {
+        font-size: 9px;
+      }
+    }
+
+    /* Mobile menu button enhancement */
+    .mobile-menu-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: all 0.2s;
+    }
+
+    .mobile-menu-btn:hover {
+      background: var(--gray-50);
+      transform: scale(1.05);
+    }
+
+    /* Mobile sidebar enhancement */
+    .mobile-sidebar-content {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-left: 1px solid rgba(255, 255, 255, 0.5);
+    }
+
+    /* ===== INTRO PAGE STYLES ===== */
+    .intro-page {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a3e 50%, #16213e 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10000;
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), 
+                  transform 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                  visibility 0.8s;
+      overflow: hidden;
+    }
+
+    .intro-page.hidden {
+      opacity: 0;
+      transform: scale(1.05);
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .intro-particles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      animation: float 15s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+    }
+
+    .intro-logo {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      animation: logoReveal 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    @keyframes logoReveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .intro-logo-icon {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 20px;
+      background: linear-gradient(135deg, var(--theme-color) 0%, var(--theme-color-dark) 100%);
+      border-radius: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      box-shadow: 0 20px 60px rgba(225, 6, 0, 0.4), 
+                  0 0 0 4px rgba(255, 255, 255, 0.1),
+                  0 0 60px rgba(225, 6, 0, 0.2);
+      animation: logoPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes logoPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .intro-logo h1 {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 42px;
+      font-weight: 800;
+      color: white;
+      margin: 0;
+      letter-spacing: -1px;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .intro-logo p {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.7);
+      margin: 8px 0 0;
+      font-weight: 500;
+    }
+
+    .intro-features {
+      display: flex;
+      gap: 16px;
+      margin-top: 40px;
+      z-index: 10;
+      animation: featuresReveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+      opacity: 0;
+      transform: translateY(20px);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    @keyframes featuresReveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .intro-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .intro-feature:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .intro-feature span:first-child { font-size: 18px; }
+    .intro-feature span:last-child {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 500;
+    }
+
+    .intro-access-btn {
+      margin-top: 40px;
+      padding: 16px 40px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(135deg, var(--theme-color) 0%, var(--theme-color-dark) 100%);
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      position: relative;
+      z-index: 10;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(225, 6, 0, 0.4);
+      animation: btnReveal 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards, 
+                 btnFloat 3s ease-in-out infinite 1s;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+    }
+
+    @keyframes btnReveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes btnFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .intro-access-btn:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 15px 50px rgba(225, 6, 0, 0.5);
+    }
+
+    .intro-access-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .intro-version {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.4);
+      z-index: 10;
+    }
+
+    .intro-loading {
+      position: absolute;
+      bottom: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      align-items: center;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .intro-loading.active { display: flex; }
+
+    .intro-loading-spinner {
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-top-color: var(--theme-color);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .intro-loading span {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    /* Mobile intro */
+    @media (max-width: 768px) {
+      .intro-logo h1 {
+        font-size: 32px;
+      }
+
+      .intro-logo p {
+        font-size: 14px;
+      }
+
+      .intro-logo-icon {
+        width: 80px;
+        height: 80px;
+        font-size: 36px;
+      }
+
+      .intro-features {
+        flex-direction: column;
+        gap: 10px;
+        padding: 0 20px;
+      }
+
+      .intro-feature {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .intro-access-btn {
+        padding: 14px 32px;
+        font-size: 15px;
+      }
+    }
+</style>
 </head>
 <body>
+
+  <!-- INTRO PAGE -->
+  <div class="intro-page" id="introPage">
+    <div class="intro-particles" id="introParticles"></div>
+
+    <div class="intro-logo">
+      <div class="intro-logo-icon">📍</div>
+      <h1>SMAC</h1>
+      <p>Cartographie des affaires</p>
+    </div>
+
+    <div class="intro-features">
+      <div class="intro-feature">
+        <span>🗺️</span>
+        <span>Cartographie interactive</span>
+      </div>
+      <div class="intro-feature">
+        <span>📊</span>
+        <span>Statistiques avancées</span>
+      </div>
+      <div class="intro-feature">
+        <span>🔒</span>
+        <span>Données sécurisées</span>
+      </div>
+    </div>
+
+    <button class="intro-access-btn" id="introAccessBtn">
+      Explorer les affaires
+    </button>
+
+    <div class="intro-loading" id="introLoading">
+      <div class="intro-loading-spinner"></div>
+      <span>Chargement...</span>
+    </div>
+
+    <div class="intro-version">Version 2.0 - Site B</div>
+  </div>
+
+
 
   <!-- Toast Container -->
   <div class="toast-container" id="toastContainer"></div>
@@ -6745,7 +7358,25 @@
         const marker = L.marker([lat, lng], { icon });
         marker.itemData = item; // Store item data for itinerary
         
-        marker.bindPopup(`
+        
+
+        // Add click handler to scroll to list item
+        marker.on('click', () => {
+          // Find the list item for this marker
+          const listContainer = document.querySelector('.list-container');
+          if (listContainer) {
+            const listItem = listContainer.querySelector(`[data-id="${item.id}"]`);
+            if (listItem) {
+              listItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              // Highlight the item briefly
+              listItem.style.background = 'var(--theme-color-light)';
+              setTimeout(() => {
+                listItem.style.background = '';
+              }, 1000);
+            }
+          }
+        });
+marker.bindPopup(`
           <div class="popup-content">
             <div class="popup-title">${escapeHTML(item.affaires)}</div>
             <div class="popup-client">${escapeHTML(item.client)} · ${escapeHTML(item.eg)}</div>
@@ -9025,4 +9656,51 @@
   </script>
 
 
-<script src="./Carto-suivico_files/leaflet.js.téléchargement" async=""></script><script src="./Carto-suivico_files/leaflet.markercluster.js.téléchargement" async=""></script><script src="./Carto-suivico_files/xlsx.full.min.js.téléchargement" async=""></script><script src="./Carto-suivico_files/jspdf.umd.min.js.téléchargement" async=""></script><script src="./Carto-suivico_files/jspdf.plugin.autotable.min.js.téléchargement" async=""></script></body></html>
+<script src="./Carto-suivico_files/leaflet.js.téléchargement" async=""></script><script src="./Carto-suivico_files/leaflet.markercluster.js.téléchargement" async=""></script><script src="./Carto-suivico_files/xlsx.full.min.js.téléchargement" async=""></script><script src="./Carto-suivico_files/jspdf.umd.min.js.téléchargement" async=""></script><script src="./Carto-suivico_files/jspdf.plugin.autotable.min.js.téléchargement" async=""></script>
+  <!-- INTRO PAGE JAVASCRIPT -->
+  <script>
+    // Create floating particles
+    function createParticles() {
+      const container = document.getElementById('introParticles');
+      if (!container) return;
+
+      for (let i = 0; i < 25; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 15 + 's';
+        particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+        container.appendChild(particle);
+      }
+    }
+
+    // Handle intro access button click
+    document.getElementById('introAccessBtn')?.addEventListener('click', function() {
+      const loading = document.getElementById('introLoading');
+      const btn = document.getElementById('introAccessBtn');
+
+      if (loading) loading.classList.add('active');
+      if (btn) btn.style.display = 'none';
+
+      // Simulate loading and hide intro
+      setTimeout(function() {
+        const introPage = document.getElementById('introPage');
+        if (introPage) {
+          introPage.classList.add('hidden');
+
+          // Remove intro from DOM after animation
+          setTimeout(function() {
+            introPage.style.display = 'none';
+          }, 800);
+        }
+      }, 600);
+    });
+
+    // Initialize particles on load
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', createParticles);
+    } else {
+      createParticles();
+    }
+  </script>
+</body></html>
