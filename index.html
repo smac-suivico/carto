@@ -3973,6 +3973,34 @@
       transform: scale(1.05);
     }
 
+    /* Mobile affaires button */
+    .mobile-affaires-btn {
+      display: none;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      background: var(--theme-color);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .mobile-affaires-btn:hover {
+      filter: brightness(1.1);
+      transform: scale(1.02);
+    }
+
+    @media (max-width: 1024px) {
+      .mobile-affaires-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+      }
+    }
+
     /* Mobile sidebar enhancement */
     .mobile-sidebar-content {
       background: rgba(255, 255, 255, 0.95);
@@ -4339,6 +4367,9 @@
       </button>
       <button class="btn btn-ghost btn-sm mobile-menu-btn" id="mobileMenuBtn">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+      <button class="btn btn-secondary btn-sm mobile-affaires-btn" id="mobileAffairesBtn" title="Voir les affaires">
+        📋 Affaires
       </button>
     </div>
   </header>
@@ -9927,6 +9958,9 @@ marker.bindPopup(`
 
       // Mobile
       document.getElementById('mobileMenuBtn')?.addEventListener('click', () => {
+        document.getElementById('mobileSidebar').classList.add('open');
+      });
+      document.getElementById('mobileAffairesBtn')?.addEventListener('click', () => {
         document.getElementById('mobileSidebar').classList.add('open');
       });
       document.getElementById('mobileBackdrop')?.addEventListener('click', () => {
