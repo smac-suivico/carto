@@ -9156,7 +9156,7 @@ marker.bindPopup(`
       renderTagsInput();
       
       // Charger les chiffreurs (nouveau format multi ou ancien format simple)
-      if (item.chiffreurs && Array.isArray(item.chiffreurs)) {
+      if (item.chiffreurs && Array.isArray(item.chiffreurs) && item.chiffreurs.length > 0) {
         currentChiffreurs = item.chiffreurs;
       } else if (item.chiffreur) {
         // Migration depuis ancien format
@@ -9167,7 +9167,7 @@ marker.bindPopup(`
       renderChiffreursList();
       
       // Charger les métreurs (nouveau format multi ou ancien format simple)
-      if (item.metreurs && Array.isArray(item.metreurs)) {
+      if (item.metreurs && Array.isArray(item.metreurs) && item.metreurs.length > 0) {
         currentMetreurs = item.metreurs;
       } else if (item.metreur) {
         // Migration depuis ancien format
@@ -10386,7 +10386,7 @@ marker.bindPopup(`
         else if (item.statut === 'En cours') totalEncours += montant;
         else if (item.statut === 'Perdu') totalPerdu += montant;
         
-        if (item.chiffreurs && Array.isArray(item.chiffreurs)) {
+        if (item.chiffreurs && Array.isArray(item.chiffreurs) && item.chiffreurs.length > 0) {
           item.chiffreurs.forEach(ch => {
             if (!ch.name) return;
             if (!chiffreurStats[ch.name]) chiffreurStats[ch.name] = { total: 0, count: 0, gagne: 0 };
@@ -10401,7 +10401,7 @@ marker.bindPopup(`
           if (item.statut === 'Gagné') chiffreurStats[item.chiffreur].gagne += montant;
         }
         
-        if (item.metreurs && Array.isArray(item.metreurs)) {
+        if (item.metreurs && Array.isArray(item.metreurs) && item.metreurs.length > 0) {
           item.metreurs.forEach(mt => {
             if (!mt.name) return;
             if (!metreurStats[mt.name]) metreurStats[mt.name] = { total: 0, count: 0, gagne: 0 };
