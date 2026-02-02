@@ -238,6 +238,33 @@
       transition: background 0.3s ease;
     }
 
+    /* Commission Tab Special Style */
+    .tab-btn.commission-tab {
+      cursor: pointer;
+      background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+      border-color: #fca5a5;
+      margin-left: 8px;
+    }
+    .tab-btn.commission-tab:hover {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      border-color: #f87171;
+    }
+    .tab-btn.commission-tab.active {
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      color: white;
+      border-color: #991b1b;
+      text-shadow: none;
+    }
+    .tab-btn.commission-tab .tab-dot {
+      box-shadow: 0 0 0 2px white;
+    }
+    .tab-btn.commission-tab .drag-handle {
+      display: none;
+    }
+    .tab-btn.commission-tab .tab-actions {
+      display: none;
+    }
+
     /* Drag states */
     .tab-btn.dragging {
       opacity: 0.5;
@@ -793,6 +820,23 @@
       margin-left: 8px;
     }
 
+    .commission-badge {
+      display: inline-flex;
+      align-items: center;
+      margin-left: 6px;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .source-tab-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 600;
+      margin-right: 6px;
+    }
+
     /* Stats Bar */
     .stats-bar {
       display: flex;
@@ -1293,6 +1337,48 @@
     .form-textarea {
       resize: vertical;
       min-height: 80px;
+    }
+
+    /* Toggle Switch */
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .toggle-slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--gray-300);
+      transition: 0.3s;
+      border-radius: 24px;
+    }
+    .toggle-slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: 0.3s;
+      border-radius: 50%;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .toggle-switch input:checked + .toggle-slider {
+      background-color: var(--green);
+    }
+    .toggle-switch input:checked + .toggle-slider:before {
+      transform: translateX(20px);
     }
 
     /* Chips Select */
@@ -6113,6 +6199,16 @@
             </select>
           </div>
           <div class="form-group">
+            <label class="form-label">Commission de marché</label>
+            <div class="toggle-container" style="display:flex;align-items:center;gap:10px;margin-top:4px;">
+              <label class="toggle-switch">
+                <input type="checkbox" id="mCommission">
+                <span class="toggle-slider"></span>
+              </label>
+              <span id="commissionLabel" style="font-size:13px;color:var(--gray-600);">Non</span>
+            </div>
+          </div>
+          <div class="form-group">
             <label class="form-label">Montant (€)</label>
             <input type="text" class="form-input" id="mMontant" placeholder="1 500 000">
           </div>
@@ -6916,6 +7012,7 @@
     let removingProtectionTabId = null;
     const unlockedTabs = new Set(); // Onglets déverrouillés pendant cette session
     let clusterEnabled = true; // Toggle cluster on/off
+    const COMMISSION_TAB_ID = '__commission__'; // ID spécial pour l'onglet Commission de marché
 
     /* Objectifs configurables */
     let objectifsConfig = JSON.parse(localStorage.getItem(`${SITE_ID}_objectifs_config`) || '{}');
@@ -7268,6 +7365,7 @@
       
       wrapper.innerHTML = '';
       
+      // Render normal tabs
       tabs.forEach((tab, index) => {
         const isProtected = !!tab.passwordHash;
         const isLocked = isTabLocked(tab.id);
@@ -7339,6 +7437,45 @@
         btn.addEventListener('dragleave', handleDragLeave);
         btn.addEventListener('drop', handleDrop);
       });
+      
+      // Add special Commission tab
+      const commissionCount = getCommissionAffaires().length;
+      const commissionBtn = document.createElement('button');
+      commissionBtn.className = `tab-btn commission-tab ${currentTab === COMMISSION_TAB_ID ? 'active' : ''}`;
+      commissionBtn.dataset.tab = COMMISSION_TAB_ID;
+      commissionBtn.draggable = false;
+      commissionBtn.innerHTML = `
+        <span class="tab-dot" style="background:#dc2626"></span>
+        <span class="tab-name">📋 Commission</span>
+        <span class="tab-count">${commissionCount}</span>
+      `;
+      commissionBtn.title = "Affaires avec Commission de marché";
+      wrapper.appendChild(commissionBtn);
+      
+      commissionBtn.addEventListener('click', () => {
+        switchTab(COMMISSION_TAB_ID);
+      });
+    }
+    
+    // Récupère toutes les affaires avec commission === true de tous les onglets
+    function getCommissionAffaires() {
+      const allCommission = [];
+      Object.keys(dataByTab).forEach(tabId => {
+        const tabData = dataByTab[tabId] || [];
+        const tabInfo = tabs.find(t => t.id === tabId);
+        tabData.forEach(item => {
+          if (item.commission === true) {
+            // Ajouter l'info de l'onglet source pour référence
+            allCommission.push({
+              ...item,
+              _sourceTab: tabId,
+              _sourceTabName: tabInfo?.name || tabId,
+              _sourceTabColor: tabInfo?.color || '#666'
+            });
+          }
+        });
+      });
+      return allCommission;
     }
 
     /* Drag & Drop Handlers */
@@ -7428,10 +7565,24 @@
       updateThemeColor();
       renderTabs();
       applyFilters();
+      
+      // Cacher le bouton Ajouter sur l'onglet Commission (lecture seule)
+      const addBtn = document.getElementById('addBtn');
+      if (addBtn) {
+        addBtn.style.display = tabId === COMMISSION_TAB_ID ? 'none' : '';
+      }
     }
 
     /* Theme Color System */
     function updateThemeColor() {
+      // Pour l'onglet Commission, utiliser le rouge
+      if (currentTab === COMMISSION_TAB_ID) {
+        document.documentElement.style.setProperty('--theme-color', '#dc2626');
+        document.documentElement.style.setProperty('--theme-color-light', 'rgba(220, 38, 38, 0.15)');
+        document.documentElement.style.setProperty('--theme-color-dark', '#991b1b');
+        return;
+      }
+      
       const tab = tabs.find(t => t.id === currentTab);
       const color = tab?.color || '#e10600';
       
@@ -8347,7 +8498,7 @@
     /* Filter & Sort */
     function applyFilters() {
       // SECURITY: Si l'onglet est verrouillé, ne pas afficher les données
-      if (isTabLocked(currentTab)) {
+      if (currentTab !== COMMISSION_TAB_ID && isTabLocked(currentTab)) {
         currentList = [];
         renderList([]);
         renderMap([]);
@@ -8357,7 +8508,11 @@
         return;
       }
       
-      const data = dataByTab[currentTab] || [];
+      // Pour l'onglet Commission, récupérer toutes les affaires avec commission=true
+      const data = currentTab === COMMISSION_TAB_ID 
+        ? getCommissionAffaires() 
+        : (dataByTab[currentTab] || []);
+      
       const fClient = (document.getElementById('fClient')?.value || '').toLowerCase();
       const fEG = (document.getElementById('fEG')?.value || '').toLowerCase();
       const fChiffreur = (document.getElementById('fChiffreur')?.value || '').toLowerCase();
@@ -8644,15 +8799,25 @@
           dateAlertHtml = getDateAlert(item.datePrevisionnelle);
         }
         
+        // Badge Commission si applicable
+        let commissionBadge = item.commission ? '<span class="commission-badge" title="Commission de marché">📋</span>' : '';
+        
+        // Badge source tab (pour l'onglet Commission)
+        let sourceTabBadge = '';
+        if (currentTab === COMMISSION_TAB_ID && item._sourceTabName) {
+          sourceTabBadge = `<span class="source-tab-badge" style="background:${item._sourceTabColor}20;color:${item._sourceTabColor};border:1px solid ${item._sourceTabColor}40;">📁 ${escapeHTML(item._sourceTabName)}</span>`;
+        }
+        
         return `
-          <div class="list-item" data-id="${item.id}" data-idx="${idx}">
+          <div class="list-item" data-id="${item.id}" data-idx="${idx}" data-source-tab="${item._sourceTab || ''}">
             <div class="list-item-header">
-              <span class="list-item-title">${escapeHTML(item.affaires)}${dateAlertHtml}</span>
+              <span class="list-item-title">${escapeHTML(item.affaires)}${commissionBadge}${dateAlertHtml}</span>
               <span class="status ${statusClass}">${statusIcon} ${item.statut}</span>
             </div>
             <div class="list-item-meta">
               <span class="client-eg-info">${escapeHTML(item.client)} · ${escapeHTML(item.eg)}</span>
               <span class="adresse-info">📍 ${escapeHTML(item.adresse)}${item.moisRemis ? `<span class="list-item-mois-remis">📅 ${formatMoisRemis(item.moisRemis)}</span>` : ''}</span>
+              ${sourceTabBadge}
               ${responsableHtml}
               ${chiffreursHtml}
               ${metreursHtml}
@@ -8861,6 +9026,8 @@ marker.bindPopup(`
       const complexeCategorySelect = document.getElementById('mComplexeCategory');
       if (complexeCategorySelect) complexeCategorySelect.value = '';
       document.getElementById('mStatut').value = 'En cours';
+      document.getElementById('mCommission').checked = false;
+      document.getElementById('commissionLabel').textContent = 'Non';
       document.querySelectorAll('#mSmacChips .chip').forEach(c => c.classList.remove('active'));
       currentTags = [];
       currentChiffreurs = [];
@@ -8878,8 +9045,27 @@ marker.bindPopup(`
     }
 
     function editItem(id) {
-      const item = dataByTab[currentTab].find(i => i.id === id);
+      // Pour l'onglet Commission, trouver l'affaire dans son onglet source
+      let item, sourceTab = currentTab;
+      
+      if (currentTab === COMMISSION_TAB_ID) {
+        // Chercher l'affaire avec son _sourceTab
+        const commissionItem = currentList.find(i => i.id === id);
+        if (commissionItem && commissionItem._sourceTab) {
+          sourceTab = commissionItem._sourceTab;
+          item = dataByTab[sourceTab]?.find(i => i.id === id);
+        }
+      } else {
+        item = dataByTab[currentTab].find(i => i.id === id);
+      }
+      
       if (!item) return;
+      
+      // Temporairement changer currentTab pour que saveModal fonctionne
+      const originalTab = currentTab;
+      if (currentTab === COMMISSION_TAB_ID) {
+        currentTab = sourceTab;
+      }
       
       updateAllDropdowns();
       
@@ -8895,6 +9081,8 @@ marker.bindPopup(`
       document.getElementById('mDateDevis').value = item.dateDevis || '';
       document.getElementById('mMoisRemis').value = item.moisRemis || '';
       document.getElementById('mStatut').value = item.statut || 'En cours';
+      document.getElementById('mCommission').checked = item.commission || false;
+      document.getElementById('commissionLabel').textContent = item.commission ? 'Oui' : 'Non';
       document.getElementById('mMontant').value = item.montant || '';
       document.getElementById('mSurface').value = item.surface || '';
       document.getElementById('mResponsable').value = item.responsable || '';
@@ -9108,6 +9296,7 @@ marker.bindPopup(`
         dateDevis: document.getElementById('mDateDevis').value,
         moisRemis: document.getElementById('mMoisRemis').value,
         statut: document.getElementById('mStatut').value,
+        commission: document.getElementById('mCommission').checked,
         montant: document.getElementById('mMontant').value.trim() || '-',
         surface: document.getElementById('mSurface').value.trim(),
         responsable: document.getElementById('mResponsable').value.trim(),
@@ -10904,6 +11093,11 @@ marker.bindPopup(`
       document.getElementById('modalClose')?.addEventListener('click', closeModal);
       document.getElementById('modalCancel')?.addEventListener('click', closeModal);
       document.getElementById('modalSave')?.addEventListener('click', saveModal);
+      
+      // Commission toggle label update
+      document.getElementById('mCommission')?.addEventListener('change', (e) => {
+        document.getElementById('commissionLabel').textContent = e.target.checked ? 'Oui' : 'Non';
+      });
 
       // Multi-Chiffreurs & Multi-Métreurs buttons
       document.getElementById('addChiffreurBtn')?.addEventListener('click', addChiffreur);
