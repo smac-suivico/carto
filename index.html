@@ -7013,6 +7013,7 @@
     const unlockedTabs = new Set(); // Onglets déverrouillés pendant cette session
     let clusterEnabled = true; // Toggle cluster on/off
     const COMMISSION_TAB_ID = '__commission__'; // ID spécial pour l'onglet Commission de marché
+    let editingFromCommissionTab = false; // Mémorise si on édite depuis l'onglet Commission
 
     /* Objectifs configurables */
     let objectifsConfig = JSON.parse(localStorage.getItem(`${SITE_ID}_objectifs_config`) || '{}');
@@ -8870,7 +8871,8 @@
           el.querySelector('.delete')?.addEventListener('click', () => askDelete(el.dataset.id));
           el.querySelector('.duplicate')?.addEventListener('click', () => duplicateItem(el.dataset.id));
           el.querySelector('.link')?.addEventListener('click', () => {
-            const item = dataByTab[currentTab].find(i => i.id === el.dataset.id);
+            // Utiliser currentList qui contient les bonnes données (même pour l'onglet Commission)
+            const item = currentList.find(i => i.id === el.dataset.id);
             if (item?.link) window.open(item.link, '_blank');
           });
           
@@ -9047,8 +9049,10 @@ marker.bindPopup(`
     function editItem(id) {
       // Pour l'onglet Commission, trouver l'affaire dans son onglet source
       let item, sourceTab = currentTab;
+      editingFromCommissionTab = false;
       
       if (currentTab === COMMISSION_TAB_ID) {
+        editingFromCommissionTab = true;
         // Chercher l'affaire avec son _sourceTab
         const commissionItem = currentList.find(i => i.id === id);
         if (commissionItem && commissionItem._sourceTab) {
@@ -9062,7 +9066,6 @@ marker.bindPopup(`
       if (!item) return;
       
       // Temporairement changer currentTab pour que saveModal fonctionne
-      const originalTab = currentTab;
       if (currentTab === COMMISSION_TAB_ID) {
         currentTab = sourceTab;
       }
@@ -9139,8 +9142,23 @@ marker.bindPopup(`
       openModal();
     }
 
+    let duplicatingSourceTab = null; // Onglet source pour duplication depuis Commission
+    
     function duplicateItem(id) {
-      const item = dataByTab[currentTab].find(i => i.id === id);
+      duplicatingSourceTab = null;
+      
+      let item;
+      if (currentTab === COMMISSION_TAB_ID) {
+        // Chercher dans currentList qui contient _sourceTab
+        const commissionItem = currentList.find(i => i.id === id);
+        if (commissionItem && commissionItem._sourceTab) {
+          duplicatingSourceTab = commissionItem._sourceTab;
+          item = dataByTab[duplicatingSourceTab]?.find(i => i.id === id);
+        }
+      } else {
+        item = dataByTab[currentTab].find(i => i.id === id);
+      }
+      
       if (!item) return;
       
       duplicatingItemId = id;
@@ -9148,7 +9166,8 @@ marker.bindPopup(`
     }
 
     function openDuplicateModal() {
-      const item = dataByTab[currentTab].find(i => i.id === duplicatingItemId);
+      const sourceTab = duplicatingSourceTab || currentTab;
+      const item = dataByTab[sourceTab]?.find(i => i.id === duplicatingItemId);
       if (!item) return;
       
       const container = document.getElementById('duplicateTabList');
@@ -9189,10 +9208,12 @@ marker.bindPopup(`
     function closeDuplicateModal() {
       document.getElementById('duplicateModal').classList.remove('open');
       duplicatingItemId = null;
+      duplicatingSourceTab = null;
     }
 
     async function performDuplicate(targetTabId) {
-      const item = dataByTab[currentTab].find(i => i.id === duplicatingItemId);
+      const sourceTab = duplicatingSourceTab || currentTab;
+      const item = dataByTab[sourceTab]?.find(i => i.id === duplicatingItemId);
       if (!item) return;
       
       const newItem = { 
@@ -9218,8 +9239,26 @@ marker.bindPopup(`
       showToast(`Affaire dupliquée vers "${targetTab.name}" !`, 'success');
     }
 
+    let deletingFromCommissionTab = false;
+    let deletingSourceTab = null;
+    
     function askDelete(id) {
-      const item = dataByTab[currentTab].find(i => i.id === id);
+      let item;
+      deletingFromCommissionTab = false;
+      deletingSourceTab = null;
+      
+      if (currentTab === COMMISSION_TAB_ID) {
+        // Chercher dans currentList qui contient les infos _sourceTab
+        const commissionItem = currentList.find(i => i.id === id);
+        if (commissionItem && commissionItem._sourceTab) {
+          deletingFromCommissionTab = true;
+          deletingSourceTab = commissionItem._sourceTab;
+          item = dataByTab[deletingSourceTab]?.find(i => i.id === id);
+        }
+      } else {
+        item = dataByTab[currentTab].find(i => i.id === id);
+      }
+      
       if (!item) return;
       
       deletingIdx = id;
@@ -9230,16 +9269,27 @@ marker.bindPopup(`
     function closeConfirm() {
       document.getElementById('confirmModal').classList.remove('open');
       deletingIdx = null;
+      deletingFromCommissionTab = false;
+      deletingSourceTab = null;
     }
 
     function confirmDelete() {
       if (!deletingIdx) return;
       
-      const idx = dataByTab[currentTab].findIndex(i => i.id === deletingIdx);
+      const targetTab = deletingFromCommissionTab ? deletingSourceTab : currentTab;
+      const idx = dataByTab[targetTab]?.findIndex(i => i.id === deletingIdx);
+      
       if (idx > -1) {
-        dataByTab[currentTab].splice(idx, 1);
+        dataByTab[targetTab].splice(idx, 1);
+        
+        // Sauvegarder dans le bon onglet
+        const originalTab = currentTab;
+        currentTab = targetTab;
         persist();
+        currentTab = originalTab;
+        
         updateTabCounts();
+        renderTabs(); // Mettre à jour le compteur de l'onglet Commission
         applyFilters();
         showToast('Affaire supprimée.');
       }
@@ -9320,6 +9370,14 @@ marker.bindPopup(`
 
       persist();
       updateTabCounts();
+      
+      // Si on éditait depuis l'onglet Commission, y revenir
+      if (editingFromCommissionTab) {
+        currentTab = COMMISSION_TAB_ID;
+        editingFromCommissionTab = false;
+        renderTabs();
+      }
+      
       applyFilters();
       closeModal();
       showToast(editingId ? 'Affaire modifiée !' : 'Affaire créée !', 'success');
