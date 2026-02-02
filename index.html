@@ -7465,7 +7465,7 @@
         const tabData = dataByTab[tabId] || [];
         const tabInfo = tabs.find(t => t.id === tabId);
         tabData.forEach(item => {
-          if (item.commission === true) {
+          if (item.commission === true || item.commission === 'true') {
             // Ajouter l'info de l'onglet source pour référence
             allCommission.push({
               ...item,
@@ -8801,7 +8801,7 @@
         }
         
         // Badge Commission si applicable
-        let commissionBadge = item.commission ? '<span class="commission-badge" title="Commission de marché">📋</span>' : '';
+        let commissionBadge = (item.commission === true || item.commission === 'true') ? '<span class="commission-badge" title="Commission de marché">📋</span>' : '';
         
         // Badge source tab (pour l'onglet Commission)
         let sourceTabBadge = '';
@@ -9084,8 +9084,8 @@ marker.bindPopup(`
       document.getElementById('mDateDevis').value = item.dateDevis || '';
       document.getElementById('mMoisRemis').value = item.moisRemis || '';
       document.getElementById('mStatut').value = item.statut || 'En cours';
-      document.getElementById('mCommission').checked = item.commission || false;
-      document.getElementById('commissionLabel').textContent = item.commission ? 'Oui' : 'Non';
+      document.getElementById('mCommission').checked = item.commission === true || item.commission === 'true';
+      document.getElementById('commissionLabel').textContent = (item.commission === true || item.commission === 'true') ? 'Oui' : 'Non';
       document.getElementById('mMontant').value = item.montant || '';
       document.getElementById('mSurface').value = item.surface || '';
       document.getElementById('mResponsable').value = item.responsable || '';
