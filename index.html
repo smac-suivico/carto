@@ -837,6 +837,21 @@
       margin-right: 6px;
     }
 
+    /* Vue simplifiée pour l'onglet Commission */
+    .list-item.commission-view {
+      padding: 12px 16px;
+      background: linear-gradient(135deg, #fef2f2 0%, #fff 100%);
+      border-left: 3px solid #dc2626;
+    }
+    .list-item.commission-view .list-item-footer {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed var(--gray-200);
+    }
+    .list-item.commission-view .list-item-amount {
+      font-size: 15px;
+    }
+
     /* Stats Bar */
     .stats-bar {
       display: flex;
@@ -7462,6 +7477,9 @@
     function getCommissionAffaires() {
       const allCommission = [];
       Object.keys(dataByTab).forEach(tabId => {
+        // SÉCURITÉ: Exclure les onglets verrouillés
+        if (isTabLocked(tabId)) return;
+        
         const tabData = dataByTab[tabId] || [];
         const tabInfo = tabs.find(t => t.id === tabId);
         tabData.forEach(item => {
@@ -8734,6 +8752,31 @@
         const statusClass = item.statut === 'Gagné' ? 'gagne' : item.statut === 'Perdu' ? 'perdu' : item.statut === 'Faste' ? 'faste' : item.statut === 'Non valorisé' ? 'nonvalorise' : 'encours';
         const statusIcon = item.statut === 'Gagné' ? '✓' : item.statut === 'Perdu' ? '✕' : item.statut === 'Faste' ? '⚡' : item.statut === 'Non valorisé' ? '⏸' : '◷';
         
+        // AFFICHAGE SIMPLIFIÉ POUR L'ONGLET COMMISSION
+        if (currentTab === COMMISSION_TAB_ID) {
+          const sourceTabBadge = item._sourceTabName 
+            ? `<span class="source-tab-badge" style="background:${item._sourceTabColor}20;color:${item._sourceTabColor};border:1px solid ${item._sourceTabColor}40;">📁 ${escapeHTML(item._sourceTabName)}</span>` 
+            : '';
+          
+          return `
+            <div class="list-item commission-view" data-id="${item.id}" data-idx="${idx}" data-source-tab="${item._sourceTab || ''}">
+              <div class="list-item-header">
+                <span class="list-item-title">${escapeHTML(item.affaires)}</span>
+                <span class="status ${statusClass}">${statusIcon} ${item.statut}</span>
+              </div>
+              <div class="list-item-meta">
+                <span class="client-eg-info">🏢 ${escapeHTML(item.eg || '-')}</span>
+                <span class="adresse-info">📍 ${escapeHTML(item.adresse || '-')}</span>
+                ${sourceTabBadge}
+              </div>
+              <div class="list-item-footer">
+                <span class="list-item-amount">${displayMontant(item.montant)}</span>
+              </div>
+            </div>
+          `;
+        }
+        
+        // AFFICHAGE COMPLET POUR LES AUTRES ONGLETS
         // Format mois remis (2026-01 -> Jan 2026)
         const formatMoisRemis = (m) => {
           if (!m) return '';
@@ -8809,12 +8852,6 @@
         // Badge Commission si applicable
         let commissionBadge = (item.commission === true || item.commission === 'true') ? '<span class="commission-badge" title="Commission de marché">📋</span>' : '';
         
-        // Badge source tab (pour l'onglet Commission)
-        let sourceTabBadge = '';
-        if (currentTab === COMMISSION_TAB_ID && item._sourceTabName) {
-          sourceTabBadge = `<span class="source-tab-badge" style="background:${item._sourceTabColor}20;color:${item._sourceTabColor};border:1px solid ${item._sourceTabColor}40;">📁 ${escapeHTML(item._sourceTabName)}</span>`;
-        }
-        
         return `
           <div class="list-item" data-id="${item.id}" data-idx="${idx}" data-source-tab="${item._sourceTab || ''}">
             <div class="list-item-header">
@@ -8824,7 +8861,6 @@
             <div class="list-item-meta">
               <span class="client-eg-info">${escapeHTML(item.client)} · ${escapeHTML(item.eg)}</span>
               <span class="adresse-info">📍 ${escapeHTML(item.adresse)}${item.moisRemis ? `<span class="list-item-mois-remis">📅 ${formatMoisRemis(item.moisRemis)}</span>` : ''}</span>
-              ${sourceTabBadge}
               ${responsableHtml}
               ${chiffreursHtml}
               ${metreursHtml}
