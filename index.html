@@ -8481,10 +8481,16 @@
         dateDevis: item.dateDevis || '',
         moisRemis: item.moisRemis || '',
         statut: item.statut || 'En cours',
+        commission: item.commission === true || item.commission === 'true', // AJOUTÉ
         montant: item.montant || '-',
+        surface: item.surface || '', // AJOUTÉ
         responsable: item.responsable || '',
         chiffreur: item.chiffreur || '',
         metreur: item.metreur || '',
+        chiffreurs: item.chiffreurs || [], // AJOUTÉ
+        metreurs: item.metreurs || [],     // AJOUTÉ
+        products: item.products || [],     // AJOUTÉ
+        marge: item.marge || '',           // AJOUTÉ
         coords: item.coords || [48.8566, 2.3522],
         tags: item.tags || [],
         link: item.link || '',
