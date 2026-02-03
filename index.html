@@ -3082,31 +3082,43 @@
     }
 
     /* Products Analysis Panel */
+    /* ═══════════════════════════════════════════════════════════════════════════
+       INVENTAIRE SMAC - Style professionnel
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
     .products-panel {
       position: absolute;
-      top: 175px;
+      top: 120px;
       left: 20px;
       z-index: 1000;
-      background: white;
-      border-radius: 20px;
+      background: #ffffff;
+      border: 1px solid var(--gray-200);
+      border-radius: 16px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.12);
-      width: 440px;
+      width: 520px;
       max-height: calc(100vh - 140px);
       display: none;
       flex-direction: column;
       overflow: hidden;
+      font-family: 'Segoe UI', system-ui, sans-serif;
     }
 
     .products-panel.open {
       display: flex;
-      animation: slideIn 0.3s ease;
+      animation: panelSlideIn 0.3s ease;
+    }
+
+    @keyframes panelSlideIn {
+      from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     @media (max-width: 1024px) {
       .products-panel {
         left: 10px;
         width: calc(100% - 20px);
-        max-width: 440px;
+        max-width: 520px;
+        top: 80px;
       }
     }
 
@@ -3114,15 +3126,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 16px 20px;
-      background: var(--theme-color, #8b5cf6);
-      color: white;
-      border-radius: 20px 20px 0 0;
+      padding: 14px 18px;
+      background: linear-gradient(135deg, var(--theme-color) 0%, color-mix(in srgb, var(--theme-color) 80%, black) 100%);
+      border-bottom: 1px solid var(--gray-200);
     }
 
     .products-panel-title {
       font-weight: 700;
-      font-size: 16px;
+      font-size: 15px;
       color: white;
       display: flex;
       align-items: center;
@@ -3130,226 +3141,1021 @@
     }
 
     .products-close-btn {
-      background: rgba(255,255,255,0.25);
-      border: 2px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.2);
+      border: 2px solid rgba(255,255,255,0.3);
       color: white;
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
       cursor: pointer;
-      font-size: 18px;
+      font-size: 16px;
       font-weight: bold;
       transition: all 0.2s;
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-shrink: 0;
     }
 
     .products-close-btn:hover {
-      background: rgba(255,255,255,0.4);
-      border-color: rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.3);
       transform: scale(1.05);
     }
 
+    /* Onglets */
+    .rpg-tabs {
+      display: flex;
+      background: var(--gray-50);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .rpg-tab {
+      flex: 1;
+      padding: 12px 14px;
+      background: transparent;
+      border: none;
+      color: var(--gray-500);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .rpg-tab:hover {
+      color: var(--gray-700);
+      background: var(--gray-100);
+    }
+
+    .rpg-tab.active {
+      color: var(--theme-color);
+      background: white;
+    }
+
+    .rpg-tab.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--theme-color);
+    }
+
+    .rpg-tab-icon {
+      display: block;
+      font-size: 18px;
+      margin-bottom: 2px;
+    }
+
+    /* Contenu principal */
     .products-panel-content {
       flex: 1;
       overflow-y: auto;
-      padding: 20px;
+      padding: 0;
+      background: white;
     }
 
-    .products-search {
-      margin-bottom: 16px;
+    .products-panel-content::-webkit-scrollbar {
+      width: 6px;
     }
 
-    .products-search input {
-      width: 100%;
-      padding: 12px 16px;
+    .products-panel-content::-webkit-scrollbar-track {
+      background: var(--gray-100);
+    }
+
+    .products-panel-content::-webkit-scrollbar-thumb {
+      background: var(--gray-300);
+      border-radius: 3px;
+    }
+
+    .rpg-tab-content {
+      display: none;
+      padding: 16px;
+    }
+
+    .rpg-tab-content.active {
+      display: block;
+    }
+
+    /* ═══ INVENTAIRE ═══ */
+    .inventory-section {
+      margin-bottom: 20px;
+    }
+
+    .inventory-section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--dark);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--gray-100);
+    }
+
+    .inventory-section-title span {
+      color: var(--gray-400);
+      font-size: 11px;
+      font-weight: 500;
+    }
+
+    .inventory-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+    }
+
+    .inventory-slot {
+      aspect-ratio: 1;
+      background: var(--gray-50);
+      border: 2px solid var(--gray-200);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .inventory-slot:hover {
+      border-color: var(--theme-color);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .inventory-slot.empty {
+      opacity: 0.3;
+      cursor: default;
+    }
+
+    .inventory-slot.empty:hover {
+      border-color: var(--gray-200);
+      transform: none;
+      box-shadow: none;
+    }
+
+    .inventory-slot.selected {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.2);
+    }
+
+    .inventory-slot.dragging {
+      opacity: 0.5;
+      transform: scale(0.95);
+    }
+
+    .slot-icon {
+      font-size: 24px;
+      margin-bottom: 2px;
+    }
+
+    .slot-name {
+      font-size: 8px;
+      color: var(--gray-600);
+      text-align: center;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0 4px;
+    }
+
+    .slot-count {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      background: var(--theme-color);
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    .slot-rarity {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .slot-rarity.common { background: var(--gray-300); }
+    .slot-rarity.uncommon { background: #4caf50; }
+    .slot-rarity.rare { background: #2196f3; }
+    .slot-rarity.epic { background: #9c27b0; }
+    .slot-rarity.legendary { background: linear-gradient(90deg, #ff9800, #ffc107, #ff9800); }
+
+    /* Tooltip */
+    .inventory-tooltip {
+      position: fixed;
+      background: white;
       border: 1px solid var(--gray-200);
       border-radius: 12px;
-      font-size: 13px;
+      padding: 14px;
+      min-width: 220px;
+      max-width: 280px;
+      z-index: 10000;
+      pointer-events: none;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .tooltip-title {
+      color: var(--dark);
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tooltip-category {
+      color: var(--gray-500);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .tooltip-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .tooltip-stat {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+    }
+
+    .tooltip-stat-label {
+      color: var(--gray-500);
+    }
+
+    .tooltip-stat-value {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    .tooltip-stat-value.gold { color: var(--theme-color); }
+    .tooltip-stat-value.blue { color: #2196f3; }
+
+    .tooltip-affaires {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid var(--gray-100);
+    }
+
+    .tooltip-affaires-title {
+      color: var(--gray-500);
+      font-size: 10px;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .tooltip-affaire {
+      font-size: 11px;
+      color: var(--gray-700);
+      padding: 3px 0;
+    }
+
+    /* ═══ TABLE DE CRAFT ═══ */
+    .craft-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .craft-title {
+      color: var(--dark);
+      font-size: 14px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 4px;
+    }
+
+    /* Sélecteur de produits pour le craft */
+    .craft-product-selector {
       background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .craft-selector-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .craft-selector-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+
+    .craft-selector-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
       transition: all 0.2s;
     }
 
-    .products-search input:focus {
+    .craft-selector-item:hover {
+      border-color: var(--theme-color);
+      background: var(--theme-color-light, #f0f0ff);
+    }
+
+    .craft-selector-item.selected {
+      border-color: var(--green);
+      background: rgba(34,197,94,0.1);
+    }
+
+    .craft-table {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .craft-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .craft-slot {
+      width: 56px;
+      height: 56px;
+      background: white;
+      border: 2px dashed var(--gray-300);
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .craft-slot:hover {
+      border-color: var(--theme-color);
+      background: var(--gray-50);
+    }
+
+    .craft-slot.has-item {
+      border-style: solid;
+      border-color: var(--green);
+      background: rgba(34,197,94,0.05);
+    }
+
+    .craft-slot.drop-target {
+      border-color: var(--theme-color);
+      background: rgba(139,92,246,0.1);
+    }
+
+    .craft-slot .slot-icon {
+      font-size: 24px;
+    }
+
+    .craft-slot .slot-name {
+      font-size: 7px;
+      color: var(--gray-600);
+      text-align: center;
+      max-width: 50px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .craft-slot .slot-remove {
+      position: absolute;
+      top: -6px;
+      right: -6px;
+      width: 18px;
+      height: 18px;
+      background: var(--red);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .craft-slot:hover .slot-remove {
+      opacity: 1;
+    }
+
+    .craft-arrow {
+      font-size: 28px;
+      color: var(--gray-400);
+    }
+
+    .craft-result {
+      width: 70px;
+      height: 70px;
+      background: rgba(34,197,94,0.1);
+      border: 2px solid var(--green);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .craft-result.empty {
+      border-color: var(--gray-300);
+      background: var(--gray-50);
+    }
+
+    .craft-result .slot-icon {
+      font-size: 28px;
+    }
+
+    .craft-result-name {
+      font-size: 9px;
+      color: var(--green);
+      font-weight: 600;
+      text-align: center;
+      margin-top: 2px;
+    }
+
+    .craft-result.empty .craft-result-name {
+      color: var(--gray-500);
+    }
+
+    .craft-result-price {
+      font-size: 10px;
+      color: var(--theme-color);
+      font-weight: 700;
+    }
+
+    /* Formulaire de craft */
+    .craft-form {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .craft-form-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+
+    .craft-form-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .craft-input {
+      flex: 1;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: var(--dark);
+      font-size: 13px;
+    }
+
+    .craft-input:focus {
       outline: none;
       border-color: var(--theme-color);
-      background: white;
-      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+      box-shadow: 0 0 0 3px rgba(139,92,246,0.1);
     }
 
-    .products-filters {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
+    .craft-input::placeholder {
+      color: var(--gray-400);
     }
 
-    .products-filter-btn {
-      padding: 6px 14px;
-      border: 1px solid var(--gray-200);
-      border-radius: 20px;
-      background: white;
-      font-size: 11px;
+    .craft-btn {
+      background: var(--green);
+      border: none;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
     }
 
-    .products-filter-btn:hover {
-      border-color: var(--theme-color);
-      color: var(--theme-color);
+    .craft-btn:hover {
+      background: #1a9f4a;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(34,197,94,0.3);
     }
 
-    .products-filter-btn.active {
-      background: var(--theme-color);
-      color: white;
-      border-color: var(--theme-color);
+    .craft-btn:disabled {
+      background: var(--gray-300);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
     }
 
-    .product-stats-card {
-      background: linear-gradient(135deg, var(--theme-color-light), white);
-      border: 1px solid var(--theme-color);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 12px;
+    .craft-summary {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 12px;
     }
 
-    .product-stats-header {
+    .craft-summary-title {
+      color: var(--gray-500);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .craft-summary-row {
       display: flex;
       justify-content: space-between;
+      font-size: 12px;
+      padding: 4px 0;
+    }
+
+    .craft-summary-label { color: var(--gray-600); }
+    .craft-summary-value { color: var(--green); font-weight: 600; }
+    .craft-summary-total { 
+      color: var(--theme-color); 
+      font-weight: 700; 
+      font-size: 14px;
+      padding-top: 8px;
+      border-top: 1px solid var(--gray-200);
+      margin-top: 4px;
+    }
+
+    /* ═══ STATS PRODUITS ═══ */
+    .stats-product-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .stats-product-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    .stats-product-card:hover {
+      border-color: var(--theme-color);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .stats-product-card.expanded {
+      border-color: var(--green);
+    }
+
+    .stats-product-header {
+      display: flex;
       align-items: center;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-      gap: 8px;
+      gap: 12px;
+      padding: 12px;
+      cursor: pointer;
     }
 
-    .product-stats-name {
-      font-weight: 700;
-      font-size: 15px;
-      color: var(--theme-color);
+    .stats-product-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
     }
 
-    .product-stats-badges {
+    .stats-product-info {
+      flex: 1;
+    }
+
+    .stats-product-name {
+      color: var(--dark);
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .stats-product-category {
+      color: var(--gray-500);
+      font-size: 11px;
+    }
+
+    .stats-product-badges {
       display: flex;
       gap: 6px;
-      flex-wrap: wrap;
     }
 
-    .product-stats-count {
-      background: var(--theme-color);
-      color: white;
+    .stats-badge {
       padding: 4px 10px;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .product-stats-finition {
-      background: var(--gray-200);
-      color: var(--gray-700);
-      padding: 4px 10px;
-      border-radius: 12px;
+      border-radius: 6px;
       font-size: 11px;
       font-weight: 600;
     }
 
-    .product-stats-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+    .stats-badge.count {
+      background: var(--gray-100);
+      color: var(--gray-700);
     }
 
-    .product-stat-item {
-      background: white;
+    .stats-badge.amount {
+      background: rgba(34,197,94,0.1);
+      color: var(--green);
+    }
+
+    .stats-product-details {
+      display: none;
+      padding: 0 12px 12px;
+    }
+
+    .stats-product-card.expanded .stats-product-details {
+      display: block;
+    }
+
+    .stats-detail-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .stats-detail-item {
+      background: var(--gray-50);
       border-radius: 8px;
       padding: 10px;
       text-align: center;
     }
 
-    .product-stat-value {
-      font-size: 18px;
-      font-weight: 800;
+    .stats-detail-value {
       color: var(--dark);
-    }
-
-    .product-stat-label {
-      font-size: 10px;
-      color: var(--gray-500);
-      text-transform: uppercase;
-      font-weight: 600;
-    }
-
-    .product-affaires-list {
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid var(--gray-200);
-    }
-
-    .product-affaire-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 8px;
-      background: white;
-      border-radius: 6px;
-      margin-bottom: 6px;
-      font-size: 12px;
-    }
-
-    .product-affaire-name {
-      font-weight: 600;
-      color: var(--dark);
-    }
-
-    .product-affaire-price {
-      color: var(--theme-color);
+      font-size: 16px;
       font-weight: 700;
     }
 
-    /* Toggle buttons for analysis */
-    .finition-detail-btn {
-      padding: 4px 10px;
-      border: 1px solid var(--theme-color);
-      background: white;
-      border-radius: 15px;
+    .stats-detail-value.gold { color: var(--theme-color); }
+    .stats-detail-value.blue { color: #2196f3; }
+
+    .stats-detail-label {
+      color: var(--gray-500);
       font-size: 10px;
-      font-weight: 600;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .stats-xp-bar {
+      background: var(--gray-50);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .stats-xp-title {
+      display: flex;
+      justify-content: space-between;
+      color: var(--gray-600);
+      font-size: 11px;
+      margin-bottom: 6px;
+    }
+
+    .stats-xp-track {
+      height: 8px;
+      background: var(--gray-200);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .stats-xp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--theme-color), var(--green));
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .stats-affaires-list {
+      margin-top: 12px;
+    }
+
+    .stats-affaires-title {
+      color: var(--gray-500);
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .stats-affaire-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      background: var(--gray-50);
+      border-radius: 6px;
+      margin-bottom: 6px;
+      font-size: 11px;
+    }
+
+    .stats-affaire-name {
+      color: var(--gray-700);
+      font-weight: 500;
+    }
+
+    .stats-affaire-price {
       color: var(--theme-color);
+      font-weight: 600;
+    }
+
+    /* Search */
+    .rpg-search {
+      margin-bottom: 14px;
+    }
+
+    .rpg-search input {
+      width: 100%;
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--dark);
+      font-size: 13px;
+    }
+
+    .rpg-search input:focus {
+      outline: none;
+      border-color: var(--theme-color);
+      box-shadow: 0 0 0 3px rgba(139,92,246,0.1);
+    }
+
+    .rpg-search input::placeholder {
+      color: var(--gray-400);
+    }
+
+    /* Catégorie filters */
+    .rpg-filters {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .rpg-filter-btn {
+      padding: 6px 12px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      color: var(--gray-600);
+      font-size: 11px;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
     }
 
-    .finition-detail-btn:hover {
+    .rpg-filter-btn:hover {
+      border-color: var(--theme-color);
+      color: var(--theme-color);
+    }
+
+    .rpg-filter-btn.active {
       background: var(--theme-color);
+      border-color: var(--theme-color);
       color: white;
     }
 
-    .finition-detail-btn small {
-      opacity: 0.7;
+    /* Empty state */
+    .rpg-empty {
+      text-align: center;
+      padding: 30px 20px;
+      color: var(--gray-400);
     }
 
-    .complexe-detail-toggle,
-    .affaires-toggle-btn {
-      width: 100%;
-      padding: 8px 12px;
-      border: 1px dashed var(--gray-300);
+    .rpg-empty-icon {
+      font-size: 40px;
+      margin-bottom: 10px;
+      opacity: 0.5;
+    }
+
+    .rpg-empty-text {
+      font-size: 13px;
+    }
+
+    .craft-empty-msg {
+      text-align: center;
+      padding: 16px;
+      color: var(--gray-400);
+      font-size: 12px;
+    }
+
+    /* Sélecteur de produits craft */
+    .craft-selector-item.selected {
+      border-color: var(--green);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    /* Liste des composants */
+    .craft-components-list {
       background: var(--gray-50);
-      border-radius: 6px;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .craft-components-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       font-size: 11px;
       font-weight: 600;
-      color: var(--gray-600);
-      cursor: pointer;
-      transition: all 0.2s;
-      text-align: left;
+      color: var(--gray-500);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--gray-200);
     }
 
-    .complexe-detail-toggle:hover,
-    .affaires-toggle-btn:hover {
-      background: var(--gray-100);
-      border-color: var(--theme-color);
+    .craft-component-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      margin-bottom: 6px;
+    }
+
+    .craft-component-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .craft-component-icon {
+      font-size: 18px;
+    }
+
+    .craft-component-name {
+      flex: 1;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .craft-component-price {
+      font-size: 11px;
+      font-weight: 700;
       color: var(--theme-color);
+    }
+
+    .craft-component-remove {
+      width: 22px;
+      height: 22px;
+      background: var(--red-light);
+      border: none;
+      border-radius: 6px;
+      color: var(--red);
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .craft-component-remove:hover {
+      background: var(--red);
+      color: white;
+    }
+
+    /* Cartes de complexes */
+    .complexe-card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+
+    .complexe-card:hover {
+      border-color: var(--theme-color);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .complexe-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+    }
+
+    .complexe-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--theme-color-light) 0%, white 100%);
+      border: 1px solid var(--theme-color);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .complexe-info {
+      flex: 1;
+    }
+
+    .complexe-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .complexe-meta {
+      font-size: 11px;
+      color: var(--gray-500);
+    }
+
+    .complexe-price {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--green);
+      padding: 6px 12px;
+      background: rgba(16, 185, 129, 0.1);
+      border-radius: 8px;
+    }
+
+    .complexe-delete {
+      width: 28px;
+      height: 28px;
+      background: var(--gray-100);
+      border: none;
+      border-radius: 6px;
+      color: var(--gray-500);
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .complexe-delete:hover {
+      background: var(--red);
+      color: white;
+    }
+
+    .complexe-components {
+      padding: 0 12px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .complexe-component {
+      font-size: 10px;
+      padding: 4px 8px;
+      background: var(--gray-100);
+      border-radius: 6px;
+      color: var(--gray-600);
     }
 
     /* Duplicate Tab List */
@@ -4388,7 +5194,7 @@
       <span>Chargement...</span>
     </div>
 
-    <div class="intro-version">Version Bêta - SMAC PN2 - A.Y.</div>
+    <div class="intro-version">Version Bêta - SMAC PN2</div>
   </div>
 
 
@@ -4516,22 +5322,123 @@
     <!-- Products Analysis Panel -->
     <div class="products-panel" id="productsPanel">
       <div class="products-panel-header">
-        <span class="products-panel-title">📦 Analyse Produits</span>
+        <span class="products-panel-title">📦 Inventaire SMAC</span>
         <button class="products-close-btn" id="productsPanelClose">✕</button>
       </div>
+      
+      <!-- Onglets -->
+      <div class="rpg-tabs">
+        <button class="rpg-tab active" data-tab="inventory">
+          <span class="rpg-tab-icon">🎒</span>
+          Produits
+        </button>
+        <button class="rpg-tab" data-tab="complexes">
+          <span class="rpg-tab-icon">🔧</span>
+          Complexes
+        </button>
+        <button class="rpg-tab" data-tab="craft">
+          <span class="rpg-tab-icon">⚙️</span>
+          Créer
+        </button>
+        <button class="rpg-tab" data-tab="stats">
+          <span class="rpg-tab-icon">📊</span>
+          Stats
+        </button>
+      </div>
+      
       <div class="products-panel-content">
-        <div class="products-search">
-          <input type="text" id="productSearchInput" placeholder="🔍 Rechercher un produit...">
+        <!-- Onglet Inventaire -->
+        <div class="rpg-tab-content active" id="inventoryTab">
+          <div class="rpg-search">
+            <input type="text" id="inventorySearchInput" placeholder="🔍 Rechercher un produit...">
+          </div>
+          <div class="rpg-filters" id="inventoryFilters">
+            <button class="rpg-filter-btn active" data-category="">Tous</button>
+          </div>
+          <div id="inventoryGrid">
+            <!-- Généré par JS -->
+          </div>
         </div>
-        <div class="products-filters" id="productsFilters">
-          <button class="products-filter-btn active" data-category="">Toutes</button>
-          <!-- Dynamic category buttons will be added by JS -->
+        
+        <!-- Onglet Complexes -->
+        <div class="rpg-tab-content" id="complexesTab">
+          <div id="complexesList">
+            <!-- Généré par JS -->
+          </div>
         </div>
-        <div id="productsAnalysisList">
-          <!-- Generated by JS -->
+        
+        <!-- Onglet Craft -->
+        <div class="rpg-tab-content" id="craftTab">
+          <div class="craft-container">
+            <div class="craft-title">⚙️ Créer un Complexe</div>
+            
+            <!-- Sélecteur de produits -->
+            <div class="craft-product-selector">
+              <div class="craft-selector-title">📋 Cliquez pour ajouter à la table de craft</div>
+              <div class="craft-selector-grid" id="craftSelectorGrid">
+                <!-- Généré par JS -->
+              </div>
+            </div>
+            
+            <!-- Table de craft 3x3 -->
+            <div class="craft-table">
+              <div class="craft-grid" id="craftGrid">
+                <div class="craft-slot" data-slot="0"></div>
+                <div class="craft-slot" data-slot="1"></div>
+                <div class="craft-slot" data-slot="2"></div>
+                <div class="craft-slot" data-slot="3"></div>
+                <div class="craft-slot" data-slot="4"></div>
+                <div class="craft-slot" data-slot="5"></div>
+                <div class="craft-slot" data-slot="6"></div>
+                <div class="craft-slot" data-slot="7"></div>
+                <div class="craft-slot" data-slot="8"></div>
+              </div>
+              
+              <div class="craft-arrow">➡️</div>
+              
+              <div class="craft-result empty" id="craftResult">
+                <span class="slot-icon">❓</span>
+                <span class="craft-result-name">Complexe</span>
+              </div>
+            </div>
+            
+            <!-- Formulaire -->
+            <div class="craft-form">
+              <div class="craft-form-row">
+                <input type="text" class="craft-input" id="craftComplexeName" placeholder="Nom du complexe (ex: Toiture complète)">
+              </div>
+              
+              <div class="craft-summary" id="craftSummary">
+                <div class="craft-summary-title">💰 Récapitulatif</div>
+                <div id="craftSummaryContent">
+                  <div class="craft-empty-msg">Ajoutez des produits dans la table de craft</div>
+                </div>
+              </div>
+              
+              <div class="craft-form-row" style="margin-top:12px;">
+                <button class="craft-btn" id="craftCreateBtn" disabled style="width:100%;">✓ Créer le complexe</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Onglet Stats -->
+        <div class="rpg-tab-content" id="statsTab">
+          <div class="rpg-search">
+            <input type="text" id="statsSearchInput" placeholder="🔍 Rechercher un produit...">
+          </div>
+          <div class="rpg-filters" id="statsFilters">
+            <button class="rpg-filter-btn active" data-category="">Tous</button>
+          </div>
+          <div class="stats-product-list" id="statsProductList">
+            <!-- Généré par JS -->
+          </div>
         </div>
       </div>
     </div>
+    
+    <!-- Tooltip pour inventaire -->
+    <div class="inventory-tooltip" id="inventoryTooltip" style="display:none;"></div>
     
     <!-- Itinerary Panel -->
     <div class="itinerary-panel" id="itineraryPanel">
@@ -7625,16 +8532,51 @@
 
     /* Advanced Statistics Functions */
     function updateAdvancedStats() {
-      // SECURITY: Si l'onglet est verrouillé, ne pas afficher les stats
-      if (isTabLocked(currentTab)) {
+      // SECURITY: Si l'onglet est verrouillé, masquer tout le panneau de stats
+      if (currentTab !== COMMISSION_TAB_ID && isTabLocked(currentTab)) {
         document.getElementById('statsTotalAffaires').textContent = '🔒';
         document.getElementById('statsTotalMontant').textContent = '🔒';
         const gagneEl = document.getElementById('statsTotalGagne');
         const convKPIEl = document.getElementById('statsConversionKPI');
         if (gagneEl) gagneEl.textContent = '🔒';
         if (convKPIEl) convKPIEl.textContent = '🔒';
+        // Masquer les graphiques complètement
+        const pieCanvas = document.getElementById('pieChart');
+        const barCanvas = document.getElementById('barChart');
+        if (pieCanvas) {
+          pieCanvas.style.opacity = '0';
+          pieCanvas.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:48px;">🔒</div>';
+        }
+        if (barCanvas) {
+          barCanvas.style.opacity = '0';
+          barCanvas.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:48px;">🔒</div>';
+        }
+        // Masquer toutes les sections avec contenu caché
+        document.querySelectorAll('.stats-section').forEach(el => {
+          el.style.opacity = '0.2';
+          el.style.pointerEvents = 'none';
+          el.style.filter = 'blur(8px)';
+        });
+        // Masquer les détails dans chaque section
+        document.querySelectorAll('.forecast-grid, .comparison-content, .conversion-gauge, .ranking-grid, .timeline-chart, .objectives-content').forEach(el => {
+          if (el) el.style.visibility = 'hidden';
+        });
         return;
       }
+      
+      // Restaurer l'affichage si déverrouillé
+      const pieCanvas = document.getElementById('pieChart');
+      const barCanvas = document.getElementById('barChart');
+      if (pieCanvas) pieCanvas.style.opacity = '1';
+      if (barCanvas) barCanvas.style.opacity = '1';
+      document.querySelectorAll('.stats-section').forEach(el => {
+        el.style.opacity = '1';
+        el.style.pointerEvents = 'auto';
+        el.style.filter = 'none';
+      });
+      document.querySelectorAll('.forecast-grid, .comparison-content, .conversion-gauge, .ranking-grid, .timeline-chart, .objectives-content').forEach(el => {
+        if (el) el.style.visibility = 'visible';
+      });
       
       const total = currentList.length;
       const gagne = currentList.filter(i => i.statut === 'Gagné').length;
@@ -8624,6 +9566,15 @@
       const kpiMarge = document.getElementById('kpiMarge');
       
       if (!kpiAffaires) return;
+      
+      // SÉCURITÉ: Masquer si onglet verrouillé
+      if (currentTab !== COMMISSION_TAB_ID && isTabLocked(currentTab)) {
+        kpiAffaires.textContent = '🔒';
+        kpiCA.textContent = '🔒';
+        kpiGagne.textContent = '🔒';
+        kpiMarge.textContent = '🔒';
+        return;
+      }
       
       // Calculs
       let totalCA = 0;
@@ -9822,8 +10773,39 @@ marker.bindPopup(`
       return num.toLocaleString('fr-FR');
     }
 
-    /* Products Analysis Panel */
-    let currentProductCategoryFilter = '';
+    /* ═══════════════════════════════════════════════════════════════════════════
+       INVENTAIRE RPG - Système complet
+       ═══════════════════════════════════════════════════════════════════════════ */
+    
+    let currentInventoryFilter = '';
+    let currentStatsFilter = '';
+    let selectedInventoryItem = null;
+    let inventoryData = [];
+    
+    // Icônes par catégorie
+    const categoryIcons = {
+      'Étanchéité': '💧',
+      'Bardage': '🧱',
+      'Couverture': '🏠',
+      'Isolation': '🧊',
+      'Fixation': '🔩',
+      'Accessoires': '🔧',
+      'Complexe': '📦',
+      'default': '📋'
+    };
+    
+    // Rareté basée sur le nombre d'utilisations
+    function getRarity(count) {
+      if (count >= 10) return { class: 'legendary', name: 'Légendaire' };
+      if (count >= 7) return { class: 'epic', name: 'Épique' };
+      if (count >= 4) return { class: 'rare', name: 'Rare' };
+      if (count >= 2) return { class: 'uncommon', name: 'Inhabituel' };
+      return { class: 'common', name: 'Commun' };
+    }
+    
+    function getCategoryIcon(category) {
+      return categoryIcons[category] || categoryIcons.default;
+    }
     
     function toggleProductsPanel() {
       const panel = document.getElementById('productsPanel');
@@ -9831,364 +10813,676 @@ marker.bindPopup(`
       
       if (panel.classList.contains('open')) {
         panel.classList.remove('open');
+        hideInventoryTooltip();
       } else {
         panel.classList.add('open');
-        // Appliquer la couleur de l'onglet actif au header
-        const tabConfig = tabs.find(t => t.id === currentTab);
-        const header = panel.querySelector('.products-panel-header');
-        if (header && tabConfig) {
-          header.style.background = tabConfig.color;
-        }
-        updateProductsFilters();
-        updateProductsAnalysis();
+        initRPGInventory();
       }
     }
-
-    function updateProductsFilters() {
-      const container = document.getElementById('productsFilters');
-      if (!container) return;
+    
+    function initRPGInventory() {
+      // Collecter tous les produits
+      collectInventoryData();
       
-      // Collecter toutes les catégories uniques
-      const categories = new Set();
-      Object.values(dataByTab).forEach(tabData => {
-        tabData.forEach(item => {
-          if (item.products && Array.isArray(item.products)) {
-            item.products.forEach(prod => {
-              if (prod.category) categories.add(prod.category);
-            });
-          }
-        });
+      // Initialiser les onglets
+      initRPGTabs();
+      
+      // Mettre à jour les filtres
+      updateInventoryFilters();
+      updateStatsFilters();
+      
+      // Rendre l'inventaire
+      renderInventory();
+      renderStatsProducts();
+      
+      // Initialiser le craft
+      initCraftSystem();
+      
+      // Event listeners pour recherche
+      document.getElementById('inventorySearchInput')?.addEventListener('input', (e) => {
+        renderInventory(e.target.value);
       });
       
-      // Générer les boutons de filtre par catégorie
-      container.innerHTML = `
-        <button class="products-filter-btn ${currentProductCategoryFilter === '' ? 'active' : ''}" data-category="">Toutes</button>
-        ${Array.from(categories).sort().map(c => `
-          <button class="products-filter-btn ${currentProductCategoryFilter === c ? 'active' : ''}" data-category="${c}">${c}</button>
-        `).join('')}
-      `;
-      
-      // Ajouter les event listeners
-      container.querySelectorAll('.products-filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          currentProductCategoryFilter = btn.dataset.category;
-          container.querySelectorAll('.products-filter-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          updateProductsAnalysis(document.getElementById('productSearchInput')?.value || '');
-        });
+      document.getElementById('statsSearchInput')?.addEventListener('input', (e) => {
+        renderStatsProducts(e.target.value);
       });
     }
-
-    function updateProductsAnalysis(searchTerm = '') {
-      const container = document.getElementById('productsAnalysisList');
-      if (!container) return;
-      
-      // Collecter tous les produits groupés par CATEGORIE puis par NOM (pas par finition)
-      const categoryStats = {};
+    
+    function collectInventoryData() {
+      const productsMap = {};
       
       Object.values(dataByTab).forEach(tabData => {
         tabData.forEach(item => {
           if (item.products && Array.isArray(item.products)) {
             item.products.forEach(prod => {
-              // Filtrer par catégorie
-              const category = prod.category || 'Non classé';
-              if (currentProductCategoryFilter && category !== currentProductCategoryFilter) return;
+              const key = `${prod.name.toLowerCase()}|${prod.category || 'Non classé'}`;
               
-              // Filtrer par recherche
-              if (searchTerm && !prod.name.toLowerCase().includes(searchTerm.toLowerCase())) return;
-              
-              // Initialiser la catégorie
-              if (!categoryStats[category]) {
-                categoryStats[category] = {
-                  products: {},
-                  totalAmount: 0,
-                  totalSurface: 0,
-                  count: 0
-                };
-              }
-              
-              // Grouper par NOM de produit uniquement (pas par finition)
-              const key = prod.name.toLowerCase();
-              if (!categoryStats[category].products[key]) {
-                categoryStats[category].products[key] = {
+              if (!productsMap[key]) {
+                productsMap[key] = {
                   name: prod.name,
+                  category: prod.category || 'Non classé',
                   isComplexe: prod.isComplexe || false,
                   components: prod.components || [],
                   count: 0,
                   totalSurface: 0,
                   totalAmount: 0,
                   prices: [],
-                  byFinition: {},
                   affaires: []
                 };
               }
               
-              const ps = categoryStats[category].products[key];
-              ps.count++;
-              ps.totalSurface += prod.surface || 0;
+              const p = productsMap[key];
+              p.count++;
+              p.totalSurface += prod.surface || 0;
               const amount = (prod.priceM2 || 0) * (prod.surface || 0);
-              ps.totalAmount += amount;
-              if (prod.priceM2 > 0) ps.prices.push(prod.priceM2);
-              
-              // Grouper aussi par finition pour le détail
-              const finKey = prod.finition || 'Sans finition';
-              if (!ps.byFinition[finKey]) {
-                ps.byFinition[finKey] = {
-                  count: 0,
-                  totalSurface: 0,
-                  totalAmount: 0,
-                  prices: [],
-                  affaires: []
-                };
-              }
-              ps.byFinition[finKey].count++;
-              ps.byFinition[finKey].totalSurface += prod.surface || 0;
-              ps.byFinition[finKey].totalAmount += amount;
-              if (prod.priceM2 > 0) ps.byFinition[finKey].prices.push(prod.priceM2);
-              ps.byFinition[finKey].affaires.push({
+              p.totalAmount += amount;
+              if (prod.priceM2 > 0) p.prices.push(prod.priceM2);
+              p.affaires.push({
                 name: item.affaires,
                 priceM2: prod.priceM2,
                 surface: prod.surface,
                 statut: item.statut
               });
-              
-              ps.affaires.push({
-                name: item.affaires,
-                priceM2: prod.priceM2,
-                surface: prod.surface,
-                statut: item.statut,
-                finition: prod.finition || 'Sans finition'
-              });
-              
-              // Totaux catégorie
-              categoryStats[category].totalAmount += amount;
-              categoryStats[category].totalSurface += prod.surface || 0;
-              categoryStats[category].count++;
             });
           }
         });
       });
       
-      // Générer le HTML groupé par catégorie
-      const sortedCategories = Object.keys(categoryStats).sort();
+      inventoryData = Object.values(productsMap).sort((a, b) => b.count - a.count);
+    }
+    
+    function initRPGTabs() {
+      document.querySelectorAll('.rpg-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          // Switch tab
+          document.querySelectorAll('.rpg-tab').forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          
+          // Switch content
+          const tabId = tab.dataset.tab;
+          document.querySelectorAll('.rpg-tab-content').forEach(c => c.classList.remove('active'));
+          document.getElementById(tabId + 'Tab')?.classList.add('active');
+          
+          hideInventoryTooltip();
+        });
+      });
+    }
+    
+    function updateInventoryFilters() {
+      const container = document.getElementById('inventoryFilters');
+      if (!container) return;
       
-      if (sortedCategories.length === 0) {
+      const categories = [...new Set(inventoryData.map(p => p.category))].sort();
+      
+      container.innerHTML = `
+        <button class="rpg-filter-btn ${currentInventoryFilter === '' ? 'active' : ''}" data-category="">Tous</button>
+        ${categories.map(c => `
+          <button class="rpg-filter-btn ${currentInventoryFilter === c ? 'active' : ''}" data-category="${c}">
+            ${getCategoryIcon(c)} ${c}
+          </button>
+        `).join('')}
+      `;
+      
+      container.querySelectorAll('.rpg-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentInventoryFilter = btn.dataset.category;
+          container.querySelectorAll('.rpg-filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderInventory(document.getElementById('inventorySearchInput')?.value || '');
+        });
+      });
+    }
+    
+    function updateStatsFilters() {
+      const container = document.getElementById('statsFilters');
+      if (!container) return;
+      
+      const categories = [...new Set(inventoryData.map(p => p.category))].sort();
+      
+      container.innerHTML = `
+        <button class="rpg-filter-btn ${currentStatsFilter === '' ? 'active' : ''}" data-category="">Tous</button>
+        ${categories.map(c => `
+          <button class="rpg-filter-btn ${currentStatsFilter === c ? 'active' : ''}" data-category="${c}">
+            ${getCategoryIcon(c)} ${c}
+          </button>
+        `).join('')}
+      `;
+      
+      container.querySelectorAll('.rpg-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          currentStatsFilter = btn.dataset.category;
+          container.querySelectorAll('.rpg-filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          renderStatsProducts(document.getElementById('statsSearchInput')?.value || '');
+        });
+      });
+    }
+    
+    function renderInventory(searchTerm = '') {
+      const container = document.getElementById('inventoryGrid');
+      if (!container) return;
+      
+      // Filtrer les produits
+      let filtered = inventoryData.filter(p => {
+        if (currentInventoryFilter && p.category !== currentInventoryFilter) return false;
+        if (searchTerm && !p.name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+        return true;
+      });
+      
+      // Grouper par catégorie
+      const byCategory = {};
+      filtered.forEach(p => {
+        if (!byCategory[p.category]) byCategory[p.category] = [];
+        byCategory[p.category].push(p);
+      });
+      
+      if (Object.keys(byCategory).length === 0) {
         container.innerHTML = `
-          <div style="text-align:center;padding:40px 20px;color:var(--gray-500);">
-            <div style="font-size:48px;margin-bottom:12px;">📦</div>
-            <div style="font-size:14px;font-weight:600;">Aucun produit trouvé</div>
-            <div style="font-size:12px;margin-top:4px;">Ajoutez des produits avec prix/m² dans vos affaires</div>
+          <div class="rpg-empty">
+            <div class="rpg-empty-icon">📦</div>
+            <div class="rpg-empty-text">Aucun produit trouvé<br><small>Ajoutez des produits dans vos affaires</small></div>
           </div>
         `;
         return;
       }
       
       let html = '';
-      let cardIndex = 0;
       
-      // Stocker les données pour les toggles
-      window.productAnalysisData = categoryStats;
-      
-      sortedCategories.forEach(category => {
-        const catData = categoryStats[category];
-        const sortedProducts = Object.values(catData.products).sort((a, b) => b.count - a.count);
+      Object.keys(byCategory).sort().forEach(category => {
+        const products = byCategory[category];
         
         html += `
-          <div class="category-section" style="margin-bottom:20px;">
-            <div class="category-header" style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:var(--gray-100);border-radius:10px;margin-bottom:12px;">
-              <span style="font-weight:800;font-size:14px;color:var(--dark);">📁 ${category}</span>
-              <div style="display:flex;gap:12px;font-size:11px;color:var(--gray-600);">
-                <span>${catData.count} produit${catData.count > 1 ? 's' : ''}</span>
-                <span>${formatNumber(Math.round(catData.totalSurface))} m²</span>
-                <span style="font-weight:700;color:var(--theme-color);">${formatMontantShort(catData.totalAmount)}</span>
-              </div>
+          <div class="inventory-section">
+            <div class="inventory-section-title">
+              ${getCategoryIcon(category)} ${category} <span>(${products.length})</span>
             </div>
+            <div class="inventory-grid">
+              ${products.map((p, idx) => {
+                const rarity = getRarity(p.count);
+                const avgPrice = p.prices.length > 0 
+                  ? Math.round(p.prices.reduce((a, b) => a + b, 0) / p.prices.length)
+                  : 0;
+                const dataJson = encodeURIComponent(JSON.stringify(p));
+                
+                return `
+                  <div class="inventory-slot" 
+                       draggable="true"
+                       data-product="${dataJson}"
+                       onmouseenter="showInventoryTooltip(event, this)"
+                       onmouseleave="hideInventoryTooltip()"
+                       ondragstart="onInventoryDragStart(event)"
+                       onclick="selectInventoryItem(this)">
+                    <div class="slot-rarity ${rarity.class}"></div>
+                    <span class="slot-icon">${p.isComplexe ? '🔧' : getCategoryIcon(p.category)}</span>
+                    <span class="slot-name">${p.name.substring(0, 12)}</span>
+                    <span class="slot-count">${p.count}</span>
+                  </div>
+                `;
+              }).join('')}
+              ${Array(Math.max(0, 6 - products.length % 6)).fill('<div class="inventory-slot empty"></div>').join('')}
+            </div>
+          </div>
         `;
-        
-        sortedProducts.forEach(prod => {
-          const avgPrice = prod.prices.length > 0 
-            ? prod.prices.reduce((a, b) => a + b, 0) / prod.prices.length 
-            : 0;
-          const minPrice = prod.prices.length > 0 ? Math.min(...prod.prices) : 0;
-          const maxPrice = prod.prices.length > 0 ? Math.max(...prod.prices) : 0;
-          const finitions = Object.keys(prod.byFinition);
-          const currentCardId = `product-card-${cardIndex}`;
-          const prodDataKey = `${category}|${prod.name.toLowerCase()}`;
-          cardIndex++;
-          
-          html += `
-            <div class="product-stats-card" ${prod.isComplexe ? 'style="border-style:dashed;"' : ''} data-prodkey="${prodDataKey}">
-              <div class="product-stats-header">
-                <span class="product-stats-name">${prod.isComplexe ? '🔧 ' : ''}${prod.name}</span>
-                <div class="product-stats-badges">
-                  <span class="product-stats-count">${prod.count} affaire${prod.count > 1 ? 's' : ''}</span>
-                </div>
-              </div>
-              
-              <!-- Stats globales (toutes finitions) -->
-              <div class="product-stats-grid">
-                <div class="product-stat-item">
-                  <div class="product-stat-value">${formatMontantShort(avgPrice)}</div>
-                  <div class="product-stat-label">Prix moy./m²</div>
-                </div>
-                <div class="product-stat-item">
-                  <div class="product-stat-value">${formatNumber(Math.round(prod.totalSurface))}</div>
-                  <div class="product-stat-label">Surface totale m²</div>
-                </div>
-                <div class="product-stat-item">
-                  <div class="product-stat-value">${formatMontantShort(minPrice)} - ${formatMontantShort(maxPrice)}</div>
-                  <div class="product-stat-label">Fourchette €/m²</div>
-                </div>
-                <div class="product-stat-item">
-                  <div class="product-stat-value">${formatMontantShort(prod.totalAmount)}</div>
-                  <div class="product-stat-label">CA total</div>
-                </div>
-              </div>
-              
-              <!-- Filtre par finition (si plusieurs) -->
-              ${finitions.length > 1 || (finitions.length === 1 && finitions[0] !== 'Sans finition') ? `
-                <div class="product-finition-section" style="margin-top:12px;padding-top:10px;border-top:1px solid var(--gray-200);">
-                  <div style="font-size:10px;font-weight:600;color:var(--gray-500);margin-bottom:6px;">DÉTAIL PAR FINITION :</div>
-                  <div style="display:flex;flex-wrap:wrap;gap:4px;">
-                    ${finitions.map(fin => {
-                      const finData = prod.byFinition[fin];
-                      return `<button class="finition-detail-btn" onclick="showFinitionDetail('${currentCardId}', '${prodDataKey}', '${fin.replace(/'/g, "\\'")}')">
-                        ${fin} <small>(${finData.count})</small>
-                      </button>`;
-                    }).join('')}
-                  </div>
-                  <div id="${currentCardId}-finition-detail" class="finition-detail-panel" style="display:none;"></div>
-                </div>
-              ` : ''}
-              
-              <!-- Bouton détails complexe (masqué par défaut) -->
-              ${prod.isComplexe && prod.components && prod.components.length > 0 ? `
-                <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--gray-200);">
-                  <button class="complexe-detail-toggle" onclick="toggleComplexeDetail('${currentCardId}')">
-                    📋 Voir les ${prod.components.length} composants
-                  </button>
-                  <div id="${currentCardId}-complexe-detail" class="complexe-detail-panel" style="display:none;margin-top:8px;padding:10px;background:var(--gray-50);border-radius:8px;">
-                    ${prod.components.map(c => `
-                      <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 0;border-bottom:1px solid var(--gray-200);">
-                        <span>${c.name} ${c.finition ? `<small style="color:var(--gray-400)">(${c.finition})</small>` : ''}</span>
-                        <span style="font-weight:700;color:var(--theme-color);">${formatNumber(c.priceM2)} €/m²</span>
-                      </div>
-                    `).join('')}
-                    <div style="display:flex;justify-content:space-between;font-size:13px;padding:8px 0 0;font-weight:800;color:var(--theme-color);">
-                      <span>TOTAL COMPLEXE</span>
-                      <span>${formatNumber(prod.components.reduce((s, c) => s + (c.priceM2 || 0), 0))} €/m²</span>
-                    </div>
-                  </div>
-                </div>
-              ` : ''}
-              
-              <!-- Liste des affaires (masquée par défaut) -->
-              <div style="margin-top:10px;">
-                <button class="affaires-toggle-btn" onclick="toggleAffairesList('${currentCardId}')">
-                  📄 Voir les affaires (${prod.affaires.length})
-                </button>
-                <div id="${currentCardId}-affaires" class="product-affaires-list" style="display:none;margin-top:8px;">
-                  ${prod.affaires.slice(0, 10).map(a => `
-                    <div class="product-affaire-item">
-                      <div style="display:flex;flex-direction:column;">
-                        <span class="product-affaire-name">${a.name}</span>
-                        ${a.finition && a.finition !== 'Sans finition' ? `<small style="color:var(--gray-400);">${a.finition}</small>` : ''}
-                      </div>
-                      <span class="product-affaire-price">${formatMontantShort(a.priceM2)} €/m² × ${formatNumber(a.surface || 0)} m²</span>
-                    </div>
-                  `).join('')}
-                  ${prod.affaires.length > 10 ? `<div style="text-align:center;font-size:11px;color:var(--gray-500);padding:6px;">+ ${prod.affaires.length - 10} autres...</div>` : ''}
-                </div>
-              </div>
-            </div>
-          `;
-        });
-        
-        html += '</div>';
       });
       
       container.innerHTML = html;
     }
     
-    function showFinitionDetail(cardId, prodKey, finition) {
-      const panel = document.getElementById(`${cardId}-finition-detail`);
-      if (!panel) return;
+    function showInventoryTooltip(event, element) {
+      const tooltip = document.getElementById('inventoryTooltip');
+      if (!tooltip) return;
       
-      // Trouver les données
-      const [category, prodName] = prodKey.split('|');
-      const catData = window.productAnalysisData?.[category];
-      if (!catData) return;
-      const prodData = catData.products[prodName];
-      if (!prodData || !prodData.byFinition[finition]) return;
-      
-      const finData = prodData.byFinition[finition];
-      const avgPrice = finData.prices.length > 0 
-        ? finData.prices.reduce((a, b) => a + b, 0) / finData.prices.length 
-        : 0;
-      const minPrice = finData.prices.length > 0 ? Math.min(...finData.prices) : 0;
-      const maxPrice = finData.prices.length > 0 ? Math.max(...finData.prices) : 0;
-      
-      panel.innerHTML = `
-        <div style="margin-top:10px;padding:12px;background:var(--gray-50);border-radius:8px;border-left:3px solid var(--theme-color);">
-          <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--theme-color);">📌 ${finition}</div>
-          <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px;">
-            <div style="background:white;padding:10px;border-radius:6px;text-align:center;">
-              <div style="font-size:16px;font-weight:800;color:var(--dark);">${formatMontantShort(avgPrice)}</div>
-              <div style="font-size:9px;color:var(--gray-500);text-transform:uppercase;">Prix moy./m²</div>
+      try {
+        const data = JSON.parse(decodeURIComponent(element.dataset.product));
+        const rarity = getRarity(data.count);
+        const avgPrice = data.prices.length > 0 
+          ? Math.round(data.prices.reduce((a, b) => a + b, 0) / data.prices.length)
+          : 0;
+        const minPrice = data.prices.length > 0 ? Math.min(...data.prices) : 0;
+        const maxPrice = data.prices.length > 0 ? Math.max(...data.prices) : 0;
+        
+        tooltip.innerHTML = `
+          <div class="tooltip-title">
+            ${data.isComplexe ? '🔧' : getCategoryIcon(data.category)} ${data.name}
+          </div>
+          <div class="tooltip-category">${data.category} • ${rarity.name}</div>
+          <div class="tooltip-stats">
+            <div class="tooltip-stat">
+              <span class="tooltip-stat-label">💰 Prix moyen</span>
+              <span class="tooltip-stat-value gold">${formatMontantShort(avgPrice)} /m²</span>
             </div>
-            <div style="background:white;padding:10px;border-radius:6px;text-align:center;">
-              <div style="font-size:16px;font-weight:800;color:var(--dark);">${finData.count}</div>
-              <div style="font-size:9px;color:var(--gray-500);text-transform:uppercase;">Affaires</div>
+            <div class="tooltip-stat">
+              <span class="tooltip-stat-label">📊 Fourchette</span>
+              <span class="tooltip-stat-value">${formatMontantShort(minPrice)} - ${formatMontantShort(maxPrice)}</span>
             </div>
-            <div style="background:white;padding:10px;border-radius:6px;text-align:center;">
-              <div style="font-size:14px;font-weight:700;color:var(--dark);">${formatMontantShort(minPrice)} - ${formatMontantShort(maxPrice)}</div>
-              <div style="font-size:9px;color:var(--gray-500);text-transform:uppercase;">Fourchette</div>
+            <div class="tooltip-stat">
+              <span class="tooltip-stat-label">📐 Surface totale</span>
+              <span class="tooltip-stat-value blue">${formatNumber(Math.round(data.totalSurface))} m²</span>
             </div>
-            <div style="background:white;padding:10px;border-radius:6px;text-align:center;">
-              <div style="font-size:16px;font-weight:800;color:var(--dark);">${formatNumber(Math.round(finData.totalSurface))}</div>
-              <div style="font-size:9px;color:var(--gray-500);text-transform:uppercase;">Surface m²</div>
+            <div class="tooltip-stat">
+              <span class="tooltip-stat-label">💎 CA total</span>
+              <span class="tooltip-stat-value gold">${formatMontantShort(data.totalAmount)}</span>
             </div>
           </div>
-          <div style="font-size:10px;font-weight:600;color:var(--gray-500);margin-bottom:6px;">Affaires avec "${finition}" :</div>
-          ${finData.affaires.slice(0, 5).map(a => `
-            <div style="display:flex;justify-content:space-between;font-size:11px;padding:6px 8px;background:white;border-radius:4px;margin-bottom:4px;">
-              <span style="font-weight:500;">${a.name}</span>
-              <span style="font-weight:700;color:var(--theme-color);">${formatMontantShort(a.priceM2)} €/m²</span>
+          ${data.affaires.length > 0 ? `
+            <div class="tooltip-affaires">
+              <div class="tooltip-affaires-title">📋 Dernières affaires</div>
+              ${data.affaires.slice(0, 3).map(a => `
+                <div class="tooltip-affaire">• ${a.name}</div>
+              `).join('')}
+              ${data.affaires.length > 3 ? `<div class="tooltip-affaire" style="opacity:0.5;">+ ${data.affaires.length - 3} autres...</div>` : ''}
             </div>
-          `).join('')}
-          ${finData.affaires.length > 5 ? `<div style="text-align:center;font-size:10px;color:var(--gray-400);padding:4px;">+ ${finData.affaires.length - 5} autres</div>` : ''}
+          ` : ''}
+        `;
+        
+        tooltip.style.display = 'block';
+        
+        // Positionner le tooltip
+        const rect = element.getBoundingClientRect();
+        let left = rect.right + 10;
+        let top = rect.top;
+        
+        // Vérifier si le tooltip sort de l'écran
+        if (left + 280 > window.innerWidth) {
+          left = rect.left - 290;
+        }
+        if (top + tooltip.offsetHeight > window.innerHeight) {
+          top = window.innerHeight - tooltip.offsetHeight - 10;
+        }
+        
+        tooltip.style.left = left + 'px';
+        tooltip.style.top = top + 'px';
+        
+      } catch (e) {
+        console.error('Erreur tooltip:', e);
+      }
+    }
+    
+    function hideInventoryTooltip() {
+      const tooltip = document.getElementById('inventoryTooltip');
+      if (tooltip) tooltip.style.display = 'none';
+    }
+    
+    function selectInventoryItem(element) {
+      // Désélectionner l'ancien
+      document.querySelectorAll('.inventory-slot.selected').forEach(s => s.classList.remove('selected'));
+      
+      // Sélectionner le nouveau
+      element.classList.add('selected');
+      selectedInventoryItem = JSON.parse(decodeURIComponent(element.dataset.product));
+    }
+    
+    // ═══ SYSTÈME DE CRAFT AVEC TABLE 3x3 ═══
+    let craftSlots = Array(9).fill(null); // 9 slots pour la grille 3x3
+    let savedComplexes = []; // Complexes créés et sauvegardés
+    
+    function initCraftSystem() {
+      // Charger les complexes sauvegardés
+      loadSavedComplexes();
+      
+      // Rendre le sélecteur de produits
+      renderCraftSelector();
+      
+      // Rendre la liste des complexes
+      renderComplexesList();
+      
+      // Initialiser l'affichage des slots
+      renderCraftSlots();
+      
+      // Bouton créer
+      document.getElementById('craftCreateBtn')?.addEventListener('click', createComplexe);
+      
+      // Input nom
+      document.getElementById('craftComplexeName')?.addEventListener('input', updateCraftButton);
+    }
+    
+    function loadSavedComplexes() {
+      try {
+        const saved = localStorage.getItem(`${SITE_ID}_complexes`);
+        if (saved) {
+          savedComplexes = JSON.parse(saved);
+        }
+      } catch (e) {
+        console.error('Erreur chargement complexes:', e);
+        savedComplexes = [];
+      }
+    }
+    
+    function saveComplexes() {
+      try {
+        localStorage.setItem(`${SITE_ID}_complexes`, JSON.stringify(savedComplexes));
+      } catch (e) {
+        console.error('Erreur sauvegarde complexes:', e);
+      }
+    }
+    
+    function renderCraftSelector() {
+      const container = document.getElementById('craftSelectorGrid');
+      if (!container) return;
+      
+      // Filtrer uniquement les produits non-complexes
+      const products = inventoryData.filter(p => !p.isComplexe);
+      
+      if (products.length === 0) {
+        container.innerHTML = '<div class="craft-empty-msg">Aucun produit disponible</div>';
+        return;
+      }
+      
+      container.innerHTML = products.map(p => {
+        const avgPrice = p.prices.length > 0 
+          ? Math.round(p.prices.reduce((a, b) => a + b, 0) / p.prices.length)
+          : 0;
+        
+        return `
+          <div class="craft-selector-item" 
+               onclick="addProductToCraftSlot('${encodeURIComponent(JSON.stringify({name: p.name, category: p.category, priceM2: avgPrice}))}')"
+               title="${p.name} - ${formatMontantShort(avgPrice)}/m²">
+            <span class="item-icon">${getCategoryIcon(p.category)}</span>
+            <span class="item-name">${p.name.substring(0, 10)}</span>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    function addProductToCraftSlot(encodedProduct) {
+      try {
+        const product = JSON.parse(decodeURIComponent(encodedProduct));
+        
+        // Trouver le premier slot libre
+        const freeSlotIndex = craftSlots.findIndex(s => s === null);
+        
+        if (freeSlotIndex === -1) {
+          showToast('Table de craft pleine (9 slots max)', 'warning');
+          return;
+        }
+        
+        // Ajouter au slot libre
+        craftSlots[freeSlotIndex] = product;
+        
+        renderCraftSlots();
+        updateCraftSummary();
+        updateCraftButton();
+      } catch (e) {
+        console.error('Erreur ajout produit:', e);
+      }
+    }
+    
+    function removeFromCraftSlot(slotIndex) {
+      craftSlots[slotIndex] = null;
+      renderCraftSlots();
+      updateCraftSummary();
+      updateCraftButton();
+    }
+    
+    function renderCraftSlots() {
+      document.querySelectorAll('#craftGrid .craft-slot').forEach((slot, idx) => {
+        const product = craftSlots[idx];
+        
+        if (product) {
+          slot.classList.add('has-item');
+          slot.innerHTML = `
+            <span class="slot-icon">${getCategoryIcon(product.category)}</span>
+            <span class="slot-name">${product.name.substring(0, 8)}</span>
+            <span class="slot-remove" onclick="event.stopPropagation(); removeFromCraftSlot(${idx})">✕</span>
+          `;
+        } else {
+          slot.classList.remove('has-item');
+          slot.innerHTML = '';
+        }
+      });
+      
+      // Mettre à jour le résultat
+      const usedSlots = craftSlots.filter(s => s !== null);
+      const resultDiv = document.getElementById('craftResult');
+      
+      if (resultDiv) {
+        if (usedSlots.length > 0) {
+          resultDiv.classList.remove('empty');
+          const totalPrice = usedSlots.reduce((sum, p) => sum + (p.priceM2 || 0), 0);
+          
+          resultDiv.innerHTML = `
+            <span class="slot-icon">🔧</span>
+            <span class="craft-result-name">Complexe</span>
+            <span class="craft-result-price">${formatMontantShort(totalPrice)}/m²</span>
+          `;
+        } else {
+          resultDiv.classList.add('empty');
+          resultDiv.innerHTML = `
+            <span class="slot-icon">❓</span>
+            <span class="craft-result-name">Complexe</span>
+          `;
+        }
+      }
+    }
+    
+    function updateCraftSummary() {
+      const container = document.getElementById('craftSummaryContent');
+      if (!container) return;
+      
+      const usedSlots = craftSlots.filter(s => s !== null);
+      
+      if (usedSlots.length === 0) {
+        container.innerHTML = '<div class="craft-empty-msg">Ajoutez des produits dans la table</div>';
+        return;
+      }
+      
+      // Grouper par produit pour afficher les quantités
+      const grouped = {};
+      usedSlots.forEach(p => {
+        if (!grouped[p.name]) {
+          grouped[p.name] = { ...p, qty: 0 };
+        }
+        grouped[p.name].qty++;
+      });
+      
+      const totalPriceM2 = usedSlots.reduce((sum, p) => sum + (p.priceM2 || 0), 0);
+      
+      let html = '';
+      Object.values(grouped).forEach(p => {
+        html += `
+          <div class="craft-summary-row">
+            <span class="craft-summary-label">${getCategoryIcon(p.category)} ${p.name} ${p.qty > 1 ? `×${p.qty}` : ''}</span>
+            <span class="craft-summary-value">${formatMontantShort(p.priceM2 * p.qty)}/m²</span>
+          </div>
+        `;
+      });
+      
+      html += `
+        <div class="craft-summary-row craft-summary-total">
+          <span>TOTAL (${usedSlots.length} composant${usedSlots.length > 1 ? 's' : ''})</span>
+          <span>${formatMontantShort(totalPriceM2)}/m²</span>
         </div>
       `;
       
-      panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+      container.innerHTML = html;
     }
     
-    function toggleComplexeDetail(cardId) {
-      const panel = document.getElementById(`${cardId}-complexe-detail`);
-      const btn = panel?.previousElementSibling;
-      if (!panel) return;
+    function updateCraftButton() {
+      const btn = document.getElementById('craftCreateBtn');
+      if (!btn) return;
       
-      if (panel.style.display === 'none') {
-        panel.style.display = 'block';
-        if (btn) btn.textContent = btn.textContent.replace('Voir', 'Masquer');
-      } else {
-        panel.style.display = 'none';
-        if (btn) btn.textContent = btn.textContent.replace('Masquer', 'Voir');
-      }
+      const name = document.getElementById('craftComplexeName')?.value?.trim();
+      const usedSlots = craftSlots.filter(s => s !== null);
+      btn.disabled = !name || usedSlots.length === 0;
     }
     
-    function toggleAffairesList(cardId) {
-      const panel = document.getElementById(`${cardId}-affaires`);
-      const btn = panel?.previousElementSibling;
-      if (!panel) return;
+    function createComplexe() {
+      const name = document.getElementById('craftComplexeName')?.value?.trim();
+      const usedSlots = craftSlots.filter(s => s !== null);
       
-      if (panel.style.display === 'none') {
-        panel.style.display = 'block';
-        if (btn) btn.textContent = btn.textContent.replace('Voir', 'Masquer');
-      } else {
-        panel.style.display = 'none';
-        if (btn) btn.textContent = btn.textContent.replace('Masquer', 'Voir');
+      if (!name || usedSlots.length === 0) return;
+      
+      const totalPriceM2 = usedSlots.reduce((sum, p) => sum + (p.priceM2 || 0), 0);
+      
+      // Créer le complexe
+      const complexe = {
+        id: Date.now(),
+        name: name,
+        category: 'Complexe',
+        isComplexe: true,
+        components: usedSlots.map(p => ({ name: p.name, category: p.category, priceM2: p.priceM2 })),
+        priceM2: totalPriceM2,
+        createdAt: new Date().toISOString()
+      };
+      
+      // Ajouter aux complexes sauvegardés
+      savedComplexes.push(complexe);
+      saveComplexes();
+      
+      showToast(`✓ Complexe "${name}" créé !`, 'success');
+      
+      // Reset
+      craftSlots = Array(9).fill(null);
+      document.getElementById('craftComplexeName').value = '';
+      renderCraftSlots();
+      updateCraftSummary();
+      updateCraftButton();
+      renderComplexesList();
+    }
+    
+    // ═══ ONGLET COMPLEXES ═══
+    function renderComplexesList() {
+      const container = document.getElementById('complexesList');
+      if (!container) return;
+      
+      if (savedComplexes.length === 0) {
+        container.innerHTML = `
+          <div class="rpg-empty">
+            <div class="rpg-empty-icon">🔧</div>
+            <div class="rpg-empty-text">Aucun complexe créé<br><small>Allez dans l'onglet "Créer" pour en créer un</small></div>
+          </div>
+        `;
+        return;
       }
+      
+      container.innerHTML = savedComplexes.map((c, idx) => `
+        <div class="complexe-card">
+          <div class="complexe-header">
+            <div class="complexe-icon">🔧</div>
+            <div class="complexe-info">
+              <div class="complexe-name">${c.name}</div>
+              <div class="complexe-meta">${c.components.length} composant${c.components.length > 1 ? 's' : ''}</div>
+            </div>
+            <div class="complexe-price">${formatMontantShort(c.priceM2)}/m²</div>
+            <button class="complexe-delete" onclick="deleteComplexe(${idx})" title="Supprimer">✕</button>
+          </div>
+          <div class="complexe-components">
+            ${c.components.map(comp => `
+              <span class="complexe-component">${getCategoryIcon(comp.category)} ${comp.name}</span>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function deleteComplexe(index) {
+      if (!confirm('Supprimer ce complexe ?')) return;
+      
+      savedComplexes.splice(index, 1);
+      saveComplexes();
+      renderComplexesList();
+      showToast('Complexe supprimé', 'info');
+    }
+    
+    // ═══ STATS PRODUITS ═══
+    function renderStatsProducts(searchTerm = '') {
+      const container = document.getElementById('statsProductList');
+      if (!container) return;
+      
+      let filtered = inventoryData.filter(p => {
+        if (currentStatsFilter && p.category !== currentStatsFilter) return false;
+        if (searchTerm && !p.name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+        return true;
+      });
+      
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="rpg-empty">
+            <div class="rpg-empty-icon">📊</div>
+            <div class="rpg-empty-text">Aucune statistique disponible</div>
+          </div>
+        `;
+        return;
+      }
+      
+      // Calculer le max pour les barres
+      const maxAmount = Math.max(...filtered.map(p => p.totalAmount));
+      
+      container.innerHTML = filtered.map((p, idx) => {
+        const rarity = getRarity(p.count);
+        const avgPrice = p.prices.length > 0 
+          ? Math.round(p.prices.reduce((a, b) => a + b, 0) / p.prices.length)
+          : 0;
+        const minPrice = p.prices.length > 0 ? Math.min(...p.prices) : 0;
+        const maxPrice = p.prices.length > 0 ? Math.max(...p.prices) : 0;
+        const xpPercent = Math.round((p.totalAmount / maxAmount) * 100);
+        
+        return `
+          <div class="stats-product-card" onclick="toggleStatsCard(this)">
+            <div class="stats-product-header">
+              <div class="stats-product-icon" style="border-color:${rarity.class === 'legendary' ? '#ffd700' : rarity.class === 'epic' ? '#9c27b0' : rarity.class === 'rare' ? '#2196f3' : '#4a4a6a'}">
+                ${p.isComplexe ? '🔧' : getCategoryIcon(p.category)}
+              </div>
+              <div class="stats-product-info">
+                <div class="stats-product-name">${p.name}</div>
+                <div class="stats-product-category">${p.category} • ${rarity.name}</div>
+              </div>
+              <div class="stats-product-badges">
+                <span class="stats-badge count">${p.count}x</span>
+                <span class="stats-badge amount">${formatMontantShort(p.totalAmount)}</span>
+              </div>
+            </div>
+            
+            <div class="stats-product-details">
+              <div class="stats-detail-grid">
+                <div class="stats-detail-item">
+                  <div class="stats-detail-value gold">${formatMontantShort(avgPrice)}</div>
+                  <div class="stats-detail-label">Prix moy./m²</div>
+                </div>
+                <div class="stats-detail-item">
+                  <div class="stats-detail-value blue">${formatNumber(Math.round(p.totalSurface))}</div>
+                  <div class="stats-detail-label">Surface m²</div>
+                </div>
+                <div class="stats-detail-item">
+                  <div class="stats-detail-value">${formatMontantShort(minPrice)}</div>
+                  <div class="stats-detail-label">Prix min</div>
+                </div>
+                <div class="stats-detail-item">
+                  <div class="stats-detail-value">${formatMontantShort(maxPrice)}</div>
+                  <div class="stats-detail-label">Prix max</div>
+                </div>
+              </div>
+              
+              <div class="stats-xp-bar">
+                <div class="stats-xp-title">
+                  <span>CA GÉNÉRÉ</span>
+                  <span>${formatMontantShort(p.totalAmount)}</span>
+                </div>
+                <div class="stats-xp-track">
+                  <div class="stats-xp-fill" style="width:${xpPercent}%"></div>
+                </div>
+              </div>
+              
+              ${p.affaires.length > 0 ? `
+                <div class="stats-affaires-list">
+                  <div class="stats-affaires-title">📋 Affaires utilisant ce produit</div>
+                  ${p.affaires.slice(0, 5).map(a => `
+                    <div class="stats-affaire-item">
+                      <span class="stats-affaire-name">${a.name}</span>
+                      <span class="stats-affaire-price">${formatMontantShort(a.priceM2)}/m² × ${formatNumber(a.surface || 0)} m²</span>
+                    </div>
+                  `).join('')}
+                  ${p.affaires.length > 5 ? `<div style="text-align:center;font-size:10px;color:#6a6a8a;padding:8px;">+ ${p.affaires.length - 5} autres affaires</div>` : ''}
+                </div>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    
+    function toggleStatsCard(card) {
+      card.classList.toggle('expanded');
     }
 
     /* Export Functions */
@@ -11226,13 +12520,11 @@ marker.bindPopup(`
         });
       });
       
-      // Products Analysis Panel
+      // Products Analysis Panel (RPG Inventory)
       document.getElementById('toggleProductsBtn')?.addEventListener('click', toggleProductsPanel);
       document.getElementById('productsPanelClose')?.addEventListener('click', () => {
         document.getElementById('productsPanel').classList.remove('open');
-      });
-      document.getElementById('productSearchInput')?.addEventListener('input', (e) => {
-        updateProductsAnalysis(e.target.value);
+        hideInventoryTooltip();
       });
 
       // Chips
@@ -11656,4 +12948,3 @@ marker.bindPopup(`
 
 <script src="./Cartographie SMAC accueil_files/leaflet(1).js.téléchargement" async=""></script><script src="./Cartographie SMAC accueil_files/leaflet.markercluster(1).js.téléchargement" async=""></script><script src="./Cartographie SMAC accueil_files/xlsx.full.min(1).js.téléchargement" async=""></script><script src="./Cartographie SMAC accueil_files/jspdf.umd.min(1).js.téléchargement" async=""></script><script src="./Cartographie SMAC accueil_files/jspdf.plugin.autotable.min(1).js.téléchargement" async=""></script>
 <script src="./Cartographie SMAC accueil_files/leaflet(2).js.téléchargement" async=""></script><script src="./Cartographie SMAC accueil_files/leaflet.markercluster(2).js.téléchargement" async=""></script><script src="./Cartographie SMAC accueil_files/xlsx.full.min(2).js.téléchargement" async=""></script><script src="./Cartographie SMAC accueil_files/jspdf.umd.min(2).js.téléchargement" async=""></script><script src="./Cartographie SMAC accueil_files/jspdf.plugin.autotable.min(2).js.téléchargement" async=""></script></body></html>
-
