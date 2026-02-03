@@ -6232,6 +6232,10 @@
             <input type="text" class="form-input" id="mSurface" placeholder="Ex: 2500">
           </div>
           <div class="form-group">
+            <label class="form-label">Marge (%)</label>
+            <input type="number" class="form-input" id="mMarge" placeholder="Ex: 25" min="0" max="100" step="0.1">
+          </div>
+          <div class="form-group">
             <label class="form-label">Responsable</label>
             <input type="text" class="form-input" id="mResponsable" placeholder="Jean Dupont">
           </div>
@@ -9053,7 +9057,7 @@ marker.bindPopup(`
     function clearModalForm() {
       editingId = null;
       document.getElementById('modalTitle').textContent = 'Nouvelle affaire';
-      ['mAffaires', 'mClient', 'mDescription', 'mAdresse', 'mDate', 'mDateDevis', 'mMoisRemis', 'mMontant', 'mSurface', 'mResponsable', 'mLat', 'mLng', 'mLink', 'mNotes', 'mEGCustom', 'mArchitectCustom', 'mChiffreurCustom', 'mMetreurCustom', 'mChiffreurTaux', 'mMetreurTaux', 'mProductName', 'mProductPrice', 'mProductSurface', 'mProductFinitionCustom', 'mComplexeName', 'mComplexeSurface', 'mComponentName', 'mComponentPrice', 'mComponentFinition'].forEach(id => {
+      ['mAffaires', 'mClient', 'mDescription', 'mAdresse', 'mDate', 'mDateDevis', 'mMoisRemis', 'mMontant', 'mSurface', 'mMarge', 'mResponsable', 'mLat', 'mLng', 'mLink', 'mNotes', 'mEGCustom', 'mArchitectCustom', 'mChiffreurCustom', 'mMetreurCustom', 'mChiffreurTaux', 'mMetreurTaux', 'mProductName', 'mProductPrice', 'mProductSurface', 'mProductFinitionCustom', 'mComplexeName', 'mComplexeSurface', 'mComponentName', 'mComponentPrice', 'mComponentFinition'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.value = '';
       });
@@ -9130,6 +9134,7 @@ marker.bindPopup(`
       document.getElementById('commissionLabel').textContent = (item.commission === true || item.commission === 'true') ? 'Oui' : 'Non';
       document.getElementById('mMontant').value = item.montant || '';
       document.getElementById('mSurface').value = item.surface || '';
+      document.getElementById('mMarge').value = item.marge || '';
       document.getElementById('mResponsable').value = item.responsable || '';
       document.getElementById('mLat').value = item.coords?.[0] || '';
       document.getElementById('mLng').value = item.coords?.[1] || '';
@@ -9391,6 +9396,7 @@ marker.bindPopup(`
         commission: document.getElementById('mCommission').checked,
         montant: document.getElementById('mMontant').value.trim() || '-',
         surface: document.getElementById('mSurface').value.trim(),
+        marge: document.getElementById('mMarge').value.trim(),
         responsable: document.getElementById('mResponsable').value.trim(),
         chiffreur: chiffreurPrincipal, // Compatibilité ancien système
         metreur: metreurPrincipal,      // Compatibilité ancien système
