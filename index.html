@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!-- saved from url=(0037)https://smac-suivico.github.io/carto/ -->
 <html lang="fr" style="--theme-color: #22c55e; --theme-color-light: rgba(34, 197, 94, 0.15); --theme-color-dark: rgb(4, 167, 64);"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -5158,6 +5159,95 @@
         font-size: 15px;
       }
     }
+
+    /* ===== v22 : en-tête et pied de modale toujours visibles ===== */
+    .modal-header {
+      position: sticky;
+      top: 0;
+      z-index: 6;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 1px 0 var(--gray-200);
+    }
+    .modal-footer {
+      position: sticky;
+      bottom: 0;
+      z-index: 6;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 0 0 16px 16px;
+    }
+    .modal-close {
+      flex-shrink: 0;
+    }
+    .modal-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ===== v22 : calcul explicite prévision / conversion ===== */
+    .calc-row { display:flex; justify-content:space-between; align-items:center; gap:8px;
+      padding:7px 2px; font-size:12px; border-bottom:1px dashed var(--gray-200); }
+    .calc-lbl { color:var(--gray-500); }
+    .calc-val { font-weight:700; color:var(--gray-800); font-variant-numeric:tabular-nums; text-align:right; }
+    .calc-total { background:var(--theme-color-light); margin-top:8px; padding:10px;
+      border-radius:var(--radius-sm); border-bottom:none; }
+    .calc-total .calc-lbl { color:var(--gray-700); font-weight:600; }
+    .calc-total .calc-val { color:var(--theme-color); font-size:17px; }
+    .calc-sub { display:flex; gap:8px; margin-top:10px; }
+    .calc-sub-item { flex:1; background:var(--gray-100); border-radius:var(--radius-sm);
+      padding:8px; display:flex; flex-direction:column; gap:2px; font-size:10.5px; color:var(--gray-500); }
+    .calc-sub-item strong { font-size:13px; color:var(--gray-800); }
+    .calc-note { font-size:10.5px; color:var(--gray-500); line-height:1.5; margin-top:10px;
+      background:var(--gray-100); padding:8px 10px; border-radius:var(--radius-sm); }
+    .calc-note strong { color:var(--gray-700); }
+    .conversion-formula { text-align:center; font-size:11.5px; color:var(--gray-500); margin:4px 0 10px; }
+    .conversion-formula strong { color:var(--gray-800); }
+    .person-clickable { transition:transform .15s, box-shadow .15s; }
+    .person-clickable:hover { transform:translateY(-1px); box-shadow:var(--shadow-md); }
+
+    /* ===== v22 : dashboard chiffreur / métreur ===== */
+    .pdash-modal { max-width:820px; }
+    .pdash-scope { font-size:11px; color:var(--gray-500); display:flex; align-items:center;
+      gap:6px; margin-right:auto; cursor:pointer; }
+    .pdash-kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:8px; margin-bottom:16px; }
+    .pdash-kpi { background:var(--gray-100); border-radius:var(--radius-sm); padding:10px; text-align:center; }
+    .pdash-kpi-val { font-size:16px; font-weight:800; font-variant-numeric:tabular-nums; }
+    .pdash-kpi-lbl { font-size:10px; color:var(--gray-500); margin-top:2px; line-height:1.3; }
+    .pdash-block { margin-bottom:16px; }
+    .pdash-block-title { font-size:12px; font-weight:700; color:var(--gray-700); margin-bottom:8px; }
+    .pdash-stack { display:flex; height:14px; border-radius:7px; overflow:hidden; background:var(--gray-200); }
+    .pdash-legend { display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
+    .pdash-leg { font-size:10.5px; color:var(--gray-700); display:flex; align-items:center; gap:4px; }
+    .pdash-leg i { width:8px; height:8px; border-radius:50%; display:inline-block; }
+    .pdash-leg small { color:var(--gray-500); }
+    .pdash-timeline { display:flex; align-items:flex-end; gap:4px; height:90px; padding-top:4px; }
+    .pdash-bar-wrap { flex:1; display:flex; flex-direction:column; justify-content:flex-end;
+      align-items:center; height:100%; gap:3px; }
+    .pdash-bar { width:100%; background:var(--theme-color); border-radius:3px 3px 0 0; min-height:0; }
+    .pdash-bar-wrap span { font-size:9px; color:var(--gray-500); }
+    .pdash-eg { display:flex; justify-content:space-between; font-size:11.5px; padding:5px 0;
+      border-bottom:1px solid var(--gray-100); }
+    .pdash-eg strong { color:var(--theme-color); font-variant-numeric:tabular-nums; }
+    .pdash-aff-list { max-height:280px; overflow-y:auto; }
+    .pdash-aff { display:flex; justify-content:space-between; align-items:center; gap:10px;
+      padding:8px; border-radius:var(--radius-sm); }
+    .pdash-aff:nth-child(odd) { background:var(--gray-50); }
+    .pdash-aff-main { min-width:0; }
+    .pdash-aff-name { display:block; font-size:12px; font-weight:600; color:var(--gray-800);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .pdash-aff-meta { font-size:10px; color:var(--gray-500); }
+    .pdash-aff-num { text-align:right; white-space:nowrap; }
+    .pdash-aff-pond { display:block; font-size:12.5px; font-weight:700; color:var(--theme-color);
+      font-variant-numeric:tabular-nums; }
+    .pdash-aff-share { font-size:9.5px; color:var(--gray-500); }
+    @media (max-width:640px) {
+      .pdash-modal { max-width:100%; }
+      .pdash-kpis { grid-template-columns:repeat(2,1fr); }
+    }
 </style>
 <link rel="stylesheet" href="./Cartographie SMAC_files/leaflet.css"><link rel="stylesheet" href="./Cartographie SMAC_files/MarkerCluster.css"><link rel="stylesheet" href="./Cartographie SMAC_files/MarkerCluster.Default.css"><link rel="stylesheet" href="./Cartographie SMAC_files/leaflet(1).css"><link rel="stylesheet" href="./Cartographie SMAC_files/MarkerCluster(1).css"><link rel="stylesheet" href="./Cartographie SMAC_files/MarkerCluster(1).Default.css"><link rel="stylesheet" href="./Cartographie SMAC_files/leaflet(2).css"><link rel="stylesheet" href="./Cartographie SMAC_files/MarkerCluster(2).css"><link rel="stylesheet" href="./Cartographie SMAC_files/MarkerCluster(2).Default.css"></head>
 <body class="">
@@ -5512,10 +5602,6 @@
           <div class="stats-toggle active" data-section="rankingSection"></div>
         </div>
         <div class="stats-config-item">
-          <span class="stats-config-label">🎯 Objectifs CA</span>
-          <div class="stats-toggle active" data-section="objectivesSection"></div>
-        </div>
-        <div class="stats-config-item">
           <span class="stats-config-label">🧮 Chiffreurs</span>
           <div class="stats-toggle active" data-section="chiffreurObjectivesSection"></div>
         </div>
@@ -5589,44 +5675,42 @@
       
       <div class="stats-grid-wrapper">
         <div class="stats-section" id="forecastSection" style="opacity: 1; pointer-events: auto; filter: none;">
-          <div class="stats-section-title">🔮 Prévisions CA</div>
+          <div class="stats-section-title">🔮 Prévision CA (pipeline pondéré)</div>
           <div class="stats-chart-container">
             <div class="forecast-container">
-              <div class="forecast-main">
-                <div class="forecast-value" id="forecastValue">4.2 M€</div>
-                <div class="forecast-label">CA potentiel (avec taux)</div>
+
+              <div class="calc-row">
+                <span class="calc-lbl">Pipeline « En cours » (montant brut)</span>
+                <span class="calc-val" id="forecastPotential">–</span>
               </div>
-              <div class="forecast-details">
-                <div class="forecast-detail">
-                  <span class="forecast-detail-label">En cours</span>
-                  <span class="forecast-detail-value" id="forecastCount">12</span>
-                </div>
-                <div class="forecast-detail">
-                  <span class="forecast-detail-label">Montant moy.</span>
-                  <span class="forecast-detail-value" id="forecastAvg">2.2 M€</span>
-                </div>
-                <div class="forecast-detail">
-                  <span class="forecast-detail-label">Montant brut</span>
-                  <span class="forecast-detail-value" id="forecastPotential">26.2 M€</span>
-                </div>
+              <div class="calc-row">
+                <span class="calc-lbl">× Taux de conversion appliqué</span>
+                <span class="calc-val" id="forecastRateValue">–</span>
               </div>
-              <!-- Taux de conversion configurable -->
-              <div class="forecast-rate-config" style="margin-top:16px;padding-top:12px;border-top:1px solid var(--gray-200);">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-                  <span style="font-size:12px;font-weight:600;color:var(--gray-700);">Taux de conversion</span>
-                  <span id="forecastRateValue" style="font-size:14px;font-weight:700;color:var(--theme-color);">16%</span>
-                </div>
-                <input type="range" id="forecastRateSlider" min="0" max="100" value="50" class="forecast-slider" style="width:100%;margin-bottom:8px;">
-                <label style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gray-600);cursor:pointer;">
-                  <input type="checkbox" id="forecastAutoRate" style="cursor:pointer;">
-                  <span>Calcul auto basé sur l'historique</span>
-                  <span id="forecastAutoValue" style="color:var(--gray-400);">(historique: 50%)</span>
-                </label>
+              <div class="calc-row calc-total">
+                <span class="calc-lbl">= CA attendu pondéré</span>
+                <span class="calc-val" id="forecastValue">–</span>
               </div>
+
+              <div class="calc-sub">
+                <div class="calc-sub-item"><span>Affaires en cours</span><strong id="forecastCount">–</strong></div>
+                <div class="calc-sub-item"><span>Montant moyen</span><strong id="forecastAvg">–</strong></div>
+              </div>
+
+              <div class="forecast-rate-config" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--gray-200);">
+                <div style="font-size:11px;font-weight:600;color:var(--gray-700);margin-bottom:6px;">Taux appliqué</div>
+                <select id="forecastRateMode" class="form-select" style="width:100%;font-size:11px;margin-bottom:8px;">
+                  <option value="count">Auto — historique en nombre d'affaires</option>
+                  <option value="amount">Auto — historique en montant (€)</option>
+                  <option value="manual">Manuel (curseur)</option>
+                </select>
+                <input type="range" id="forecastRateSlider" min="0" max="100" value="50" class="forecast-slider" style="width:100%;">
+              </div>
+
+              <div class="calc-note" id="forecastNote"></div>
             </div>
           </div>
         </div>
-        
         <div class="stats-section" id="conversionSection" style="opacity: 1; pointer-events: auto; filter: none;">
           <div class="stats-section-title">🎯 Taux de conversion</div>
           <div class="stats-chart-container">
@@ -5638,19 +5722,36 @@
                 </svg>
                 <div class="conversion-value" id="conversionRate">0%</div>
               </div>
+              <div class="conversion-formula" id="conversionFormula">–</div>
+
+              <div class="calc-row">
+                <span class="calc-lbl">En nombre d'affaires</span>
+                <span class="calc-val" id="convRateCount">–</span>
+              </div>
+              <div class="calc-row">
+                <span class="calc-lbl">En montant (€)</span>
+                <span class="calc-val" id="convRateAmount">–</span>
+              </div>
+
               <div class="conversion-details">
                 <div class="conversion-detail">
                   <span class="conversion-dot" style="background:#22c55e"></span>
-                  <span>Gagné: <strong id="convGagne">0</strong></span>
+                  <span>Gagné : <strong id="convGagne">0</strong></span>
                 </div>
                 <div class="conversion-detail">
                   <span class="conversion-dot" style="background:#f43f5e"></span>
-                  <span>Perdu: <strong id="convPerdu">0</strong></span>
+                  <span>Perdu : <strong id="convPerdu">0</strong></span>
                 </div>
                 <div class="conversion-detail">
                   <span class="conversion-dot" style="background:#f59e0b"></span>
-                  <span>En cours: <strong id="convEncours">12</strong></span>
+                  <span>En cours : <strong id="convEncours">0</strong></span>
                 </div>
+              </div>
+
+              <div class="calc-note">
+                Le taux ne compte que les affaires <strong>tranchées</strong> : Gagné ÷ (Gagné + Perdu).
+                Les affaires <strong>En cours</strong> sont exclues du calcul — elles alimentent la prévision CA ci-contre.
+                Tant qu'aucune affaire n'est marquée Gagné ou Perdu, le taux reste à 0 %.
               </div>
             </div>
           </div>
@@ -5761,66 +5862,6 @@
       </div>
       
       <div class="stats-grid-wrapper">
-      <div class="stats-section" id="objectivesSection" style="opacity: 1; pointer-events: auto; filter: none;">
-        <div class="stats-section-title">
-          🎯 Objectifs CA
-          <button class="objective-config-btn" onclick="openObjectivesConfig()" title="Configurer les objectifs" style="margin-left:8px;background:none;border:none;cursor:pointer;font-size:14px;">⚙️</button>
-        </div>
-        <div class="stats-chart-container">
-          <div class="objectives-container">
-            <!-- Objectif Mensuel Global -->
-            <div class="objective-item" style="background: linear-gradient(135deg, var(--red-light), white);">
-              <div class="objective-header">
-                <span class="objective-label">📅 Ce mois (Obj: <span id="objMonthTargetLabel">18.0 M€</span>)</span>
-                <div>
-                  <span class="objective-values"><span id="objMonthCurrent">0 €</span> / <span id="objMonthTarget">18.0 M€</span></span>
-                </div>
-              </div>
-              <div class="objective-bar">
-                <div class="objective-fill danger" id="objMonthFill" style="width: 0%"></div>
-              </div>
-              <div class="objective-percent" id="objMonthPercent">0%</div>
-            </div>
-            
-            <!-- Objectif Annuel -->
-            <div class="objective-item">
-              <div class="objective-header">
-                <span class="objective-label">📆 Cette année (Obj: <span id="objYearTargetLabel">216.0 M€</span>)</span>
-                <div>
-                  <span class="objective-values"><span id="objYearCurrent">0 €</span> / <span id="objYearTarget">216.0 M€</span></span>
-                </div>
-              </div>
-              <div class="objective-bar">
-                <div class="objective-fill danger" id="objYearFill" style="width: 0%"></div>
-              </div>
-              <div class="objective-percent" id="objYearPercent">0%</div>
-            </div>
-
-            <!-- Objectif Prise d'Affaire (Gagné) -->
-            <div class="objective-item" style="background: var(--green-light);">
-              <div class="objective-header">
-                <span class="objective-label">🏆 Prise d'affaire ce mois</span>
-                <div>
-                  <span class="objective-values"><span id="objPriseAffaire">0 €</span></span>
-                </div>
-              </div>
-              <div id="priseAffaireCount" style="font-size: 11px; color: var(--green); margin-top: 4px;">0 affaire(s) gagnée(s) ce mois</div>
-            </div>
-
-            <!-- Historique 3 derniers mois (tout chiffré) -->
-            <div class="objective-item" style="background: var(--cyan-light);">
-              <div class="objective-header">
-                <span class="objective-label">📊 Historique 3 derniers mois (chiffré)</span>
-                <div>
-                  <span class="objective-values"><span id="objHistorique3M">17.7 M€</span></span>
-                </div>
-              </div>
-              <div id="historique3MDetails" style="font-size: 11px; color: var(--cyan); margin-top: 4px;">11 affaires (Déc-Jan-Fév) · Tous statuts</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- Objectifs par Chiffreur -->
       <div class="stats-section" id="chiffreurObjectivesSection" style="opacity: 1; pointer-events: auto; filter: none;">
         <div class="stats-section-title">
@@ -7746,6 +7787,23 @@
   </div>
 
   <!-- Confirm Modal -->
+  <!-- Dashboard par chiffreur / métreur -->
+  <div class="modal-overlay" id="personDashModal">
+    <div class="modal pdash-modal">
+      <div class="modal-header">
+        <span class="modal-title" id="pdashTitle">Dashboard</span>
+        <button class="modal-close" onclick="closePersonDashboard()">✕</button>
+      </div>
+      <div class="modal-body" id="pdashBody"></div>
+      <div class="modal-footer">
+        <label class="pdash-scope">
+          <input type="checkbox" id="pdashAllTabs"> Inclure tous les onglets déverrouillés
+        </label>
+        <button class="btn btn-secondary" onclick="closePersonDashboard()">Fermer</button>
+      </div>
+    </div>
+  </div>
+
   <div class="modal-overlay" id="confirmModal">
     <div class="modal" style="max-width:400px">
       <div class="modal-header">
@@ -8499,21 +8557,30 @@
       return [...new Set([...fromData, ...customMOEList])].filter(Boolean).sort();
     }
 
-    function getAllChiffreurs() {
-      // Extract from existing data + custom list
+    /* Collecte les noms depuis l'ancien champ simple ET le tableau multi */
+    function collectPeople(simpleKey, arrayKey) {
       const fromData = [];
       Object.values(dataByTab).forEach(data => {
-        data.forEach(item => { if (item.chiffreur) fromData.push(item.chiffreur); });
+        (data || []).forEach(item => {
+          if (item[simpleKey]) fromData.push(String(item[simpleKey]).trim());
+          if (Array.isArray(item[arrayKey])) {
+            item[arrayKey].forEach(p => {
+              const n = (p && (p.name || p.nom)) ? String(p.name || p.nom).trim() : '';
+              if (n) fromData.push(n);
+            });
+          }
+        });
       });
+      return fromData;
+    }
+
+    function getAllChiffreurs() {
+      const fromData = collectPeople('chiffreur', 'chiffreurs');
       return [...new Set([...fromData, ...customChiffreurList])].filter(Boolean).sort();
     }
 
     function getAllMetreurs() {
-      // Extract from existing data + custom list
-      const fromData = [];
-      Object.values(dataByTab).forEach(data => {
-        data.forEach(item => { if (item.metreur) fromData.push(item.metreur); });
-      });
+      const fromData = collectPeople('metreur', 'metreurs');
       return [...new Set([...fromData, ...customMetreurList])].filter(Boolean).sort();
     }
 
@@ -8578,7 +8645,7 @@
     }
 
     function updateChiffreurDropdown() {
-      const select = document.getElementById('mChiffreur');
+      const select = document.getElementById('mChiffreurSelect');
       if (!select) return;
       const currentVal = select.value;
       select.innerHTML = '<option value="">-- Sélectionner --</option>';
@@ -8592,7 +8659,7 @@
     }
 
     function updateMetreurDropdown() {
-      const select = document.getElementById('mMetreur');
+      const select = document.getElementById('mMetreurSelect');
       if (!select) return;
       const currentVal = select.value;
       select.innerHTML = '<option value="">-- Sélectionner --</option>';
@@ -9020,7 +9087,7 @@
           el.style.filter = 'blur(8px)';
         });
         // Masquer les détails dans chaque section
-        document.querySelectorAll('.forecast-grid, .comparison-content, .conversion-gauge, .ranking-grid, .timeline-chart, .objectives-content').forEach(el => {
+        document.querySelectorAll('.forecast-grid, .comparison-content, .conversion-gauge, .ranking-grid, .timeline-chart, .objectives-content, .calc-row, .calc-note, .calc-sub, .conversion-formula').forEach(el => {
           if (el) el.style.visibility = 'hidden';
         });
         return;
@@ -9036,7 +9103,7 @@
         el.style.pointerEvents = 'auto';
         el.style.filter = 'none';
       });
-      document.querySelectorAll('.forecast-grid, .comparison-content, .conversion-gauge, .ranking-grid, .timeline-chart, .objectives-content').forEach(el => {
+      document.querySelectorAll('.forecast-grid, .comparison-content, .conversion-gauge, .ranking-grid, .timeline-chart, .objectives-content, .calc-row, .calc-note, .calc-sub, .conversion-formula').forEach(el => {
         if (el) el.style.visibility = 'visible';
       });
       
@@ -9269,51 +9336,65 @@
 
     /* Forecast (Prévisions CA) */
     function updateForecast(encours, gagne, perdu) {
-      // Calculate total amount of "En cours" deals
       const encoursItems = currentList.filter(i => i.statut === 'En cours');
       const encoursTotal = encoursItems.reduce((sum, item) => {
         const val = parseMontant(item.montant);
         return Number.isFinite(val) ? sum + val : sum;
       }, 0);
-      
-      // Calculate average
       const encoursAvg = encours > 0 ? encoursTotal / encours : 0;
-      
-      // Calculate historical conversion rate
+
+      /* Deux taux historiques : en nombre d'affaires et en montant */
       const decided = gagne + perdu;
-      const historicalRate = decided > 0 ? gagne / decided : 0.5;
-      
-      // Get slider and checkbox
+      const rateCount = decided > 0 ? gagne / decided : 0;
+      let gagneEUR = 0, perduEUR = 0;
+      currentList.forEach(item => {
+        const val = parseMontant(item.montant);
+        if (!Number.isFinite(val)) return;
+        if (item.statut === 'Gagné') gagneEUR += val;
+        else if (item.statut === 'Perdu') perduEUR += val;
+      });
+      const decidedEUR = gagneEUR + perduEUR;
+      const rateAmount = decidedEUR > 0 ? gagneEUR / decidedEUR : 0;
+
+      const modeSelect = document.getElementById('forecastRateMode');
       const slider = document.getElementById('forecastRateSlider');
-      const autoCheckbox = document.getElementById('forecastAutoRate');
-      const autoValueSpan = document.getElementById('forecastAutoValue');
-      
-      // Show historical rate
-      if (autoValueSpan) {
-        autoValueSpan.textContent = `(historique: ${Math.round(historicalRate * 100)}%)`;
-      }
-      
-      // Determine which rate to use
-      let conversionRate;
-      if (autoCheckbox && autoCheckbox.checked) {
-        conversionRate = historicalRate;
-        if (slider) {
-          slider.value = Math.round(historicalRate * 100);
-          slider.disabled = true;
-        }
-        document.getElementById('forecastRateValue').textContent = Math.round(historicalRate * 100) + '%';
+      const mode = modeSelect ? modeSelect.value : 'count';
+
+      let conversionRate = 0;
+      let source = '';
+      if (mode === 'manual') {
+        conversionRate = slider ? parseInt(slider.value, 10) / 100 : 0.5;
+        source = 'taux saisi manuellement';
+        if (slider) { slider.disabled = false; slider.style.opacity = '1'; }
+      } else if (mode === 'amount') {
+        conversionRate = rateAmount;
+        source = 'historique en montant : ' + formatMontantShort(gagneEUR) + ' gagnés ÷ ' + formatMontantShort(decidedEUR) + ' tranchés';
+        if (slider) { slider.value = Math.round(rateAmount * 100); slider.disabled = true; slider.style.opacity = '0.4'; }
       } else {
-        conversionRate = slider ? parseInt(slider.value) / 100 : 0.5;
-        if (slider) slider.disabled = false;
+        conversionRate = rateCount;
+        source = 'historique en nombre : ' + gagne + ' gagnée(s) ÷ ' + decided + ' tranchée(s)';
+        if (slider) { slider.value = Math.round(rateCount * 100); slider.disabled = true; slider.style.opacity = '0.4'; }
       }
-      
+
       const potentialCA = encoursTotal * conversionRate;
-      
-      // Update UI - La valeur principale est maintenant le CA potentiel avec taux
-      document.getElementById('forecastValue').textContent = formatMontantShort(potentialCA);
-      document.getElementById('forecastCount').textContent = encours;
-      document.getElementById('forecastAvg').textContent = formatMontantShort(encoursAvg);
-      document.getElementById('forecastPotential').textContent = formatMontantShort(encoursTotal);
+
+      setTxt('forecastPotential', formatMontantShort(encoursTotal));
+      setTxt('forecastRateValue', Math.round(conversionRate * 100) + '%');
+      setTxt('forecastValue', formatMontantShort(potentialCA));
+      setTxt('forecastCount', encours);
+      setTxt('forecastAvg', formatMontantShort(encoursAvg));
+
+      const note = document.getElementById('forecastNote');
+      if (note) {
+        if (decided === 0 && mode !== 'manual') {
+          note.innerHTML = '⚠️ <strong>Aucune affaire Gagné/Perdu</strong> sur cet onglet : le taux historique vaut 0 %, donc la prévision aussi. ' +
+                           'Passez en mode <strong>Manuel</strong> pour appliquer un taux d\'hypothèse, ou renseignez les statuts.';
+        } else {
+          note.innerHTML = 'Calcul : ' + formatMontantShort(encoursTotal) + ' × ' + Math.round(conversionRate * 100) + '% = <strong>' +
+                           formatMontantShort(potentialCA) + '</strong>.<br>Taux issu de : ' + source + '. ' +
+                           'Seules les affaires <strong>En cours</strong> du filtre actif entrent dans le pipeline.';
+        }
+      }
     }
 
     /* Comparison (Comparaison périodes) */
@@ -9443,24 +9524,42 @@
     function updateConversion(gagne, perdu, encours) {
       const decided = gagne + perdu;
       const rate = decided > 0 ? (gagne / decided) * 100 : 0;
-      
-      // Update gauge (arc length based on rate)
-      // Full arc is about 126 units (half circle)
+
+      let gagneEUR = 0, perduEUR = 0;
+      currentList.forEach(item => {
+        const val = parseMontant(item.montant);
+        if (!Number.isFinite(val)) return;
+        if (item.statut === 'Gagné') gagneEUR += val;
+        else if (item.statut === 'Perdu') perduEUR += val;
+      });
+      const decidedEUR = gagneEUR + perduEUR;
+      const rateEUR = decidedEUR > 0 ? (gagneEUR / decidedEUR) * 100 : 0;
+
       const arcLength = (rate / 100) * 126;
       const conversionArc = document.getElementById('conversionArc');
-      conversionArc.setAttribute('stroke-dasharray', `${arcLength} 126`);
-      
-      // Color based on rate
-      let strokeColor = '#f43f5e'; // red for low
-      if (rate >= 60) strokeColor = '#22c55e'; // green for high
-      else if (rate >= 40) strokeColor = '#f59e0b'; // orange for medium
-      conversionArc.setAttribute('stroke', strokeColor);
-      
-      // Update values
-      document.getElementById('conversionRate').textContent = Math.round(rate) + '%';
-      document.getElementById('convGagne').textContent = gagne;
-      document.getElementById('convPerdu').textContent = perdu;
-      document.getElementById('convEncours').textContent = encours;
+      if (conversionArc) {
+        conversionArc.setAttribute('stroke-dasharray', `${arcLength} 126`);
+        let strokeColor = '#f43f5e';
+        if (rate >= 60) strokeColor = '#22c55e';
+        else if (rate >= 40) strokeColor = '#f59e0b';
+        conversionArc.setAttribute('stroke', strokeColor);
+      }
+
+      setTxt('conversionRate', Math.round(rate) + '%');
+      setTxt('convGagne', gagne);
+      setTxt('convPerdu', perdu);
+      setTxt('convEncours', encours);
+      setTxt('convRateCount', decided > 0 ? (gagne + ' / ' + decided + '  →  ' + Math.round(rate) + '%') : 'aucune affaire tranchée');
+      setTxt('convRateAmount', decidedEUR > 0
+        ? (formatMontantShort(gagneEUR) + ' / ' + formatMontantShort(decidedEUR) + '  →  ' + Math.round(rateEUR) + '%')
+        : 'aucune affaire tranchée');
+
+      const formula = document.getElementById('conversionFormula');
+      if (formula) {
+        formula.innerHTML = decided > 0
+          ? 'Gagné ÷ (Gagné + Perdu) = <strong>' + gagne + ' ÷ ' + decided + '</strong>'
+          : 'Gagné ÷ (Gagné + Perdu) — <strong>0 affaire tranchée</strong>';
+      }
     }
 
     /* EG Ranking (Classement EG par CA) */
@@ -9508,13 +9607,17 @@
     }
 
     /* Objectives (Objectifs CA) */
+    /* Écriture DOM tolérante (la section Objectifs CA a été retirée) */
+    function setTxt(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+    function setW(id, val) { const el = document.getElementById(id); if (el) el.style.width = val; }
+
     function updateObjectives() {
       // SECURITY: Si l'onglet est verrouillé, ne pas afficher les objectifs
       if (isTabLocked(currentTab)) {
-        document.getElementById('objMonthCurrent').textContent = '🔒';
-        document.getElementById('objYearCurrent').textContent = '🔒';
-        document.getElementById('objPriseAffaire').textContent = '🔒';
-        document.getElementById('objHistorique3M').textContent = '🔒';
+        setTxt('objMonthCurrent', '🔒');
+        setTxt('objYearCurrent', '🔒');
+        setTxt('objPriseAffaire', '🔒');
+        setTxt('objHistorique3M', '🔒');
         document.getElementById('chiffreurObjectivesList').innerHTML = '<div style="text-align:center;padding:20px;color:var(--gray-500);">🔒 Verrouillé</div>';
         document.getElementById('metreurObjectivesList').innerHTML = '<div style="text-align:center;padding:20px;color:var(--gray-500);">🔒 Verrouillé</div>';
         return;
@@ -9531,8 +9634,8 @@
       const OBJECTIF_METREUR = getObjectifMetreur();
       
       // Update labels
-      document.getElementById('objMonthTargetLabel').textContent = formatMontantShort(OBJECTIF_MENSUEL);
-      document.getElementById('objYearTargetLabel').textContent = formatMontantShort(OBJECTIF_ANNUEL);
+      setTxt('objMonthTargetLabel', formatMontantShort(OBJECTIF_MENSUEL));
+      setTxt('objYearTargetLabel', formatMontantShort(OBJECTIF_ANNUEL));
       document.getElementById('chiffreurObjLabel').textContent = formatMontantShort(OBJECTIF_CHIFFREUR);
       document.getElementById('metreurObjLabel').textContent = formatMontantShort(OBJECTIF_METREUR);
       
@@ -9648,32 +9751,32 @@
       });
       
       // Update month objective
-      document.getElementById('objMonthCurrent').textContent = formatMontantShort(monthTotal);
-      document.getElementById('objMonthTarget').textContent = formatMontantShort(OBJECTIF_MENSUEL);
+      setTxt('objMonthCurrent', formatMontantShort(monthTotal));
+      setTxt('objMonthTarget', formatMontantShort(OBJECTIF_MENSUEL));
       const monthPercent = OBJECTIF_MENSUEL > 0 ? Math.min((monthTotal / OBJECTIF_MENSUEL) * 100, 150) : 0;
-      document.getElementById('objMonthFill').style.width = Math.min(monthPercent, 100) + '%';
-      document.getElementById('objMonthPercent').textContent = Math.round(monthPercent) + '%';
+      setW('objMonthFill', Math.min(monthPercent, 100) + '%');
+      setTxt('objMonthPercent', Math.round(monthPercent) + '%');
       updateFillColor('objMonthFill', monthPercent, OBJECTIF_MENSUEL > 0);
       
       // Update year objective
-      document.getElementById('objYearCurrent').textContent = formatMontantShort(yearTotal);
-      document.getElementById('objYearTarget').textContent = formatMontantShort(OBJECTIF_ANNUEL);
+      setTxt('objYearCurrent', formatMontantShort(yearTotal));
+      setTxt('objYearTarget', formatMontantShort(OBJECTIF_ANNUEL));
       const yearPercent = OBJECTIF_ANNUEL > 0 ? Math.min((yearTotal / OBJECTIF_ANNUEL) * 100, 150) : 0;
-      document.getElementById('objYearFill').style.width = Math.min(yearPercent, 100) + '%';
-      document.getElementById('objYearPercent').textContent = Math.round(yearPercent) + '%';
+      setW('objYearFill', Math.min(yearPercent, 100) + '%');
+      setTxt('objYearPercent', Math.round(yearPercent) + '%');
       updateFillColor('objYearFill', yearPercent, OBJECTIF_ANNUEL > 0);
       
       // Update prise d'affaire
-      document.getElementById('objPriseAffaire').textContent = formatMontantShort(priseAffaireMonth);
-      document.getElementById('priseAffaireCount').textContent = `${priseAffaireCount} affaire(s) gagnée(s) ce mois`;
+      setTxt('objPriseAffaire', formatMontantShort(priseAffaireMonth));
+      setTxt('priseAffaireCount', `${priseAffaireCount} affaire(s) gagnée(s) ce mois`);
       
       // Update historique 3 mois (tous statuts confondus)
       const moisNames = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'];
       const m1 = moisNames[(currentMonth - 2 + 12) % 12];
       const m2 = moisNames[(currentMonth - 1 + 12) % 12];
       const m3 = moisNames[currentMonth];
-      document.getElementById('objHistorique3M').textContent = formatMontantShort(historique3M);
-      document.getElementById('historique3MDetails').textContent = `${historique3MCount} affaires (${m1}-${m2}-${m3}) · Tous statuts`;
+      setTxt('objHistorique3M', formatMontantShort(historique3M));
+      setTxt('historique3MDetails', `${historique3MCount} affaires (${m1}-${m2}-${m3}) · Tous statuts`);
       
       // Update chiffreur stats avec jauge vs objectif
       updatePersonStatsWithObjective('chiffreurObjectivesList', chiffreurStats, '🧮', 'Chiffreur', OBJECTIF_CHIFFREUR);
@@ -9707,9 +9810,9 @@
         else if (percent >= 50) fillColor = 'var(--orange)';
         
         return `
-          <div class="objective-item" style="padding:12px;margin-bottom:8px;">
+          <div class="objective-item person-clickable" style="padding:12px;margin-bottom:8px;cursor:pointer;" data-person="${escapeHTML(person)}" data-role="${type}" onclick="openPersonDashboard(this.dataset.person, this.dataset.role)" title="Ouvrir le dashboard de ${escapeHTML(person)}">
             <div class="objective-header" style="margin-bottom:8px;">
-              <span style="font-size:13px;font-weight:600;">${icon} ${escapeHTML(person)}</span>
+              <span style="font-size:13px;font-weight:600;">${icon} ${escapeHTML(person)} <span style="font-size:10px;font-weight:400;color:var(--gray-500);">· voir le détail →</span></span>
               <span style="font-size:16px;font-weight:700;color:${fillColor};">
                 ${percentDisplay}%
               </span>
@@ -9734,6 +9837,219 @@
     function updatePersonStats(containerId, stats, icon, type) {
       // Kept for compatibility
       updatePersonStatsWithObjective(containerId, stats, icon, type, 4500000);
+    }
+
+    /* ============ DASHBOARD PAR CHIFFREUR / MÉTREUR ============ */
+    let pdashCurrent = null; // { person, role }
+
+    function pdashParseMarge(v) {
+      if (v === null || v === undefined || v === '') return null;
+      const n = parseFloat(String(v).replace('%', '').replace(',', '.').trim());
+      return Number.isFinite(n) ? n : null;
+    }
+
+    /* Quote-part d'une personne sur une affaire (0 si non impliquée) */
+    function pdashShare(item, person, role) {
+      const arrKey = role === 'Chiffreur' ? 'chiffreurs' : 'metreurs';
+      const simpleKey = role === 'Chiffreur' ? 'chiffreur' : 'metreur';
+      const arr = item[arrKey];
+      if (Array.isArray(arr) && arr.length > 0) {
+        let share = 0;
+        arr.forEach(p => {
+          const n = (p && (p.name || p.nom)) ? String(p.name || p.nom).trim() : '';
+          if (n === person) {
+            const t = parseFloat(p.taux);
+            share += Number.isFinite(t) ? t / 100 : 1;
+          }
+        });
+        return share;
+      }
+      if (item[simpleKey] && String(item[simpleKey]).trim() === person) return 1;
+      return 0;
+    }
+
+    function pdashCollect(person, role, allTabs) {
+      const tabIds = allTabs
+        ? Object.keys(dataByTab).filter(id => !isTabLocked(id))
+        : [currentTab];
+      const rows = [];
+      tabIds.forEach(tabId => {
+        (dataByTab[tabId] || []).forEach(item => {
+          const share = pdashShare(item, person, role);
+          if (share <= 0) return;
+          const montant = parseMontant(item.montant);
+          rows.push({
+            item,
+            tabId,
+            share,
+            montant: Number.isFinite(montant) ? montant : 0,
+            pondere: (Number.isFinite(montant) ? montant : 0) * share,
+            statut: item.statut || 'En cours',
+            marge: pdashParseMarge(item.marge)
+          });
+        });
+      });
+      return rows;
+    }
+
+    function pdashMonthKey(item) {
+      if (item.moisRemis) return item.moisRemis.slice(0, 7);
+      const d = item.dateDevis || item.datePrevisionnelle;
+      if (!d) return null;
+      const dt = new Date(d);
+      if (isNaN(dt.getTime())) return null;
+      return dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0');
+    }
+
+    function openPersonDashboard(person, role) {
+      if (typeof clientModeActive !== 'undefined' && clientModeActive) {
+        showToast('Dashboard indisponible en mode Client', 'info');
+        return;
+      }
+      pdashCurrent = { person, role };
+      document.getElementById('personDashModal').classList.add('open');
+      renderPersonDashboard();
+    }
+
+    function closePersonDashboard() {
+      document.getElementById('personDashModal')?.classList.remove('open');
+      pdashCurrent = null;
+    }
+
+    function renderPersonDashboard() {
+      if (!pdashCurrent) return;
+      const { person, role } = pdashCurrent;
+      const allTabs = document.getElementById('pdashAllTabs')?.checked || false;
+      const icon = role === 'Chiffreur' ? '🧮' : '📐';
+      setTxt('pdashTitle', icon + ' ' + person + ' — ' + role);
+
+      const rows = pdashCollect(person, role, allTabs);
+      const body = document.getElementById('pdashBody');
+      if (!body) return;
+
+      if (rows.length === 0) {
+        body.innerHTML = '<div style="text-align:center;padding:30px;color:var(--gray-500);font-size:13px;">Aucune affaire pour cette personne.</div>';
+        return;
+      }
+
+      const S = { 'Gagné': 0, 'Perdu': 0, 'En cours': 0, 'Faste': 0, 'Non valorisé': 0 };
+      const C = { 'Gagné': 0, 'Perdu': 0, 'En cours': 0, 'Faste': 0, 'Non valorisé': 0 };
+      let total = 0, countPond = 0, margeSum = 0, margeWeight = 0;
+      const byMonth = {}, byEG = {};
+
+      rows.forEach(r => {
+        total += r.pondere;
+        countPond += r.share;
+        if (S[r.statut] === undefined) { S[r.statut] = 0; C[r.statut] = 0; }
+        S[r.statut] += r.pondere;
+        C[r.statut] += r.share;
+        if (r.marge !== null && r.pondere > 0) { margeSum += r.marge * r.pondere; margeWeight += r.pondere; }
+        const mk = pdashMonthKey(r.item);
+        if (mk) byMonth[mk] = (byMonth[mk] || 0) + r.pondere;
+        const eg = r.item.eg || 'Non défini';
+        byEG[eg] = (byEG[eg] || 0) + r.pondere;
+      });
+
+      const decidedC = C['Gagné'] + C['Perdu'];
+      const tauxPerso = decidedC > 0 ? (C['Gagné'] / decidedC) * 100 : null;
+      const margeMoy = margeWeight > 0 ? margeSum / margeWeight : null;
+
+      /* Part dans le total de l'onglet */
+      const scopeIds = allTabs ? Object.keys(dataByTab).filter(id => !isTabLocked(id)) : [currentTab];
+      let totalScope = 0;
+      scopeIds.forEach(id => (dataByTab[id] || []).forEach(it => {
+        const v = parseMontant(it.montant);
+        if (Number.isFinite(v)) totalScope += v;
+      }));
+      const part = totalScope > 0 ? (total / totalScope) * 100 : 0;
+
+      const kpi = (label, value, color) =>
+        `<div class="pdash-kpi"><div class="pdash-kpi-val" style="color:${color || 'var(--gray-800)'}">${value}</div><div class="pdash-kpi-lbl">${label}</div></div>`;
+
+      /* Barre de répartition */
+      const segColors = { 'Gagné': 'var(--green)', 'Perdu': 'var(--rose)', 'En cours': 'var(--orange)', 'Faste': 'var(--purple)', 'Non valorisé': 'var(--gray-300)' };
+      const segments = Object.keys(S).filter(k => S[k] > 0).map(k =>
+        `<div style="width:${(S[k] / total) * 100}%;background:${segColors[k] || 'var(--gray-300)'};" title="${k} : ${formatMontantShort(S[k])}"></div>`
+      ).join('');
+      const legend = Object.keys(S).filter(k => S[k] > 0).map(k =>
+        `<span class="pdash-leg"><i style="background:${segColors[k] || 'var(--gray-300)'}"></i>${k} · ${formatMontantShort(S[k])} <small>(${C[k].toFixed(2).replace(/\.?0+$/, '')} aff.)</small></span>`
+      ).join('');
+
+      /* Évolution mensuelle : 12 derniers mois */
+      const now = new Date();
+      const months = [];
+      for (let i = 11; i >= 0; i--) {
+        const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+        months.push({ key: d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'), label: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'][d.getMonth()], val: 0 });
+      }
+      months.forEach(m => { m.val = byMonth[m.key] || 0; });
+      const maxM = Math.max(...months.map(m => m.val), 1);
+      const timeline = months.map(m =>
+        `<div class="pdash-bar-wrap" title="${m.key} : ${formatMontantShort(m.val)}">
+           <div class="pdash-bar" style="height:${Math.max((m.val / maxM) * 100, m.val > 0 ? 4 : 0)}%"></div>
+           <span>${m.label}</span>
+         </div>`
+      ).join('');
+
+      /* Top EG */
+      const egTop = Object.entries(byEG).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([n, v]) =>
+        `<div class="pdash-eg"><span>${escapeHTML(n)}</span><strong>${formatMontantShort(v)}</strong></div>`
+      ).join('');
+
+      /* Liste des affaires */
+      const statutIcon = { 'Gagné': '✓', 'Perdu': '✕', 'En cours': '◷', 'Faste': '⚡', 'Non valorisé': '⏸' };
+      const affaires = rows.sort((a, b) => b.pondere - a.pondere).map(r => `
+        <div class="pdash-aff">
+          <div class="pdash-aff-main">
+            <span class="pdash-aff-name">${statutIcon[r.statut] || '•'} ${escapeHTML(r.item.affaires || 'Sans nom')}</span>
+            <span class="pdash-aff-meta">${escapeHTML(r.item.eg || '—')}${r.item.moisRemis ? ' · ' + r.item.moisRemis : ''}${allTabs ? ' · ' + escapeHTML((tabs.find(t => t.id === r.tabId) || {}).name || r.tabId) : ''}</span>
+          </div>
+          <div class="pdash-aff-num">
+            <span class="pdash-aff-pond">${formatMontantShort(r.pondere)}</span>
+            <span class="pdash-aff-share">${Math.round(r.share * 100)}% de ${formatMontantShort(r.montant)}</span>
+          </div>
+        </div>
+      `).join('');
+
+      body.innerHTML = `
+        <div class="pdash-kpis">
+          ${kpi('Montant ' + (role === 'Chiffreur' ? 'chiffré' : 'métré') + ' (quote-part)', formatMontantShort(total), 'var(--theme-color)')}
+          ${kpi('Affaires (quote-part)', countPond.toFixed(2).replace(/\.?0+$/, ''))}
+          ${kpi('CA gagné', formatMontantShort(S['Gagné']), 'var(--green)')}
+          ${kpi('Pipeline en cours', formatMontantShort(S['En cours']), 'var(--orange)')}
+          ${kpi('Taux de conversion', tauxPerso === null ? 'n/a' : Math.round(tauxPerso) + '%')}
+          ${kpi('Marge moyenne', margeMoy === null ? 'n/a' : margeMoy.toFixed(1) + '%')}
+          ${kpi('Part du portefeuille', part.toFixed(1) + '%')}
+        </div>
+
+        <div class="pdash-block">
+          <div class="pdash-block-title">Répartition par statut</div>
+          <div class="pdash-stack">${segments}</div>
+          <div class="pdash-legend">${legend}</div>
+          ${tauxPerso === null ? '<div class="calc-note">Aucune affaire tranchée (Gagné/Perdu) : le taux de conversion personnel n\'est pas calculable.</div>' : ''}
+        </div>
+
+        <div class="pdash-block">
+          <div class="pdash-block-title">Évolution sur 12 mois (mois remis client)</div>
+          <div class="pdash-timeline">${timeline}</div>
+        </div>
+
+        <div class="pdash-block">
+          <div class="pdash-block-title">Top entreprises générales</div>
+          ${egTop || '<div style="font-size:12px;color:var(--gray-500);">—</div>'}
+        </div>
+
+        <div class="pdash-block">
+          <div class="pdash-block-title">Affaires (${rows.length}) — montant pondéré par la quote-part</div>
+          <div class="pdash-aff-list">${affaires}</div>
+        </div>
+
+        <div class="calc-note">
+          Tous les montants sont <strong>pondérés par le taux de participation</strong> saisi sur chaque affaire.
+          Exemple : 50 % sur une affaire de 10 M€ compte pour 5 M€ et 0,5 affaire.
+          Périmètre : ${allTabs ? 'tous les onglets déverrouillés' : 'onglet « ' + escapeHTML((tabs.find(t => t.id === currentTab) || {}).name || currentTab) + ' »'}.
+        </div>
+      `;
     }
 
     function calculateConversionRate() {
@@ -12331,30 +12647,12 @@ marker.bindPopup(`
       for (const tab of tabs) {
         const cloudData = await loadFromCloud(tab.id);
         if (cloudData && Array.isArray(cloudData) && cloudData.length > 0) {
+          // Le cloud fait foi. On ne réinjecte plus les affaires codées en dur :
+          // cela ressuscitait les affaires supprimées et polluait les nouveaux onglets.
           dataByTab[tab.id] = migrateData(cloudData);
-          // Fusionner avec les nouvelles affaires si pas déjà présentes
-          const initialAffaires = getInitialAffaires();
-          let added = 0;
-          initialAffaires.forEach(newAff => {
-            const exists = dataByTab[tab.id].some(existing => 
-              existing.id === newAff.id || 
-              existing.affaires?.toLowerCase() === newAff.affaires?.toLowerCase()
-            );
-            if (!exists) {
-              dataByTab[tab.id].push(newAff);
-              added++;
-            }
-          });
-          if (added > 0) {
-            console.log(`${added} nouvelles affaires ajoutées`);
-            setTimeout(() => saveToCloud(tab.id), 1000);
-          }
         } else {
-          // Base vide - charger les données initiales
-          dataByTab[tab.id] = getInitialAffaires();
-          if (dataByTab[tab.id].length > 0) {
-            setTimeout(() => saveToCloud(tab.id), 1000);
-          }
+          // Pas de données (onglet neuf OU erreur réseau) : on n'écrit RIEN dans le cloud.
+          dataByTab[tab.id] = [];
         }
       }
       
@@ -13165,6 +13463,7 @@ marker.bindPopup(`
             closeRemoveProtectionModal();
             document.getElementById('helpModal')?.classList.remove('open');
             document.getElementById('mobileSidebar')?.classList.remove('open');
+            closePersonDashboard();
           }
           return;
         }
@@ -13180,6 +13479,7 @@ marker.bindPopup(`
             closeRemoveProtectionModal();
             document.getElementById('helpModal')?.classList.remove('open');
             document.getElementById('mobileSidebar')?.classList.remove('open');
+            closePersonDashboard();
             break;
           case 'n': case 'N':
             clearModalForm();
@@ -13236,32 +13536,32 @@ marker.bindPopup(`
       document.getElementById('compPeriod2')?.addEventListener('change', updateComparison);
       document.getElementById('compStatutFilter')?.addEventListener('change', updateComparison);
 
-      // Forecast rate slider and checkbox
+      // Prévision CA : mode de taux + curseur manuel
       const forecastRateSlider = document.getElementById('forecastRateSlider');
-      const forecastAutoRate = document.getElementById('forecastAutoRate');
-      
-      // Load saved forecast rate settings
+      const forecastRateMode = document.getElementById('forecastRateMode');
+
       const savedForecastRate = localStorage.getItem(`${SITE_ID}_forecast_rate`);
-      const savedAutoRate = localStorage.getItem(`${SITE_ID}_forecast_auto_rate`);
-      
-      if (savedForecastRate && forecastRateSlider) {
-        forecastRateSlider.value = savedForecastRate;
-        document.getElementById('forecastRateValue').textContent = savedForecastRate + '%';
-      }
-      if (savedAutoRate === 'true' && forecastAutoRate) {
-        forecastAutoRate.checked = true;
-      }
-      
+      const savedForecastMode = localStorage.getItem(`${SITE_ID}_forecast_mode`);
+
+      if (savedForecastRate && forecastRateSlider) forecastRateSlider.value = savedForecastRate;
+      if (savedForecastMode && forecastRateMode) forecastRateMode.value = savedForecastMode;
+
       forecastRateSlider?.addEventListener('input', () => {
-        const value = forecastRateSlider.value;
-        document.getElementById('forecastRateValue').textContent = value + '%';
-        localStorage.setItem(`${SITE_ID}_forecast_rate`, value);
+        localStorage.setItem(`${SITE_ID}_forecast_rate`, forecastRateSlider.value);
+        if (forecastRateMode) forecastRateMode.value = 'manual';
+        localStorage.setItem(`${SITE_ID}_forecast_mode`, 'manual');
         updateAdvancedStats();
       });
-      
-      forecastAutoRate?.addEventListener('change', () => {
-        localStorage.setItem(`${SITE_ID}_forecast_auto_rate`, forecastAutoRate.checked);
+
+      forecastRateMode?.addEventListener('change', () => {
+        localStorage.setItem(`${SITE_ID}_forecast_mode`, forecastRateMode.value);
         updateAdvancedStats();
+      });
+
+      // Dashboard chiffreur / métreur : bascule de périmètre
+      document.getElementById('pdashAllTabs')?.addEventListener('change', renderPersonDashboard);
+      document.getElementById('personDashModal')?.addEventListener('click', (e) => {
+        if (e.target.id === 'personDashModal') closePersonDashboard();
       });
 
       // Stats configuration
