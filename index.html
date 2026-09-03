@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <!-- saved from url=(0037)https://smac-suivico.github.io/carto/ -->
 <html lang="fr" style="--theme-color: #22c55e; --theme-color-light: rgba(34, 197, 94, 0.15); --theme-color-dark: rgb(4, 167, 64);"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -8061,6 +8062,20 @@
           <span class="kbd">1-5</span><span>Filtrer par statut</span>
           <span class="kbd">C</span><span>Mode Client (présentation)</span>
         </div>
+
+        <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--gray-200);">
+          <strong style="color:var(--red);">🗺️ Fond de carte</strong>
+          <p style="font-size:12px;color:var(--gray-700);margin:8px 0;line-height:1.5;">
+            Le bouton 🗺️ sur la carte fait défiler trois fonds : Plan, Plan clair et Satellite.<br>
+            CARTO (le fond « Voyager ») exige désormais une clé ; celle de l'agence est déjà intégrée.
+            Ce champ ne sert qu'à la remplacer par une autre — laissez-le vide pour utiliser celle par défaut.
+            Une clé gratuite s'obtient sur <a href="https://carto.com/basemaps/apikey/" target="_blank" rel="noopener">carto.com/basemaps/apikey</a>.
+          </p>
+          <div style="display:flex;gap:6px;">
+            <input type="text" class="form-input" id="cartoKeyInput" placeholder="Clé CARTO (facultatif)" style="flex:1;font-size:12px;">
+            <button class="btn btn-secondary btn-sm" id="cartoKeySave">Enregistrer</button>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
         <button class="btn btn-primary" id="helpOk">OK</button>
@@ -12886,18 +12901,48 @@ marker.bindPopup(`
       // Initialize map
       map = L.map('map').setView([48.8566, 2.3522], 10);
       
-      // Define tile layers
-      const planLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-        attribution: '© <a href="https://carto.com/">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-      });
-      
-      const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-        attribution: '© Esri'
-      });
-      
-      // Add default layer
-      planLayer.addTo(map);
-      let currentLayer = 'plan';
+      /* ===== Fonds de carte =====
+         CARTO a rendu ses tuiles raster payantes (filigrane « API KEY REQUIRED »
+         sur les requêtes anonymes) et annonce leur retrait. On garde Voyager
+         uniquement si une clé gratuite est renseignée, sinon on bascule sur des
+         fonds sans clé. */
+      const DEFAULT_CARTO_KEY = 'cb1_2ub0_1_e10fb56ec20a958f32930770';
+      const cartoKey = (localStorage.getItem(`${SITE_ID}_carto_key`) || DEFAULT_CARTO_KEY).trim();
+
+      const BASEMAPS = {
+        plan: {
+          icon: '🗺️',
+          name: cartoKey ? 'Plan (CARTO Voyager)' : 'Plan (OSM)',
+          layer: cartoKey
+            ? L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=' + encodeURIComponent(cartoKey), {
+                attribution: '© <a href="https://carto.com/">CARTO</a> © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                subdomains: 'abcd', maxZoom: 20
+              })
+            : L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                maxZoom: 19
+              })
+        },
+        gris: {
+          icon: '🌫️',
+          name: 'Plan clair (Esri)',
+          layer: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '© Esri', maxZoom: 16
+          })
+        },
+        satellite: {
+          icon: '🛰️',
+          name: 'Satellite (Esri)',
+          layer: L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '© Esri', maxZoom: 19
+          })
+        }
+      };
+      const BASEMAP_ORDER = ['plan', 'gris', 'satellite'];
+
+      let currentLayer = localStorage.getItem(`${SITE_ID}_basemap`) || 'plan';
+      if (!BASEMAPS[currentLayer]) currentLayer = 'plan';
+      BASEMAPS[currentLayer].layer.addTo(map);
 
       markerCluster = L.markerClusterGroup({
         spiderfyOnMaxZoom: true,
@@ -12906,24 +12951,28 @@ marker.bindPopup(`
       });
       map.addLayer(markerCluster);
 
-      // Layer toggle functionality
+      // Bascule de fond de carte (cycle Plan → Plan clair → Satellite)
       const toggleLayerBtn = document.getElementById('toggleLayerBtn');
+
+      function setBasemap(key, notify) {
+        if (!BASEMAPS[key]) return;
+        BASEMAP_ORDER.forEach(k => {
+          if (map.hasLayer(BASEMAPS[k].layer)) map.removeLayer(BASEMAPS[k].layer);
+        });
+        BASEMAPS[key].layer.addTo(map);
+        currentLayer = key;
+        localStorage.setItem(`${SITE_ID}_basemap`, key);
+        const next = BASEMAP_ORDER[(BASEMAP_ORDER.indexOf(key) + 1) % BASEMAP_ORDER.length];
+        toggleLayerBtn.innerHTML = BASEMAPS[key].icon;
+        toggleLayerBtn.title = 'Fond : ' + BASEMAPS[key].name + ' — cliquer pour ' + BASEMAPS[next].name;
+        if (notify) showToast(BASEMAPS[key].name, 'success');
+      }
+
+      setBasemap(currentLayer, false);
+
       toggleLayerBtn.addEventListener('click', () => {
-        if (currentLayer === 'plan') {
-          map.removeLayer(planLayer);
-          satelliteLayer.addTo(map);
-          currentLayer = 'satellite';
-          toggleLayerBtn.innerHTML = '🛰️';
-          toggleLayerBtn.title = 'Basculer vers Plan';
-          showToast('Vue satellite activée', 'success');
-        } else {
-          map.removeLayer(satelliteLayer);
-          planLayer.addTo(map);
-          currentLayer = 'plan';
-          toggleLayerBtn.innerHTML = '🗺️';
-          toggleLayerBtn.title = 'Basculer vers Satellite';
-          showToast('Vue plan activée', 'success');
-        }
+        const next = BASEMAP_ORDER[(BASEMAP_ORDER.indexOf(currentLayer) + 1) % BASEMAP_ORDER.length];
+        setBasemap(next, true);
       });
 
       // Itinerary functionality
@@ -13561,6 +13610,18 @@ marker.bindPopup(`
       document.getElementById('pdashAllTabs')?.addEventListener('change', renderPersonDashboard);
       document.getElementById('personDashModal')?.addEventListener('click', (e) => {
         if (e.target.id === 'personDashModal') closePersonDashboard();
+      });
+
+      // Clé CARTO (fond de carte)
+      const cartoKeyInput = document.getElementById('cartoKeyInput');
+      if (cartoKeyInput) cartoKeyInput.value = localStorage.getItem(`${SITE_ID}_carto_key`) || '';
+      document.getElementById('cartoKeySave')?.addEventListener('click', () => {
+        const v = (cartoKeyInput?.value || '').trim();
+        // Vide ou identique à la clé intégrée : on efface la surcharge locale
+        if (v) localStorage.setItem(`${SITE_ID}_carto_key`, v);
+        else localStorage.removeItem(`${SITE_ID}_carto_key`);
+        showToast('Clé enregistrée — rechargement…', 'success');
+        setTimeout(() => location.reload(), 700);
       });
 
       // Stats configuration
